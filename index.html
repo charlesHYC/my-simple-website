@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Charles-Hong | 個人網站</title>
+  <title>Charles-Hong | Personal Website</title>
   <style>
     :root {
       --bg: #f7f8fc;
@@ -123,10 +123,18 @@
       align-items: center;
     }
 
+    .hero-title-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
     .hero-text h1 {
       font-size: clamp(2.2rem, 4vw, 3.6rem);
-      line-height: 1.2;
-      margin-bottom: 16px;
+      line-height: 1.18;
+      margin-bottom: 0;
+      flex: 1;
     }
 
     .hero-text h1 span {
@@ -135,6 +143,17 @@
 
     .hero-name {
       display: block;
+    }
+
+    .hero-main-photo {
+      width: 170px;
+      height: 170px;
+      border-radius: 28px;
+      object-fit: cover;
+      box-shadow: var(--shadow);
+      border: 4px solid rgba(255,255,255,0.9);
+      flex-shrink: 0;
+      background: #fff;
     }
 
     .hero-text p {
@@ -182,11 +201,6 @@
       border-color: var(--border);
     }
 
-    .hero-note {
-      color: var(--subtext);
-      font-size: 0.95rem;
-    }
-
     .hero-card {
       background: var(--card);
       border-radius: 28px;
@@ -195,12 +209,24 @@
       animation: floatCard 3.6s ease-in-out infinite;
     }
 
-    .profile-img {
+    .slideshow-frame {
       width: 100%;
       aspect-ratio: 1 / 1;
-      object-fit: cover;
       border-radius: 22px;
+      overflow: hidden;
+      background: #eef2ff;
       margin-bottom: 18px;
+    }
+
+    .slideshow-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.45s ease;
+    }
+
+    .slideshow-image.is-fading {
+      opacity: 0.25;
     }
 
     .hero-card h2 {
@@ -394,6 +420,16 @@
         padding-top: 44px;
       }
 
+      .hero-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-main-photo {
+        width: 130px;
+        height: 130px;
+      }
+
       .hero-text h1 {
         font-size: 2rem;
       }
@@ -414,10 +450,10 @@
       <a href="#top" class="logo">Charles-Hong</a>
       <div class="nav-right">
         <div class="nav-links">
-          <a href="#about" data-i18n="nav_about">關於我</a>
-          <a href="#skills" data-i18n="nav_skills">技能</a>
-          <a href="#projects" data-i18n="nav_projects">作品</a>
-          <a href="#contact" data-i18n="nav_contact">聯絡</a>
+          <a href="#about" data-i18n="nav_about">About</a>
+          <a href="#skills" data-i18n="nav_skills">Skills</a>
+          <a href="#projects" data-i18n="nav_projects">Projects</a>
+          <a href="#contact" data-i18n="nav_contact">Contact</a>
         </div>
         <button id="langToggle" class="lang-toggle">中文</button>
       </div>
@@ -428,69 +464,84 @@
     <section class="hero">
       <div class="hero-grid">
         <div class="hero-text fade-in">
-          <h1 data-i18n-html="hero_title">你好，我是 <span class="hero-name">Charles-Hong</span></h1>
+          <div class="hero-title-row">
+            <h1 data-i18n-html="hero_title">Hello, I am <span class="hero-name">Charles-Hong</span></h1>
+            <img
+              class="hero-main-photo"
+              id="heroMainPhoto"
+              src="images/profile-main.jpg"
+              alt="Portrait of Charles-Hong"
+            />
+          </div>
+
           <p data-i18n="hero_desc">
-            這是我的個人網站。我畢業於中原大學電機工程學系，網站內容會整理我的學習歷程、發表文獻、工作經驗、作品展示，以及我在 IC 設計、FPGA 與網路應用相關領域的技術探索。
+            This is my personal website. I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. Here I organize my learning journey, publications, work experience, project showcase, and my technical exploration in IC design, FPGA, and networking-related applications.
           </p>
           <div class="hero-actions">
-            <a href="#projects" class="btn btn-primary" data-i18n="hero_btn_projects">查看作品</a>
-            <button class="btn btn-secondary" id="helloBtn" data-i18n="hero_btn_hello">LinkedIn</button>
+            <a href="#projects" class="btn btn-primary" data-i18n="hero_btn_projects">View Projects</a>
+            <a href="#" class="btn btn-secondary" data-i18n="hero_btn_linkedin">LinkedIn</a>
           </div>
-          <p class="hero-note" id="helloText" data-i18n="hero_note"></p>
         </div>
 
         <div class="hero-card fade-in delay-1">
-          <img class="profile-img" src="images/profile.jpg" alt="Charles-Hong 的個人照片" id="profileImage" />
-          <h2 data-i18n="intro_title">個人簡介</h2>
-          <p data-i18n="intro_desc">
-            我畢業於中原大學電機工程學系，專業領域包含 Cell-based IC Design、ASIC、FPGA 與網路應用。
+          <div class="slideshow-frame">
+            <img
+              class="slideshow-image"
+              id="slideshowImage"
+              src="images/moment1.jpg"
+              alt="Highlight photo of Charles-Hong"
+            />
+          </div>
+          <h2 data-i18n="intro_title">Highlights</h2>
+          <p id="slideshowCaption" data-i18n="intro_desc">
+            A few snapshots from my life and experiences.
           </p>
         </div>
       </div>
     </section>
 
     <section id="about" class="section fade-in delay-1">
-      <h2 class="section-title" data-i18n="about_title">關於我</h2>
-      <p class="section-desc" data-i18n="about_desc">以下為我的基本背景資訊，方便閱讀與快速掌握。</p>
+      <h2 class="section-title" data-i18n="about_title">About Me</h2>
+      <p class="section-desc" data-i18n="about_desc">Below is my basic background information for quick and clear reading.</p>
       <div class="about-card">
         <div class="about-lines">
           <p class="about-item">
-            <strong data-i18n="about_label_school">畢業學校：</strong>
-            <span data-i18n="about_school">中原大學 電機工程學系</span>
+            <strong data-i18n="about_label_school">Education:</strong>
+            <span data-i18n="about_school">Chung Yuan Christian University, Department of Electrical Engineering</span>
           </p>
 
           <div class="about-space"></div>
 
           <p class="about-item">
-            <strong data-i18n="about_label_domain">專業領域：</strong>
-            <span data-i18n="about_domain">Cell-based IC Design、ASIC、FPGA、Application of Networking</span>
+            <strong data-i18n="about_label_domain">Professional Fields:</strong>
+            <span data-i18n="about_domain">Cell-based IC Design, ASIC, FPGA, Application of Networking</span>
           </p>
 
           <p class="about-item">
-            <strong data-i18n="about_label_eda">EDA tools：</strong>
-            <span data-i18n="about_eda">Design Compiler、ICC/ICC2/Fusion Compiler、Custom Compiler、Laker、Virtuoso、Catapult、Vivado</span>
+            <strong data-i18n="about_label_eda">EDA Tools:</strong>
+            <span data-i18n="about_eda">Design Compiler, ICC/ICC2/Fusion Compiler, Custom Compiler, Laker, Virtuoso, Catapult, Vivado</span>
           </p>
 
           <p class="about-item">
-            <strong data-i18n="about_label_langprog">程式語言：</strong>
-            <span data-i18n="about_programming">Python、C、Verilog</span>
+            <strong data-i18n="about_label_langprog">Programming Languages:</strong>
+            <span data-i18n="about_programming">Python, C, Verilog</span>
           </p>
 
           <p class="about-item">
-            <strong data-i18n="about_label_language">語言：</strong>
-            <span data-i18n="about_languages">中文、英文、越語</span>
+            <strong data-i18n="about_label_language">Languages:</strong>
+            <span data-i18n="about_languages">Chinese, English, Vietnamese</span>
           </p>
         </div>
       </div>
     </section>
 
     <section id="skills" class="section fade-in delay-2">
-      <h2 class="section-title" data-i18n="skills_title">技能/工具</h2>
-      <p class="section-desc" data-i18n="skills_desc">這邊可能可以做個顏色分類</p>
+      <h2 class="section-title" data-i18n="skills_title">Skills</h2>
+      <p class="section-desc" data-i18n="skills_desc">My skills are grouped by category below so the information is cleaner and easier to read.</p>
 
       <div class="skills-grid">
         <div class="skill-group">
-          <h3 data-i18n="skills_group_domain">專業領域</h3>
+          <h3 data-i18n="skills_group_domain">Professional Fields</h3>
           <div class="skills-wrap">
             <span class="skill-tag" data-i18n="skill_domain_1">Cell-based IC Design</span>
             <span class="skill-tag" data-i18n="skill_domain_2">ASIC</span>
@@ -513,7 +564,7 @@
         </div>
 
         <div class="skill-group">
-          <h3 data-i18n="skills_group_programming">程式語言</h3>
+          <h3 data-i18n="skills_group_programming">Programming Languages</h3>
           <div class="skills-wrap">
             <span class="skill-tag" data-i18n="skill_prog_1">Python</span>
             <span class="skill-tag" data-i18n="skill_prog_2">C</span>
@@ -522,46 +573,46 @@
         </div>
 
         <div class="skill-group">
-          <h3 data-i18n="skills_group_languages">語言能力</h3>
+          <h3 data-i18n="skills_group_languages">Languages</h3>
           <div class="skills-wrap">
-            <span class="skill-tag" data-i18n="lang_chinese">中文</span>
-            <span class="skill-tag" data-i18n="lang_english">英文</span>
-            <span class="skill-tag" data-i18n="lang_vietnamese">越語</span>
+            <span class="skill-tag" data-i18n="lang_chinese">Chinese</span>
+            <span class="skill-tag" data-i18n="lang_english">English</span>
+            <span class="skill-tag" data-i18n="lang_vietnamese">Vietnamese</span>
           </div>
         </div>
       </div>
     </section>
 
     <section id="projects" class="section fade-in delay-3">
-      <h2 class="section-title" data-i18n="projects_title">我的作品</h2>
-      <p class="section-desc" data-i18n="projects_desc">我還不知道要放啥，不太確定這邊是要放作品的分類連結，還是直接把完整資訊放上來，怕弄得太亂</p>
+      <h2 class="section-title" data-i18n="projects_title">Projects</h2>
+      <p class="section-desc" data-i18n="projects_desc">I am still deciding whether this section should show project categories and links, or complete project details directly.</p>
       <div class="project-grid">
         <article class="project-card">
-          <h3 data-i18n="project1_title">個人網站首頁</h3>
-          <p data-i18n="project1_desc">我還不知道要寫啥</p>
-          <a href="#top" data-i18n="project1_link">返回首頁</a>
+          <h3 data-i18n="project1_title">Personal Homepage</h3>
+          <p data-i18n="project1_desc">This section can later introduce the design concept and development structure of this website.</p>
+          <a href="#top" data-i18n="project1_link">Back to Top</a>
         </article>
 
         <article class="project-card">
-          <h3 data-i18n="project2_title">可能之後就放github的相關資訊</h3>
-          <p data-i18n="project2_desc">我還不知道要寫啥。</p>
-          <a href="https://github.com/" target="_blank" data-i18n="project2_link">放 GitHub 連結</a>
+          <h3 data-i18n="project2_title">GitHub</h3>
+          <p data-i18n="project2_desc">I may later place implementation links and open-source code projects on GitHub.</p>
+          <a href="https://github.com/" target="_blank" data-i18n="project2_link">GitHub Link</a>
         </article>
 
         <article class="project-card">
-          <h3 data-i18n="project3_title">未來專案預留區</h3>
-          <p data-i18n="project3_desc">這一格是預留給之後的新作品</p>
-          <a href="#contact" data-i18n="project3_link">聯絡我</a>
+          <h3 data-i18n="project3_title">Future Project Placeholder</h3>
+          <p data-i18n="project3_desc">This card is reserved for future projects.</p>
+          <a href="#contact" data-i18n="project3_link">Contact Me</a>
         </article>
       </div>
     </section>
 
     <section id="contact" class="section fade-in delay-3">
-      <h2 class="section-title" data-i18n="contact_title">聯絡方式</h2>
+      <h2 class="section-title" data-i18n="contact_title">Contact</h2>
       <p class="section-desc" data-i18n="contact_desc"></p>
       <div class="contact-card">
         <div class="contact-list">
-          <p data-i18n="contact_email">Email：charles5000017@gmail.com</p>
+          <p data-i18n="contact_email">Email: charles5000017@gmail.com</p>
           <a href="https://github.com/" target="_blank" data-i18n="contact_github">GitHub</a>
         </div>
       </div>
@@ -575,212 +626,248 @@
   <script>
     const translations = {
       zh: {
-        page_title: "Charles-Hong | 個人網站",
-        nav_about: "關於我",
-        nav_skills: "技能",
-        nav_projects: "作品",
-        nav_contact: "聯絡",
+        page_title: 'Charles-Hong | 個人網站',
+        nav_about: '關於我',
+        nav_skills: '技能',
+        nav_projects: '作品',
+        nav_contact: '聯絡',
 
         hero_title: '你好，我是 <span class="hero-name">Charles-Hong</span>',
-        hero_desc: "這是我的個人網站。我畢業於中原大學電機工程學系，網站內容會整理我的學習歷程、發表文獻、工作經驗、作品展示，以及我在 IC 設計、FPGA 與網路應用相關領域的技術探索。",
-        hero_btn_projects: "查看作品",
-        hero_btn_hello: "LinkedIn",
-        hero_note: "",
-        hero_note_clicked: "很高興認識你，歡迎來到 Charles-Hong 的網站！",
+        hero_desc: '這是我的個人網站。我畢業於中原大學電機工程學系，網站內容會整理我的學習歷程、發表文獻、工作經驗、作品展示，以及我在 IC 設計、FPGA 與網路應用相關領域的技術探索。',
+        hero_btn_projects: '查看作品',
+        hero_btn_linkedin: 'LinkedIn',
 
-        intro_title: "個人簡介",
-        intro_desc: "我畢業於中原大學電機工程學系，專業領域包含 Cell-based IC Design、ASIC、FPGA 與網路應用。",
+        intro_title: '生活花絮',
+        intro_desc: '這裡可以輪播我的花絮照片與生活片段。',
 
-        about_title: "關於我",
-        about_desc: "以下為我的基本背景資訊，方便閱讀與快速掌握。",
-        about_label_school: "畢業學校：",
-        about_school: "中原大學 電機工程學系",
-        about_label_domain: "專業領域：",
-        about_domain: "Cell-based IC Design、ASIC、FPGA、Application of Networking",
-        about_label_eda: "EDA tools：",
-        about_eda: "Design Compiler、ICC/ICC2/Fusion Compiler、Custom Compiler、Laker、Virtuoso、Catapult、Vivado",
-        about_label_langprog: "程式語言：",
-        about_programming: "Python、C、Verilog",
-        about_label_language: "語言：",
-        about_languages: "中文、英文、越語",
+        about_title: '關於我',
+        about_desc: '以下為我的基本背景資訊，方便閱讀與快速掌握。',
+        about_label_school: '畢業學校：',
+        about_school: '中原大學 電機工程學系',
+        about_label_domain: '專業領域：',
+        about_domain: 'Cell-based IC Design、ASIC、FPGA、Application of Networking',
+        about_label_eda: 'EDA tools：',
+        about_eda: 'Design Compiler、ICC/ICC2/Fusion Compiler、Custom Compiler、Laker、Virtuoso、Catapult、Vivado',
+        about_label_langprog: '程式語言：',
+        about_programming: 'Python、C、Verilog',
+        about_label_language: '語言：',
+        about_languages: '中文、英文、越語',
 
-        skills_title: "技能/工具",
-        skills_desc: "這邊可能可以做個顏色分類",
-        skills_group_domain: "專業領域",
-        skills_group_eda: "EDA Tools",
-        skills_group_programming: "程式語言",
-        skills_group_languages: "語言能力",
+        skills_title: '技能',
+        skills_desc: '以下依類別整理技能，讓版面更清楚。',
+        skills_group_domain: '專業領域',
+        skills_group_eda: 'EDA Tools',
+        skills_group_programming: '程式語言',
+        skills_group_languages: '語言能力',
 
-        skill_domain_1: "Cell-based IC Design",
-        skill_domain_2: "ASIC",
-        skill_domain_3: "FPGA",
-        skill_domain_4: "Application of Networking",
+        skill_domain_1: 'Cell-based IC Design',
+        skill_domain_2: 'ASIC',
+        skill_domain_3: 'FPGA',
+        skill_domain_4: 'Application of Networking',
 
-        skill_eda_1: "Design Compiler",
-        skill_eda_2: "ICC / ICC2 / Fusion Compiler",
-        skill_eda_3: "Custom Compiler",
-        skill_eda_4: "Laker",
-        skill_eda_5: "Virtuoso",
-        skill_eda_6: "Catapult",
-        skill_eda_7: "Vivado",
+        skill_eda_1: 'Design Compiler',
+        skill_eda_2: 'ICC / ICC2 / Fusion Compiler',
+        skill_eda_3: 'Custom Compiler',
+        skill_eda_4: 'Laker',
+        skill_eda_5: 'Virtuoso',
+        skill_eda_6: 'Catapult',
+        skill_eda_7: 'Vivado',
 
-        skill_prog_1: "Python",
-        skill_prog_2: "C",
-        skill_prog_3: "Verilog",
+        skill_prog_1: 'Python',
+        skill_prog_2: 'C',
+        skill_prog_3: 'Verilog',
 
-        lang_chinese: "中文",
-        lang_english: "英文",
-        lang_vietnamese: "越語",
+        lang_chinese: '中文',
+        lang_english: '英文',
+        lang_vietnamese: '越語',
 
-        projects_title: "我的作品",
-        projects_desc: "還不知道要放啥",
-        project1_title: "個人網站首頁",
-        project1_desc: "還不知道要放啥",
-        project1_link: "返回首頁",
-        project2_title: "Github",
-        project2_desc: "應該到時候會在github上放一些作品的實作連結_open_source_code的那種",
-        project2_link: "放 GitHub 連結",
-        project3_title: "未來專案預留區",
-        project3_desc: "這一格預留給之後的作品",
-        project3_link: "聯絡我",
+        projects_title: '我的作品',
+        projects_desc: '我還在思考這裡要放作品分類連結，還是直接放完整專案內容。',
+        project1_title: '個人網站首頁',
+        project1_desc: '之後可以補上這個網站的設計理念與開發結構。',
+        project1_link: '返回首頁',
+        project2_title: 'GitHub',
+        project2_desc: '之後可以在 GitHub 放上實作連結與 open source code。',
+        project2_link: 'GitHub 連結',
+        project3_title: '未來專案預留區',
+        project3_desc: '這一格預留給之後的新作品。',
+        project3_link: '聯絡我',
 
-        contact_title: "聯絡方式",
-        contact_desc: "",
-        contact_email: "Email：charles5000017@gmail.com",
-        contact_github: "GitHub",
+        contact_title: '聯絡方式',
+        contact_desc: '',
+        contact_email: 'Email：charles5000017@gmail.com',
+        contact_github: 'GitHub',
 
-        footer_text: "© 2026 Charles-Hong. All rights reserved.",
-        lang_button: "EN",
-        image_alt: "Charles-Hong 的個人照片"
+        footer_text: '© 2026 Charles-Hong. All rights reserved.',
+        lang_button: 'EN',
+        hero_main_alt: 'Charles-Hong 的主照片',
+        slideshow_alt: 'Charles-Hong 的生活花絮照片'
       },
 
       en: {
-        page_title: "Charles-Hong | Personal Website",
-        nav_about: "About",
-        nav_skills: "Skills",
-        nav_projects: "Projects",
-        nav_contact: "Contact",
+        page_title: 'Charles-Hong | Personal Website',
+        nav_about: 'About',
+        nav_skills: 'Skills',
+        nav_projects: 'Projects',
+        nav_contact: 'Contact',
 
         hero_title: 'Hello, I am <span class="hero-name">Charles-Hong</span>',
-        hero_desc: "This is my personal website. I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. Here I organize my learning journey, publications, work experience, project showcase, and my technical exploration in IC design, FPGA, and networking-related applications.",
-        hero_btn_projects: "View Projects",
-        hero_btn_hello: "LinkedIn",
-        hero_note: "",
-        hero_note_clicked: "Nice to meet you. Welcome to Charles-Hong's website!",
+        hero_desc: 'This is my personal website. I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. Here I organize my learning journey, publications, work experience, project showcase, and my technical exploration in IC design, FPGA, and networking-related applications.',
+        hero_btn_projects: 'View Projects',
+        hero_btn_linkedin: 'LinkedIn',
 
-        intro_title: "Profile",
-        intro_desc: "I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. My professional focus includes Cell-based IC Design, ASIC, FPGA, and networking applications.",
+        intro_title: 'Highlights',
+        intro_desc: 'A few snapshots from my life and experiences.',
 
-        about_title: "About Me",
-        about_desc: "Below is my basic background information for quick and clear reading.",
-        about_label_school: "Education: ",
-        about_school: "Chung Yuan Christian University, Department of Electrical Engineering",
-        about_label_domain: "Professional Fields: ",
-        about_domain: "Cell-based IC Design, ASIC, FPGA, Application of Networking",
-        about_label_eda: "EDA Tools: ",
-        about_eda: "Design Compiler, ICC/ICC2/Fusion Compiler, Custom Compiler, Laker, Virtuoso, Catapult, Vivado",
-        about_label_langprog: "Programming Languages: ",
-        about_programming: "Python, C, Verilog",
-        about_label_language: "Languages: ",
-        about_languages: "Chinese, English, Vietnamese",
+        about_title: 'About Me',
+        about_desc: 'Below is my basic background information for quick and clear reading.',
+        about_label_school: 'Education:',
+        about_school: 'Chung Yuan Christian University, Department of Electrical Engineering',
+        about_label_domain: 'Professional Fields:',
+        about_domain: 'Cell-based IC Design, ASIC, FPGA, Application of Networking',
+        about_label_eda: 'EDA Tools:',
+        about_eda: 'Design Compiler, ICC/ICC2/Fusion Compiler, Custom Compiler, Laker, Virtuoso, Catapult, Vivado',
+        about_label_langprog: 'Programming Languages:',
+        about_programming: 'Python, C, Verilog',
+        about_label_language: 'Languages:',
+        about_languages: 'Chinese, English, Vietnamese',
 
-        skills_title: "Skills",
-        skills_desc: "Maybe color grouping can be added here later.",
-        skills_group_domain: "Professional Fields",
-        skills_group_eda: "EDA Tools",
-        skills_group_programming: "Programming Languages",
-        skills_group_languages: "Languages",
+        skills_title: 'Skills',
+        skills_desc: 'My skills are grouped by category below so the layout stays clear and easy to read.',
+        skills_group_domain: 'Professional Fields',
+        skills_group_eda: 'EDA Tools',
+        skills_group_programming: 'Programming Languages',
+        skills_group_languages: 'Languages',
 
-        skill_domain_1: "Cell-based IC Design",
-        skill_domain_2: "ASIC",
-        skill_domain_3: "FPGA",
-        skill_domain_4: "Application of Networking",
+        skill_domain_1: 'Cell-based IC Design',
+        skill_domain_2: 'ASIC',
+        skill_domain_3: 'FPGA',
+        skill_domain_4: 'Application of Networking',
 
-        skill_eda_1: "Design Compiler",
-        skill_eda_2: "ICC / ICC2 / Fusion Compiler",
-        skill_eda_3: "Custom Compiler",
-        skill_eda_4: "Laker",
-        skill_eda_5: "Virtuoso",
-        skill_eda_6: "Catapult",
-        skill_eda_7: "Vivado",
+        skill_eda_1: 'Design Compiler',
+        skill_eda_2: 'ICC / ICC2 / Fusion Compiler',
+        skill_eda_3: 'Custom Compiler',
+        skill_eda_4: 'Laker',
+        skill_eda_5: 'Virtuoso',
+        skill_eda_6: 'Catapult',
+        skill_eda_7: 'Vivado',
 
-        skill_prog_1: "Python",
-        skill_prog_2: "C",
-        skill_prog_3: "Verilog",
+        skill_prog_1: 'Python',
+        skill_prog_2: 'C',
+        skill_prog_3: 'Verilog',
 
-        lang_chinese: "Chinese",
-        lang_english: "English",
-        lang_vietnamese: "Vietnamese",
+        lang_chinese: 'Chinese',
+        lang_english: 'English',
+        lang_vietnamese: 'Vietnamese',
 
-        projects_title: "My Projects",
-        projects_desc: "I am not sure what to put here yet. I am still deciding whether this section should contain project categories and links, or full project details directly.",
-        project1_title: "Personal Homepage",
-        project1_desc: "I am not sure what to write here yet.",
-        project1_link: "Back to Top",
-        project2_title: "GitHub",
-        project2_desc: "I may later place some implementation links and open-source code projects on GitHub.",
-        project2_link: "GitHub Link",
-        project3_title: "Future Project Placeholder",
-        project3_desc: "This card is reserved for future projects.",
-        project3_link: "Contact Me",
+        projects_title: 'Projects',
+        projects_desc: 'I am still deciding whether this section should show project categories and links, or complete project details directly.',
+        project1_title: 'Personal Homepage',
+        project1_desc: 'This section can later introduce the design concept and development structure of this website.',
+        project1_link: 'Back to Top',
+        project2_title: 'GitHub',
+        project2_desc: 'I may later place implementation links and open-source code projects on GitHub.',
+        project2_link: 'GitHub Link',
+        project3_title: 'Future Project Placeholder',
+        project3_desc: 'This card is reserved for future projects.',
+        project3_link: 'Contact Me',
 
-        contact_title: "Contact",
-        contact_desc: "",
-        contact_email: "Email: charles5000017@gmail.com",
-        contact_github: "GitHub",
+        contact_title: 'Contact',
+        contact_desc: '',
+        contact_email: 'Email: charles5000017@gmail.com',
+        contact_github: 'GitHub',
 
-        footer_text: "© 2026 Charles-Hong. All rights reserved.",
-        lang_button: "中文",
-        image_alt: "Portrait of Charles-Hong"
+        footer_text: '© 2026 Charles-Hong. All rights reserved.',
+        lang_button: '中文',
+        hero_main_alt: 'Portrait of Charles-Hong',
+        slideshow_alt: 'Highlight photo of Charles-Hong'
       }
     };
 
-    let currentLang = localStorage.getItem("language") || "en";
-    let helloClicked = false;
+    const slideshowPhotos = [
+      {
+        src: 'images/moment1.jpg',
+        zh: '這張可以放活動、上課或日常紀錄。',
+        en: 'This slide can show an activity, class moment, or daily snapshot.'
+      },
+      {
+        src: 'images/moment2.jpg',
+        zh: '這張可以放專題、實驗室或工作花絮。',
+        en: 'This slide can show a project, lab scene, or work highlight.'
+      },
+      {
+        src: 'images/moment3.jpg',
+        zh: '這張可以放旅程、展覽或成果展示照片。',
+        en: 'This slide can show travel, an exhibition, or a presentation moment.'
+      },
+      {
+        src: 'images/moment4.jpg',
+        zh: '這張可以放你想讓人記住的生活片段。',
+        en: 'This slide can show a personal memory you want people to remember.'
+      }
+    ];
 
-    const langToggle = document.getElementById("langToggle");
-    const helloBtn = document.getElementById("helloBtn");
-    const helloText = document.getElementById("helloText");
-    const profileImage = document.getElementById("profileImage");
+    let currentLang = localStorage.getItem('language') || 'en';
+    let currentSlideIndex = 0;
+
+    const langToggle = document.getElementById('langToggle');
+    const heroMainPhoto = document.getElementById('heroMainPhoto');
+    const slideshowImage = document.getElementById('slideshowImage');
+    const slideshowCaption = document.getElementById('slideshowCaption');
+
+    function updateSlideshowContent() {
+      const slide = slideshowPhotos[currentSlideIndex];
+      slideshowImage.classList.add('is-fading');
+
+      setTimeout(() => {
+        slideshowImage.src = slide.src;
+        slideshowImage.alt = translations[currentLang].slideshow_alt;
+        slideshowCaption.textContent = slide[currentLang];
+        slideshowImage.classList.remove('is-fading');
+      }, 180);
+    }
+
+    function nextSlide() {
+      currentSlideIndex = (currentSlideIndex + 1) % slideshowPhotos.length;
+      updateSlideshowContent();
+    }
 
     function applyLanguage(lang) {
       currentLang = lang;
       const dict = translations[lang];
 
-      document.documentElement.lang = lang === "zh" ? "zh-TW" : "en";
+      document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
       document.title = dict.page_title;
       langToggle.textContent = dict.lang_button;
-      profileImage.alt = dict.image_alt;
+      heroMainPhoto.alt = dict.hero_main_alt;
+      slideshowImage.alt = dict.slideshow_alt;
 
-      document.querySelectorAll("[data-i18n]").forEach((element) => {
+      document.querySelectorAll('[data-i18n]').forEach((element) => {
         const key = element.dataset.i18n;
         if (dict[key] !== undefined) {
           element.textContent = dict[key];
         }
       });
 
-      document.querySelectorAll("[data-i18n-html]").forEach((element) => {
+      document.querySelectorAll('[data-i18n-html]').forEach((element) => {
         const key = element.dataset.i18nHtml;
         if (dict[key] !== undefined) {
           element.innerHTML = dict[key];
         }
       });
 
-      helloText.textContent = helloClicked ? dict.hero_note_clicked : dict.hero_note;
-      localStorage.setItem("language", lang);
+      slideshowCaption.textContent = slideshowPhotos[currentSlideIndex][currentLang];
+      localStorage.setItem('language', lang);
     }
 
-    langToggle.addEventListener("click", () => {
-      const nextLang = currentLang === "zh" ? "en" : "zh";
+    langToggle.addEventListener('click', () => {
+      const nextLang = currentLang === 'zh' ? 'en' : 'zh';
       applyLanguage(nextLang);
     });
 
-    helloBtn.addEventListener("click", () => {
-      helloClicked = true;
-      helloText.textContent = translations[currentLang].hero_note_clicked;
-    });
-
     applyLanguage(currentLang);
+    updateSlideshowContent();
+    setInterval(nextSlide, 3000);
   </script>
 </body>
 </html>
