@@ -419,7 +419,7 @@
           <a href="#projects" data-i18n="nav_projects">作品</a>
           <a href="#contact" data-i18n="nav_contact">聯絡</a>
         </div>
-        <button id="langToggle" class="lang-toggle">EN</button>
+        <button id="langToggle" class="lang-toggle">中文</button>
       </div>
     </div>
   </nav>
@@ -485,7 +485,7 @@
     </section>
 
     <section id="skills" class="section fade-in delay-2">
-      <h2 class="section-title" data-i18n="skills_title">技能基礎</h2>
+      <h2 class="section-title" data-i18n="skills_title">技能/工具</h2>
       <p class="section-desc" data-i18n="skills_desc">這邊可能可以做個顏色分類</p>
 
       <div class="skills-grid">
@@ -604,7 +604,7 @@
         about_label_language: "語言：",
         about_languages: "中文、英文、越語",
 
-        skills_title: "技能基礎",
+        skills_title: "技能/工具",
         skills_desc: "這邊可能可以做個顏色分類",
         skills_group_domain: "專業領域",
         skills_group_eda: "EDA Tools",
@@ -684,7 +684,7 @@
         about_label_language: "Languages: ",
         about_languages: "Chinese, English, Vietnamese",
 
-        skills_title: "Skill Foundations",
+        skills_title: "Skills",
         skills_desc: "Maybe color grouping can be added here later.",
         skills_group_domain: "Professional Fields",
         skills_group_eda: "EDA Tools",
@@ -735,7 +735,7 @@
       }
     };
 
-    let currentLang = localStorage.getItem("language") || "zh";
+    let currentLang = localStorage.getItem("language") || "en";
     let helloClicked = false;
 
     const langToggle = document.getElementById("langToggle");
