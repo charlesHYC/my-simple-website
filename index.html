@@ -63,12 +63,21 @@
       justify-content: space-between;
       align-items: center;
       padding: 16px 0;
+      gap: 16px;
     }
 
     .logo {
       font-size: 1.25rem;
       font-weight: 700;
       color: var(--primary);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .nav-links {
@@ -86,6 +95,21 @@
 
     .nav-links a:hover {
       color: var(--primary);
+    }
+
+    .lang-toggle {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--primary);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .lang-toggle:hover {
+      background: #eef2ff;
     }
 
     .hero {
@@ -263,7 +287,8 @@
       margin-top: 10px;
     }
 
-    .contact-list a {
+    .contact-list a,
+    .contact-list p {
       color: var(--primary);
       font-weight: 700;
       word-break: break-word;
@@ -315,6 +340,11 @@
         gap: 12px;
       }
 
+      .nav-right {
+        width: 100%;
+        justify-content: center;
+      }
+
       .hero {
         padding-top: 44px;
       }
@@ -336,11 +366,14 @@
   <nav class="navbar">
     <div class="container nav-inner">
       <a href="#top" class="logo">YingChao-Hong</a>
-      <div class="nav-links">
-        <a href="#about">關於我</a>
-        <a href="#skills">技能</a>
-        <a href="#projects">作品</a>
-        <a href="#contact">聯絡</a>
+      <div class="nav-right">
+        <div class="nav-links">
+          <a href="#about" data-i18n="nav_about">關於我</a>
+          <a href="#skills" data-i18n="nav_skills">技能</a>
+          <a href="#projects" data-i18n="nav_projects">作品</a>
+          <a href="#contact" data-i18n="nav_contact">聯絡</a>
+        </div>
+        <button id="langToggle" class="lang-toggle">EN</button>
       </div>
     </div>
   </nav>
@@ -349,106 +382,230 @@
     <section class="hero">
       <div class="hero-grid">
         <div class="hero-text fade-in">
-          <h1>你好，我是 <span>YingChao-Hong</span></h1>
-          <p>
-            這是我的個人網站。我會在這裡整理自己的學習歷程、作品展示，以及我正在探索的技術方向。
-            這個版本使用了 HTML、CSS、Flexbox、Grid、RWD、動畫效果，以及基礎 JavaScript 與 DOM 操作。
+          <h1 data-i18n-html="hero_title">你好，我是 <span>YingChao-Hong</span></h1>
+          <p data-i18n="hero_desc">
+            這是我的個人網站。我會在這裡整理自己的學習歷程、作品展示，以及我正在探索的技術方向。這個版本使用了 HTML、CSS、Flexbox、Grid、RWD、動畫效果，以及基礎 JavaScript 與 DOM 操作。
           </p>
           <div class="hero-actions">
-            <a href="#projects" class="btn btn-primary">查看作品</a>
-            <button class="btn btn-secondary" id="helloBtn">點我打招呼</button>
+            <a href="#projects" class="btn btn-primary" data-i18n="hero_btn_projects">查看作品</a>
+            <button class="btn btn-secondary" id="helloBtn" data-i18n="hero_btn_hello">點我打招呼</button>
           </div>
-          <p class="hero-note" id="helloText">準備好開始建立你的個人品牌了嗎？</p>
+          <p class="hero-note" id="helloText" data-i18n="hero_note">準備好開始建立你的個人品牌了嗎？</p>
         </div>
 
         <div class="hero-card fade-in delay-1">
-          <img class="profile-img" src="https://picsum.photos/500" alt="YingChao-Hong 的個人照片" />
-          <h2>個人簡介</h2>
-          <p>
-            你可以把這裡換成自己的照片、學校、科系、興趣，或一句最能代表你的話。
-            網頁不是裝飾品，它其實是你的數位名片。
+          <img class="profile-img" src="images/profile.jpg" alt="YingChao-Hong 的個人照片" id="profileImage" />
+          <h2 data-i18n="intro_title">個人簡介</h2>
+          <p data-i18n="intro_desc">
+            你可以把這裡換成自己的照片、學校、科系、興趣，或一句最能代表你的話。網頁不是裝飾品，它其實是你的數位名片。
           </p>
         </div>
       </div>
     </section>
 
     <section id="about" class="section fade-in delay-1">
-      <h2 class="section-title">關於我</h2>
-      <p class="section-desc">先讓別人知道你是誰、你在做什麼，以及你想往哪裡走。</p>
+      <h2 class="section-title" data-i18n="about_title">關於我</h2>
+      <p class="section-desc" data-i18n="about_desc">先讓別人知道你是誰、你在做什麼，以及你想往哪裡走。</p>
       <div class="about-card">
-        <p>
-          我是 YingChao-Hong，目前正在學習前端網頁設計與網站部署。這個網站是我的個人練習作品，
-          未來我希望逐步加入更多內容，例如自我介紹、課程成果、專案作品、學習筆記與聯絡方式，
-          讓網站不只是作業，而是可以真正代表我自己的展示平台。
+        <p data-i18n="about_body">
+          我是 YingChao-Hong，目前正在學習前端網頁設計與網站部署。這個網站是我的個人練習作品，未來我希望逐步加入更多內容，例如自我介紹、課程成果、專案作品、學習筆記與聯絡方式，讓網站不只是作業，而是可以真正代表我自己的展示平台。
         </p>
       </div>
     </section>
 
     <section id="skills" class="section fade-in delay-2">
-      <h2 class="section-title">技能基礎</h2>
-      <p class="section-desc">以下內容就是你教授提供的基礎，我已經把它們真的放進這個網站裡了。</p>
+      <h2 class="section-title" data-i18n="skills_title">技能基礎</h2>
+      <p class="section-desc" data-i18n="skills_desc">以下內容就是你教授提供的基礎，我已經把它們真的放進這個網站裡了。</p>
       <div class="skills-wrap">
-        <span class="skill-tag">Git / GitHub</span>
-        <span class="skill-tag">Basic HTML</span>
-        <span class="skill-tag">HTML / CSS</span>
-        <span class="skill-tag">Basic CSS</span>
-        <span class="skill-tag">Flexbox</span>
-        <span class="skill-tag">Grid</span>
-        <span class="skill-tag">RWD</span>
-        <span class="skill-tag">Animate</span>
-        <span class="skill-tag">JavaScript</span>
-        <span class="skill-tag">DOM 操作</span>
+        <span class="skill-tag">Cell-based IC Design</span>
+        <span class="skill-tag">ASIC</span>
+        <span class="skill-tag">FPGA</span>
+        <span class="skill-tag">Application of Networking</span>
+        <span class="skill-tag">Design Compiler</span>
+        <span class="skill-tag">ICC / ICC2 / Fusion Compiler</span>
+        <span class="skill-tag">Custom Compiler</span>
+        <span class="skill-tag">Laker</span>
+        <span class="skill-tag">Virtuoso</span>
+        <span class="skill-tag">Catapult</span>
+        <span class="skill-tag">Vivado</span>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">C</span>
+        <span class="skill-tag">Verilog</span>
+        <span class="skill-tag">Chinese</span>
+        <span class="skill-tag">English</span>
+        <span class="skill-tag">Vietnamese</span>
       </div>
     </section>
 
     <section id="projects" class="section fade-in delay-3">
-      <h2 class="section-title">我的作品</h2>
-      <p class="section-desc">先放 2 到 3 個就夠了，不要一開始就把自己搞成作品大賣場。</p>
+      <h2 class="section-title" data-i18n="projects_title">我的作品</h2>
+      <p class="section-desc" data-i18n="projects_desc">先放 2 到 3 個就夠了，不要一開始就把自己搞成作品大賣場。</p>
       <div class="project-grid">
         <article class="project-card">
-          <h3>個人網站首頁</h3>
-          <p>使用 HTML、CSS 與 RWD 製作的個人首頁，作為 GitHub Pages 的第一個網站作品。</p>
-          <a href="#top">返回首頁</a>
+          <h3 data-i18n="project1_title">個人網站首頁</h3>
+          <p data-i18n="project1_desc">使用 HTML、CSS 與 RWD 製作的個人首頁，作為 GitHub Pages 的第一個網站作品。</p>
+          <a href="#top" data-i18n="project1_link">返回首頁</a>
         </article>
 
         <article class="project-card">
-          <h3>前端練習版面</h3>
-          <p>可放入你練習 Flexbox、Grid、卡片排版或導覽列設計的作品展示內容。</p>
-          <a href="https://github.com/" target="_blank">放 GitHub 連結</a>
+          <h3 data-i18n="project2_title">前端練習版面</h3>
+          <p data-i18n="project2_desc">可放入你練習 Flexbox、Grid、卡片排版或導覽列設計的作品展示內容。</p>
+          <a href="https://github.com/" target="_blank" data-i18n="project2_link">放 GitHub 連結</a>
         </article>
 
         <article class="project-card">
-          <h3>未來專案預留區</h3>
-          <p>這一格可以預留給之後的新作品。網站設計最怕一開始就寫太死，所以我先幫你留彈性。</p>
-          <a href="#contact">聯絡我</a>
+          <h3 data-i18n="project3_title">未來專案預留區</h3>
+          <p data-i18n="project3_desc">這一格可以預留給之後的新作品。網站設計最怕一開始就寫太死，所以我先幫你留彈性。</p>
+          <a href="#contact" data-i18n="project3_link">聯絡我</a>
         </article>
       </div>
     </section>
 
     <section id="contact" class="section fade-in delay-3">
-      <h2 class="section-title">聯絡方式</h2>
-      <p class="section-desc">把真實可用的聯絡資訊放上去，不然頁面再好看也只是電子壁紙。</p>
+      <h2 class="section-title" data-i18n="contact_title">聯絡方式</h2>
+      <p class="section-desc" data-i18n="contact_desc">把真實可用的聯絡資訊放上去，不然頁面再好看也只是電子壁紙。</p>
       <div class="contact-card">
         <div class="contact-list">
-          <p>Email：yourmail@example.com</p>
-          <a href="https://github.com/" target="_blank">GitHub</a>
-          <a href="https://pages.github.com/" target="_blank">GitHub Pages 官方文件</a>
+          <p data-i18n="contact_email">Email：charles5000017@gmail.com</p>
+          <a href="https://github.com/" target="_blank" data-i18n="contact_github">GitHub</a>
+          <a href="https://pages.github.com/" target="_blank" data-i18n="contact_docs">GitHub Pages 官方文件</a>
         </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>© 2026 YingChao-Hong. All rights reserved.</p>
+    <p data-i18n="footer_text">© 2026 YingChao-Hong. All rights reserved.</p>
   </footer>
 
   <script>
+    const translations = {
+      zh: {
+        page_title: 'YingChao-Hong | 個人網站',
+        nav_about: '關於我',
+        nav_skills: '技能',
+        nav_projects: '作品',
+        nav_contact: '聯絡',
+        hero_title: '你好，我是 <span>YingChao-Hong</span>',
+        hero_desc: '這是我的個人網站。我畢業於中原大學電機工程學系，網站內容會整理我的學習歷程、作品展示，以及我在 IC 設計、FPGA 與網路應用相關領域的技術探索。這個版本使用了 HTML、CSS、Flexbox、Grid、RWD、動畫效果，以及基礎 JavaScript 與 DOM 操作。',
+        hero_btn_projects: '查看作品',
+        hero_btn_hello: '點我打招呼',
+        hero_note: '準備好開始建立你的個人品牌了嗎？',
+        hero_note_clicked: '很高興認識你，歡迎來到 YingChao-Hong 的網站！',
+        intro_title: '個人簡介',
+        intro_desc: '我畢業於中原大學電機工程學系，專業領域包含 Cell-based IC Design、ASIC、FPGA 與網路應用。這個網站將作為我的數位名片，用來整理背景、技能與作品。',
+        about_title: '關於我',
+        about_desc: '讓讀者快速了解我的學歷背景、技術能力，以及我正在投入的發展方向。',
+        about_body: '我是 YingChao-Hong，畢業於中原大學電機工程學系。我的技術基礎涵蓋 Cell-based IC Design、ASIC、FPGA，以及 Networking Application，並熟悉多項 EDA 工具，包括 Design Compiler、ICC/ICC2/Fusion Compiler、Custom Compiler、Laker、Virtuoso、Catapult 與 Vivado。同時，我也具備 Python、C、Verilog 等程式能力，並可使用中文、英文與越語進行溝通。未來我希望透過這個網站整理自己的專案成果與專業經歷，建立更完整的個人展示平台。',
+        skills_title: '技能基礎',
+        skills_desc: '以下整理的是我的專業技能與工具基礎，涵蓋 IC 設計、EDA 工具、程式語言與語言能力。',
+        projects_title: '我的作品',
+        projects_desc: '先放 2 到 3 個就夠了，不要一開始就把自己搞成作品大賣場。',
+        project1_title: '個人網站首頁',
+        project1_desc: '使用 HTML、CSS 與 RWD 製作的個人首頁，作為 GitHub Pages 的第一個網站作品。',
+        project1_link: '返回首頁',
+        project2_title: '前端練習版面',
+        project2_desc: '可放入你練習 Flexbox、Grid、卡片排版或導覽列設計的作品展示內容。',
+        project2_link: '放 GitHub 連結',
+        project3_title: '未來專案預留區',
+        project3_desc: '這一格可以預留給之後的新作品。網站設計最怕一開始就寫太死，所以我先幫你留彈性。',
+        project3_link: '聯絡我',
+        contact_title: '聯絡方式',
+        contact_desc: '把真實可用的聯絡資訊放上去，不然頁面再好看也只是電子壁紙。',
+        contact_email: 'Email：charles5000017@gmail.com',
+        contact_github: 'GitHub',
+        contact_docs: 'GitHub Pages 官方文件',
+        footer_text: '© 2026 YingChao-Hong. All rights reserved.',
+        lang_button: 'EN',
+        image_alt: 'YingChao-Hong 的個人照片'
+      },
+      en: {
+        page_title: 'YingChao-Hong | Personal Website',
+        nav_about: 'About',
+        nav_skills: 'Skills',
+        nav_projects: 'Projects',
+        nav_contact: 'Contact',
+        hero_title: 'Hello, I am <span>YingChao-Hong</span>',
+        hero_desc: 'This is my personal website. I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. Here I organize my learning journey, showcase my work, and present my technical exploration in IC design, FPGA, and networking-related applications. This version includes HTML, CSS, Flexbox, Grid, responsive web design, animation effects, and basic JavaScript with DOM interaction.',
+        hero_btn_projects: 'View Projects',
+        hero_btn_hello: 'Say Hello',
+        hero_note: 'Are you ready to start building your personal brand?',
+        hero_note_clicked: 'Nice to meet you. Welcome to YingChao-Hong\'s website!',
+        intro_title: 'Profile',
+        intro_desc: 'I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. My professional focus includes Cell-based IC Design, ASIC, FPGA, and networking applications. This website serves as my digital business card for presenting my background, skills, and projects.',
+        about_title: 'About Me',
+        about_desc: 'This section gives readers a quick understanding of my academic background, technical strengths, and current development direction.',
+        about_body: 'I am YingChao-Hong, a graduate of the Department of Electrical Engineering at Chung Yuan Christian University. My technical foundation covers Cell-based IC Design, ASIC, FPGA, and networking applications. I am familiar with a range of EDA tools, including Design Compiler, ICC/ICC2/Fusion Compiler, Custom Compiler, Laker, Virtuoso, Catapult, and Vivado. I also work with Python, C, and Verilog, and I can communicate in Chinese, English, and Vietnamese. Through this website, I hope to organize my projects and professional experiences into a stronger personal portfolio.',
+        skills_title: 'Skill Foundations',
+        skills_desc: 'Below is a summary of my professional skills and tools, including IC design, EDA tools, programming languages, and language abilities.',
+        projects_title: 'My Projects',
+        projects_desc: 'Two or three projects are enough to start with. A portfolio should be focused, not a crowded flea market.',
+        project1_title: 'Personal Homepage',
+        project1_desc: 'A personal homepage built with HTML, CSS, and responsive web design as my first GitHub Pages project.',
+        project1_link: 'Back to Top',
+        project2_title: 'Front-End Layout Practice',
+        project2_desc: 'You can place your Flexbox, Grid, card layout, or navigation bar design exercises here as portfolio items.',
+        project2_link: 'GitHub Link',
+        project3_title: 'Future Project Placeholder',
+        project3_desc: 'This card is reserved for your future projects. Good web design should stay flexible instead of becoming rigid too early.',
+        project3_link: 'Contact Me',
+        contact_title: 'Contact',
+        contact_desc: 'Put real and usable contact information here, or the page will just become a pretty wallpaper.',
+        contact_email: 'Email: charles5000017@gmail.com',
+        contact_github: 'GitHub',
+        contact_docs: 'GitHub Pages Official Docs',
+        footer_text: '© 2026 YingChao-Hong. All rights reserved.',
+        lang_button: '中文',
+        image_alt: 'Portrait of YingChao-Hong'
+      }
+    };
+
+    let currentLang = localStorage.getItem('language') || 'zh';
+    let helloClicked = false;
+
+    const langToggle = document.getElementById('langToggle');
     const helloBtn = document.getElementById('helloBtn');
     const helloText = document.getElementById('helloText');
+    const profileImage = document.getElementById('profileImage');
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      const dict = translations[lang];
+
+      document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
+      document.title = dict.page_title;
+      langToggle.textContent = dict.lang_button;
+      profileImage.alt = dict.image_alt;
+
+      document.querySelectorAll('[data-i18n]').forEach((element) => {
+        const key = element.dataset.i18n;
+        if (dict[key]) {
+          element.textContent = dict[key];
+        }
+      });
+
+      document.querySelectorAll('[data-i18n-html]').forEach((element) => {
+        const key = element.dataset.i18nHtml;
+        if (dict[key]) {
+          element.innerHTML = dict[key];
+        }
+      });
+
+      helloText.textContent = helloClicked ? dict.hero_note_clicked : dict.hero_note;
+      localStorage.setItem('language', lang);
+    }
+
+    langToggle.addEventListener('click', () => {
+      const nextLang = currentLang === 'zh' ? 'en' : 'zh';
+      applyLanguage(nextLang);
+    });
 
     helloBtn.addEventListener('click', () => {
-      helloText.textContent = '很高興認識你，歡迎來到 YingChao-Hong 的網站！';
+      helloClicked = true;
+      helloText.textContent = translations[currentLang].hero_note_clicked;
     });
+
+    applyLanguage(currentLang);
   </script>
 </body>
 </html>
