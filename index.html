@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YingChao-Hong | 個人網站</title>
+  <title>Charles-Hong | 個人網站</title>
   <style>
     :root {
       --bg: #f7f8fc;
@@ -131,6 +131,10 @@
 
     .hero-text h1 span {
       color: var(--primary);
+    }
+
+    .hero-name {
+      display: block;
     }
 
     .hero-text p {
@@ -407,7 +411,7 @@
 <body>
   <nav class="navbar">
     <div class="container nav-inner">
-      <a href="#top" class="logo">YingChao-Hong</a>
+      <a href="#top" class="logo">Charles-Hong</a>
       <div class="nav-right">
         <div class="nav-links">
           <a href="#about" data-i18n="nav_about">關於我</a>
@@ -424,19 +428,19 @@
     <section class="hero">
       <div class="hero-grid">
         <div class="hero-text fade-in">
-          <h1 data-i18n-html="hero_title">你好，我是 <span>YingChao-Hong</span></h1>
+          <h1 data-i18n-html="hero_title">你好，我是 <span class="hero-name">Charles-Hong</span></h1>
           <p data-i18n="hero_desc">
             這是我的個人網站。我畢業於中原大學電機工程學系，網站內容會整理我的學習歷程、發表文獻、工作經驗、作品展示，以及我在 IC 設計、FPGA 與網路應用相關領域的技術探索。
           </p>
           <div class="hero-actions">
             <a href="#projects" class="btn btn-primary" data-i18n="hero_btn_projects">查看作品</a>
-            <button class="btn btn-secondary" id="helloBtn" data-i18n="hero_btn_hello"> LinkedIn</button>
+            <button class="btn btn-secondary" id="helloBtn" data-i18n="hero_btn_hello">LinkedIn</button>
           </div>
           <p class="hero-note" id="helloText" data-i18n="hero_note"></p>
         </div>
 
         <div class="hero-card fade-in delay-1">
-          <img class="profile-img" src="images/profile.jpg" alt="YingChao-Hong 的個人照片" id="profileImage" />
+          <img class="profile-img" src="images/profile.jpg" alt="Charles-Hong 的個人照片" id="profileImage" />
           <h2 data-i18n="intro_title">個人簡介</h2>
           <p data-i18n="intro_desc">
             我畢業於中原大學電機工程學系，專業領域包含 Cell-based IC Design、ASIC、FPGA 與網路應用。
@@ -447,7 +451,7 @@
 
     <section id="about" class="section fade-in delay-1">
       <h2 class="section-title" data-i18n="about_title">關於我</h2>
-      <p class="section-desc" data-i18n="about_desc">以下依照條列格式整理我的背景資訊，方便閱讀與快速掌握。</p>
+      <p class="section-desc" data-i18n="about_desc">以下為我的基本背景資訊，方便閱讀與快速掌握。</p>
       <div class="about-card">
         <div class="about-lines">
           <p class="about-item">
@@ -482,7 +486,7 @@
 
     <section id="skills" class="section fade-in delay-2">
       <h2 class="section-title" data-i18n="skills_title">技能基礎</h2>
-      <p class="section-desc" data-i18n="skills_desc">以下將技能基礎依類別整理，避免全部擠成一團，閱讀上會清楚很多。</p>
+      <p class="section-desc" data-i18n="skills_desc">這邊可能可以做個顏色分類</p>
 
       <div class="skills-grid">
         <div class="skill-group">
@@ -565,24 +569,24 @@
   </main>
 
   <footer>
-    <p data-i18n="footer_text">© 2026 YingChao-Hong. All rights reserved.</p>
+    <p data-i18n="footer_text">© 2026 Charles-Hong. All rights reserved.</p>
   </footer>
 
   <script>
     const translations = {
       zh: {
-        page_title: "YingChao-Hong | 個人網站",
+        page_title: "Charles-Hong | 個人網站",
         nav_about: "關於我",
         nav_skills: "技能",
         nav_projects: "作品",
         nav_contact: "聯絡",
 
-        hero_title: '你好，我是 <span>Charles-Hong</span>',
-        hero_desc: "這是我的個人網站。我畢業於中原大學電機工程學系，網站內容會整理我的學習歷程、作品展示，以及我在 IC 設計、FPGA 與網路應用相關領域的技術探索。",
+        hero_title: '你好，我是 <span class="hero-name">Charles-Hong</span>',
+        hero_desc: "這是我的個人網站。我畢業於中原大學電機工程學系，網站內容會整理我的學習歷程、發表文獻、工作經驗、作品展示，以及我在 IC 設計、FPGA 與網路應用相關領域的技術探索。",
         hero_btn_projects: "查看作品",
         hero_btn_hello: "LinkedIn",
         hero_note: "",
-        hero_note_clicked: "很高興認識你，歡迎來到 YingChao-Hong 的網站！",
+        hero_note_clicked: "很高興認識你，歡迎來到 Charles-Hong 的網站！",
 
         intro_title: "個人簡介",
         intro_desc: "我畢業於中原大學電機工程學系，專業領域包含 Cell-based IC Design、ASIC、FPGA 與網路應用。",
@@ -644,32 +648,31 @@
         contact_desc: "",
         contact_email: "Email：charles5000017@gmail.com",
         contact_github: "GitHub",
-        contact_docs: "",
 
-        footer_text: "© 2026 YingChao-Hong. All rights reserved.",
+        footer_text: "© 2026 Charles-Hong. All rights reserved.",
         lang_button: "EN",
-        image_alt: "YingChao-Hong 的個人照片"
+        image_alt: "Charles-Hong 的個人照片"
       },
 
       en: {
-        page_title: "YingChao-Hong | Personal Website",
+        page_title: "Charles-Hong | Personal Website",
         nav_about: "About",
         nav_skills: "Skills",
         nav_projects: "Projects",
         nav_contact: "Contact",
 
-        hero_title: 'Hello, I am <span>YingChao-Hong</span>',
-        hero_desc: "This is my personal website. I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. Here I organize my learning journey, showcase my work, and present my technical exploration in IC design, FPGA, and networking-related applications. This version includes HTML, CSS, Flexbox, Grid, responsive web design, animation effects, and basic JavaScript with DOM interaction.",
+        hero_title: 'Hello, I am <span class="hero-name">Charles-Hong</span>',
+        hero_desc: "This is my personal website. I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. Here I organize my learning journey, publications, work experience, project showcase, and my technical exploration in IC design, FPGA, and networking-related applications.",
         hero_btn_projects: "View Projects",
-        hero_btn_hello: "Say Hello",
-        hero_note: "Are you ready to start building your personal brand?",
-        hero_note_clicked: "Nice to meet you. Welcome to YingChao-Hong's website!",
+        hero_btn_hello: "LinkedIn",
+        hero_note: "",
+        hero_note_clicked: "Nice to meet you. Welcome to Charles-Hong's website!",
 
         intro_title: "Profile",
-        intro_desc: "I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. My professional focus includes Cell-based IC Design, ASIC, FPGA, and networking applications. This website serves as my digital business card for presenting my background, skills, and projects.",
+        intro_desc: "I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. My professional focus includes Cell-based IC Design, ASIC, FPGA, and networking applications.",
 
         about_title: "About Me",
-        about_desc: "The information below is organized in a clear listed format so readers can scan it quickly.",
+        about_desc: "Below is my basic background information for quick and clear reading.",
         about_label_school: "Education: ",
         about_school: "Chung Yuan Christian University, Department of Electrical Engineering",
         about_label_domain: "Professional Fields: ",
@@ -682,7 +685,7 @@
         about_languages: "Chinese, English, Vietnamese",
 
         skills_title: "Skill Foundations",
-        skills_desc: "My skills are grouped by category below so the information is cleaner and easier to read.",
+        skills_desc: "Maybe color grouping can be added here later.",
         skills_group_domain: "Professional Fields",
         skills_group_eda: "EDA Tools",
         skills_group_programming: "Programming Languages",
@@ -710,26 +713,25 @@
         lang_vietnamese: "Vietnamese",
 
         projects_title: "My Projects",
-        projects_desc: "Two or three projects are enough to start with. A portfolio should be focused, not a crowded flea market.",
+        projects_desc: "I am not sure what to put here yet. I am still deciding whether this section should contain project categories and links, or full project details directly.",
         project1_title: "Personal Homepage",
-        project1_desc: "A personal homepage built with HTML, CSS, and responsive web design as my first GitHub Pages project.",
+        project1_desc: "I am not sure what to write here yet.",
         project1_link: "Back to Top",
-        project2_title: "Front-End Layout Practice",
-        project2_desc: "You can place your Flexbox, Grid, card layout, or navigation bar design exercises here as portfolio items.",
+        project2_title: "GitHub",
+        project2_desc: "I may later place some implementation links and open-source code projects on GitHub.",
         project2_link: "GitHub Link",
         project3_title: "Future Project Placeholder",
-        project3_desc: "This card is reserved for your future projects. Good web design should stay flexible instead of becoming rigid too early.",
+        project3_desc: "This card is reserved for future projects.",
         project3_link: "Contact Me",
 
         contact_title: "Contact",
-        contact_desc: "Put real and usable contact information here, or the page will just become a pretty wallpaper.",
+        contact_desc: "",
         contact_email: "Email: charles5000017@gmail.com",
         contact_github: "GitHub",
-        contact_docs: "GitHub Pages Official Docs",
 
-        footer_text: "© 2026 YingChao-Hong. All rights reserved.",
+        footer_text: "© 2026 Charles-Hong. All rights reserved.",
         lang_button: "中文",
-        image_alt: "Portrait of YingChao-Hong"
+        image_alt: "Portrait of Charles-Hong"
       }
     };
 
@@ -752,14 +754,14 @@
 
       document.querySelectorAll("[data-i18n]").forEach((element) => {
         const key = element.dataset.i18n;
-        if (dict[key]) {
+        if (dict[key] !== undefined) {
           element.textContent = dict[key];
         }
       });
 
       document.querySelectorAll("[data-i18n-html]").forEach((element) => {
         const key = element.dataset.i18nHtml;
-        if (dict[key]) {
+        if (dict[key] !== undefined) {
           element.innerHTML = dict[key];
         }
       });
