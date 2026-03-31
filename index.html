@@ -5,177 +5,450 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>YingChao-Hong | 個人網站</title>
   <style>
+    :root {
+      --bg: #f7f8fc;
+      --card: #ffffff;
+      --primary: #5b5ff5;
+      --primary-dark: #4347d9;
+      --text: #1f2937;
+      --subtext: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      --radius: 20px;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: Arial, "Noto Sans TC", sans-serif;
-      line-height: 1.6;
-      background: linear-gradient(135deg, #f5f7fa, #e4ecfb);
-      color: #1f2937;
+      background: linear-gradient(180deg, #f8f8ff 0%, #eef2ff 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
     }
 
     .container {
-      width: 90%;
-      max-width: 960px;
+      width: min(1120px, 92%);
       margin: 0 auto;
     }
 
-    header {
-      text-align: center;
-      padding: 80px 20px 50px;
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.82);
+      border-bottom: 1px solid rgba(229, 231, 235, 0.8);
     }
 
-    header h1 {
-      font-size: 2.8rem;
-      color: #1d4ed8;
-      margin-bottom: 12px;
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
     }
 
-    header p {
-      font-size: 1.1rem;
-      color: #4b5563;
-      max-width: 700px;
-      margin: 0 auto 24px;
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
     }
 
-    .profile-img {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 5px solid white;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--subtext);
+      font-weight: 600;
+      transition: 0.25s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .hero {
+      padding: 72px 0 48px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero-text h1 {
+      font-size: clamp(2.2rem, 4vw, 3.6rem);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .hero-text h1 span {
+      color: var(--primary);
+    }
+
+    .hero-text p {
+      font-size: 1.05rem;
+      color: var(--subtext);
       margin-bottom: 24px;
+      max-width: 680px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
     }
 
     .btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       padding: 12px 22px;
-      background: #1d4ed8;
-      color: white;
-      text-decoration: none;
       border-radius: 999px;
-      transition: 0.3s;
-      font-weight: bold;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: transform 0.25s, background 0.25s, color 0.25s;
+      cursor: pointer;
     }
 
     .btn:hover {
-      background: #1e40af;
+      transform: translateY(-2px);
     }
 
-    section {
-      background: white;
-      margin: 24px 0;
-      padding: 32px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
     }
 
-    section h2 {
-      color: #1d4ed8;
-      margin-bottom: 16px;
-      font-size: 1.6rem;
+    .btn-primary:hover {
+      background: var(--primary-dark);
     }
 
-    .skills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 12px;
+    .btn-secondary {
+      background: #fff;
+      color: var(--primary);
+      border-color: var(--border);
     }
 
-    .tag {
-      background: #dbeafe;
-      color: #1e3a8a;
-      padding: 8px 14px;
-      border-radius: 999px;
+    .hero-note {
+      color: var(--subtext);
       font-size: 0.95rem;
     }
 
-    .links a {
-      display: inline-block;
-      margin-right: 12px;
-      margin-top: 10px;
-      color: #1d4ed8;
-      text-decoration: none;
-      font-weight: bold;
+    .hero-card {
+      background: var(--card);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      animation: floatCard 3.6s ease-in-out infinite;
     }
 
-    .links a:hover {
-      text-decoration: underline;
+    .profile-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 22px;
+      margin-bottom: 18px;
+    }
+
+    .hero-card h2 {
+      margin-bottom: 8px;
+      color: var(--primary);
+    }
+
+    .hero-card p {
+      color: var(--subtext);
+    }
+
+    .section {
+      padding: 28px 0;
+    }
+
+    .section-title {
+      font-size: 1.9rem;
+      margin-bottom: 10px;
+    }
+
+    .section-desc {
+      color: var(--subtext);
+      margin-bottom: 22px;
+    }
+
+    .about-card,
+    .contact-card {
+      background: var(--card);
+      padding: 28px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .skills-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .skill-tag {
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: var(--primary);
+      font-weight: 700;
+      border: 1px solid #dfe4ff;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      border: 1px solid transparent;
+      transition: transform 0.25s, border-color 0.25s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: #d8ddff;
+    }
+
+    .project-card h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .project-card p {
+      color: var(--subtext);
+      margin-bottom: 16px;
+    }
+
+    .project-card a {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .contact-list a {
+      color: var(--primary);
+      font-weight: 700;
+      word-break: break-word;
     }
 
     footer {
       text-align: center;
-      padding: 30px 20px 50px;
-      color: #6b7280;
+      padding: 36px 0 44px;
+      color: var(--subtext);
       font-size: 0.95rem;
     }
 
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 2.2rem;
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.12s; }
+    .delay-2 { animation-delay: 0.24s; }
+    .delay-3 { animation-delay: 0.36s; }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatCard {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        flex-direction: column;
+        gap: 12px;
       }
 
-      section {
-        padding: 24px;
+      .hero {
+        padding-top: 44px;
+      }
+
+      .hero-text h1 {
+        font-size: 2rem;
+      }
+
+      .about-card,
+      .contact-card,
+      .project-card,
+      .hero-card {
+        padding: 20px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <img src="https://picsum.photos/300" alt="YingChao-Hong 的個人照片" class="profile-img" />
-      <h1>Hi, 我是 YingChao-Hong</h1>
-      <p>
-        歡迎來到我的個人網站！這裡會介紹我的背景、興趣、作品，以及我目前正在學習與挑戰的方向。
-      </p>
-      <a class="btn" href="#about">認識我</a>
-    </header>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="#top" class="logo">YingChao-Hong</a>
+      <div class="nav-links">
+        <a href="#about">關於我</a>
+        <a href="#skills">技能</a>
+        <a href="#projects">作品</a>
+        <a href="#contact">聯絡</a>
+      </div>
+    </div>
+  </nav>
 
-    <section id="about">
-      <h2>關於我</h2>
-      <p>
-        我是 YingChao-Hong，這是我第一個使用 GitHub Pages 建立的個人網站。
-        我對技術、學習新事物，以及把想法一步一步做成作品很有興趣。
-        這個網站未來可以放上我的自我介紹、專案成果、學習筆記，還有聯絡方式。
-      </p>
-    </section>
+  <main id="top" class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-text fade-in">
+          <h1>你好，我是 <span>YingChao-Hong</span></h1>
+          <p>
+            這是我的個人網站。我會在這裡整理自己的學習歷程、作品展示，以及我正在探索的技術方向。
+            這個版本使用了 HTML、CSS、Flexbox、Grid、RWD、動畫效果，以及基礎 JavaScript 與 DOM 操作。
+          </p>
+          <div class="hero-actions">
+            <a href="#projects" class="btn btn-primary">查看作品</a>
+            <button class="btn btn-secondary" id="helloBtn">點我打招呼</button>
+          </div>
+          <p class="hero-note" id="helloText">準備好開始建立你的個人品牌了嗎？</p>
+        </div>
 
-    <section>
-      <h2>我的技能</h2>
-      <div class="skills">
-        <span class="tag">HTML</span>
-        <span class="tag">CSS</span>
-        <span class="tag">GitHub Pages</span>
-        <span class="tag">網頁設計</span>
+        <div class="hero-card fade-in delay-1">
+          <img class="profile-img" src="https://picsum.photos/500" alt="YingChao-Hong 的個人照片" />
+          <h2>個人簡介</h2>
+          <p>
+            你可以把這裡換成自己的照片、學校、科系、興趣，或一句最能代表你的話。
+            網頁不是裝飾品，它其實是你的數位名片。
+          </p>
+        </div>
       </div>
     </section>
 
-    <section>
-      <h2>我的作品</h2>
-      <p>
-        這裡之後可以放你的專案，例如課堂作業、個人網站、研究計畫、程式作品，或任何你想展示的內容。
-      </p>
-    </section>
-
-    <section>
-      <h2>聯絡我</h2>
-      <p>你可以把 Email、GitHub 或其他社群連結放在這裡。</p>
-      <div class="links">
-        <a href="https://github.com/" target="_blank">GitHub</a>
-        <a href="https://pages.github.com/" target="_blank">GitHub Pages 官方文件</a>
+    <section id="about" class="section fade-in delay-1">
+      <h2 class="section-title">關於我</h2>
+      <p class="section-desc">先讓別人知道你是誰、你在做什麼，以及你想往哪裡走。</p>
+      <div class="about-card">
+        <p>
+          我是 YingChao-Hong，目前正在學習前端網頁設計與網站部署。這個網站是我的個人練習作品，
+          未來我希望逐步加入更多內容，例如自我介紹、課程成果、專案作品、學習筆記與聯絡方式，
+          讓網站不只是作業，而是可以真正代表我自己的展示平台。
+        </p>
       </div>
     </section>
 
-    <footer>
-      <p>© 2026 YingChao-Hong. All rights reserved.</p>
-    </footer>
-  </div>
+    <section id="skills" class="section fade-in delay-2">
+      <h2 class="section-title">技能基礎</h2>
+      <p class="section-desc">以下內容就是你教授提供的基礎，我已經把它們真的放進這個網站裡了。</p>
+      <div class="skills-wrap">
+        <span class="skill-tag">Git / GitHub</span>
+        <span class="skill-tag">Basic HTML</span>
+        <span class="skill-tag">HTML / CSS</span>
+        <span class="skill-tag">Basic CSS</span>
+        <span class="skill-tag">Flexbox</span>
+        <span class="skill-tag">Grid</span>
+        <span class="skill-tag">RWD</span>
+        <span class="skill-tag">Animate</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">DOM 操作</span>
+      </div>
+    </section>
+
+    <section id="projects" class="section fade-in delay-3">
+      <h2 class="section-title">我的作品</h2>
+      <p class="section-desc">先放 2 到 3 個就夠了，不要一開始就把自己搞成作品大賣場。</p>
+      <div class="project-grid">
+        <article class="project-card">
+          <h3>個人網站首頁</h3>
+          <p>使用 HTML、CSS 與 RWD 製作的個人首頁，作為 GitHub Pages 的第一個網站作品。</p>
+          <a href="#top">返回首頁</a>
+        </article>
+
+        <article class="project-card">
+          <h3>前端練習版面</h3>
+          <p>可放入你練習 Flexbox、Grid、卡片排版或導覽列設計的作品展示內容。</p>
+          <a href="https://github.com/" target="_blank">放 GitHub 連結</a>
+        </article>
+
+        <article class="project-card">
+          <h3>未來專案預留區</h3>
+          <p>這一格可以預留給之後的新作品。網站設計最怕一開始就寫太死，所以我先幫你留彈性。</p>
+          <a href="#contact">聯絡我</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" class="section fade-in delay-3">
+      <h2 class="section-title">聯絡方式</h2>
+      <p class="section-desc">把真實可用的聯絡資訊放上去，不然頁面再好看也只是電子壁紙。</p>
+      <div class="contact-card">
+        <div class="contact-list">
+          <p>Email：yourmail@example.com</p>
+          <a href="https://github.com/" target="_blank">GitHub</a>
+          <a href="https://pages.github.com/" target="_blank">GitHub Pages 官方文件</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 YingChao-Hong. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const helloBtn = document.getElementById('helloBtn');
+    const helloText = document.getElementById('helloText');
+
+    helloBtn.addEventListener('click', () => {
+      helloText.textContent = '很高興認識你，歡迎來到 YingChao-Hong 的網站！';
+    });
+  </script>
 </body>
 </html>
