@@ -1,18 +1,181 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的第一個 GitHub Pages 網站</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YingChao-Hong | 個人網站</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(135deg, #f5f7fa, #e4ecfb);
+      color: #1f2937;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 80px 20px 50px;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      color: #1d4ed8;
+      margin-bottom: 12px;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      color: #4b5563;
+      max-width: 700px;
+      margin: 0 auto 24px;
+    }
+
+    .profile-img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid white;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 22px;
+      background: #1d4ed8;
+      color: white;
+      text-decoration: none;
+      border-radius: 999px;
+      transition: 0.3s;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background: #1e40af;
+    }
+
+    section {
+      background: white;
+      margin: 24px 0;
+      padding: 32px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    section h2 {
+      color: #1d4ed8;
+      margin-bottom: 16px;
+      font-size: 1.6rem;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      background: #dbeafe;
+      color: #1e3a8a;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+    }
+
+    .links a {
+      display: inline-block;
+      margin-right: 12px;
+      margin-top: 10px;
+      color: #1d4ed8;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px 50px;
+      color: #6b7280;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2.2rem;
+      }
+
+      section {
+        padding: 24px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>歡迎來到我的網站！</h1>
-    <p>這是我的第一個 GitHub Pages 部署的網站。</p>
+  <div class="container">
+    <header>
+      <img src="https://picsum.photos/300" alt="YingChao-Hong 的個人照片" class="profile-img" />
+      <h1>Hi, 我是 YingChao-Hong</h1>
+      <p>
+        歡迎來到我的個人網站！這裡會介紹我的背景、興趣、作品，以及我目前正在學習與挑戰的方向。
+      </p>
+      <a class="btn" href="#about">認識我</a>
+    </header>
+
+    <section id="about">
+      <h2>關於我</h2>
+      <p>
+        我是 YingChao-Hong，這是我第一個使用 GitHub Pages 建立的個人網站。
+        我對技術、學習新事物，以及把想法一步一步做成作品很有興趣。
+        這個網站未來可以放上我的自我介紹、專案成果、學習筆記，還有聯絡方式。
+      </p>
+    </section>
+
+    <section>
+      <h2>我的技能</h2>
+      <div class="skills">
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+        <span class="tag">GitHub Pages</span>
+        <span class="tag">網頁設計</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>我的作品</h2>
+      <p>
+        這裡之後可以放你的專案，例如課堂作業、個人網站、研究計畫、程式作品，或任何你想展示的內容。
+      </p>
+    </section>
+
+    <section>
+      <h2>聯絡我</h2>
+      <p>你可以把 Email、GitHub 或其他社群連結放在這裡。</p>
+      <div class="links">
+        <a href="https://github.com/" target="_blank">GitHub</a>
+        <a href="https://pages.github.com/" target="_blank">GitHub Pages 官方文件</a>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2026 YingChao-Hong. All rights reserved.</p>
+    </footer>
+  </div>
 </body>
 </html>
-<style>
-    body { font-family: Arial, sans-serif; text-align: center; }
-    h1 { color: blue; }
-</style> 
-<img src="https://picsum.photos/200/300" alt="示例圖片">
-<p>參考 GitHub Pages 官方文件：<a href="https://pages.github.com/" target="_blank">點此查看</a></p>
