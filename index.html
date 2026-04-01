@@ -638,7 +638,6 @@
         hero_btn_linkedin: 'LinkedIn',
 
         intro_title: '生活花絮',
-        intro_desc: '這裡可以輪播我的花絮照片與生活片段。',
 
         about_title: '關於我',
         about_desc: '以下為我的基本背景資訊，方便閱讀與快速掌握。',
@@ -701,7 +700,20 @@
         footer_text: '© 2026 Charles-Hong. All rights reserved.',
         lang_button: 'EN',
         hero_main_alt: 'Charles-Hong 的主照片',
-        slideshow_alt: 'Charles-Hong 的生活花絮照片'
+        slideshow_alt: 'Charles-Hong 的生活花絮照片',
+
+        slide_caption_0: '生活花絮照片 1',
+        slide_caption_1: '生活花絮照片 2',
+        slide_caption_2: '生活花絮照片 3',
+        slide_caption_3: '生活花絮照片 4',
+        slide_caption_4: '生活花絮照片 5',
+        slide_caption_5: '生活花絮照片 6',
+        slide_caption_6: '生活花絮照片 7',
+        slide_caption_7: '生活花絮照片 8',
+        slide_caption_8: '生活花絮照片 9',
+        slide_caption_9: '生活花絮照片 10',
+        slide_caption_10: '生活花絮照片 11',
+        slide_caption_11: '生活花絮照片 12'
       },
 
       en: {
@@ -717,7 +729,6 @@
         hero_btn_linkedin: 'LinkedIn',
 
         intro_title: 'Highlights',
-        intro_desc: 'A few snapshots from my life and experiences.',
 
         about_title: 'About Me',
         about_desc: 'Below is my basic background information for quick and clear reading.',
@@ -780,61 +791,36 @@
         footer_text: '© 2026 Charles-Hong. All rights reserved.',
         lang_button: '中文',
         hero_main_alt: 'Portrait of Charles-Hong',
-        slideshow_alt: 'Highlight photo of Charles-Hong'
+        slideshow_alt: 'Highlight photo of Charles-Hong',
+
+        slide_caption_0: 'Highlight photo 1',
+        slide_caption_1: 'Highlight photo 2',
+        slide_caption_2: 'Highlight photo 3',
+        slide_caption_3: 'Highlight photo 4',
+        slide_caption_4: 'Highlight photo 5',
+        slide_caption_5: 'Highlight photo 6',
+        slide_caption_6: 'Highlight photo 7',
+        slide_caption_7: 'Highlight photo 8',
+        slide_caption_8: 'Highlight photo 9',
+        slide_caption_9: 'Highlight photo 10',
+        slide_caption_10: 'Highlight photo 11',
+        slide_caption_11: 'Highlight photo 12'
       }
     };
 
     const slideshowPhotos = [
-      {
-        src: 'images/moment1.jpg',
-        zh: '活動、上課或日常紀錄。',
-        en: 'This slide can show an activity, class moment, or daily snapshot.'
-      },
-      {
-        src: 'images/moment2.jpg',
-        zh: '專題、實驗室或工作花絮。',
-        en: 'This slide can show a project, lab scene, or work highlight.'
-      },
-      {
-        src: 'images/moment3.jpg',
-        zh: '旅程、展覽或成果展示照片。',
-        en: 'This slide can show travel, an exhibition, or a presentation moment.'
-      },
-      {
-        src: 'images/moment4.jpg',
-        zh: '想讓人記住的生活片段。',
-        en: 'This slide can show a personal memory you want people to remember.'
-      }
-      {
-        src: 'images/moment5.jpg',
-        zh: '專題、實驗室或工作花絮。',
-        en: 'This slide can show a personal memory you want people to remember.'
-      }
-      {
-        src: 'images/moment6.jpg',
-        zh: '專題、實驗室或工作花絮。',
-        en: 'This slide can show a personal memory you want people to remember.'
-      }
-      {
-        src: 'images/moment7.jpg',
-        zh: '專題、實驗室或工作花絮。',
-        en: 'This slide can show a personal memory you want people to remember.'
-      }
-      {
-        src: 'images/moment8.jpg',
-        zh: '專題、實驗室或工作花絮。',
-        en: 'This slide can show a personal memory you want people to remember.'
-      }
-      {
-        src: 'images/moment9.jpg',
-        zh: '專題、實驗室或工作花絮。',
-        en: 'This slide can show a personal memory you want people to remember.'
-      }
-      {
-        src: 'images/moment10.jpg',
-        zh: '專題、實驗室或工作花絮。',
-        en: 'This slide can show a personal memory you want people to remember.'
-      }
+      { src: 'images/moment0.jpg', key: 'slide_caption_0' },
+      { src: 'images/moment1.jpg', key: 'slide_caption_1' },
+      { src: 'images/moment2.jpg', key: 'slide_caption_2' },
+      { src: 'images/moment3.jpg', key: 'slide_caption_3' },
+      { src: 'images/moment4.jpg', key: 'slide_caption_4' },
+      { src: 'images/moment5.jpg', key: 'slide_caption_5' },
+      { src: 'images/moment6.jpg', key: 'slide_caption_6' },
+      { src: 'images/moment7.jpg', key: 'slide_caption_7' },
+      { src: 'images/moment8.jpg', key: 'slide_caption_8' },
+      { src: 'images/moment9.jpg', key: 'slide_caption_9' },
+      { src: 'images/moment10.jpg', key: 'slide_caption_10' },
+      { src: 'images/moment11.jpg', key: 'slide_caption_11' }
     ];
 
     let currentLang = localStorage.getItem('language') || 'en';
@@ -852,7 +838,7 @@
       setTimeout(() => {
         slideshowImage.src = slide.src;
         slideshowImage.alt = translations[currentLang].slideshow_alt;
-        slideshowCaption.textContent = slide[currentLang];
+        slideshowCaption.textContent = translations[currentLang][slide.key];
         slideshowImage.classList.remove('is-fading');
       }, 180);
     }
@@ -886,7 +872,7 @@
         }
       });
 
-      slideshowCaption.textContent = slideshowPhotos[currentSlideIndex][currentLang];
+      slideshowCaption.textContent = dict[slideshowPhotos[currentSlideIndex].key];
       localStorage.setItem('language', lang);
     }
 
@@ -897,7 +883,10 @@
 
     applyLanguage(currentLang);
     updateSlideshowContent();
-    setInterval(nextSlide, 3000);
+
+    if (slideshowPhotos.length > 1) {
+      setInterval(nextSlide, 3000);
+    }
   </script>
 </body>
 </html>
