@@ -316,119 +316,27 @@
       font-size: 0.95rem;
     }
 
-    .project-featured {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      border: 1px solid transparent;
-      padding: 30px;
-      margin-bottom: 20px;
-      transition: transform 0.25s, border-color 0.25s;
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
     }
 
-    .project-featured:hover {
-      transform: translateY(-6px);
+    .project-card.is-main {
+      grid-column: 1 / -1;
       border-color: #d8ddff;
     }
 
-    .featured-tag {
+    .card-tag {
       display: inline-block;
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--primary);
       background: #eef0ff;
       border-radius: 999px;
-      padding: 5px 13px;
-      margin-bottom: 14px;
-    }
-
-    .project-featured h3 {
-      font-size: 1.42rem;
-      line-height: 1.35;
-      margin-bottom: 12px;
-    }
-
-    .project-featured > p {
-      color: var(--subtext);
-      margin-bottom: 22px;
-    }
-
-    .featured-figure {
-      background: #fbfbfe;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px 14px;
-      margin-bottom: 22px;
-      overflow-x: auto;
-    }
-
-    .featured-figure svg {
-      display: block;
-      margin: 0 auto;
-      min-width: 560px;
-    }
-
-    .featured-metrics {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 22px;
-    }
-
-    .metric {
-      background: #f7f8fc;
-      border-radius: 14px;
-      padding: 16px 18px;
-    }
-
-    .metric .metric-value {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--primary);
-      line-height: 1.25;
-    }
-
-    .metric .metric-label {
-      font-size: 0.84rem;
-      color: var(--subtext);
-      margin-top: 4px;
-    }
-
-    .featured-tools {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .tool-chip {
-      font-size: 0.8rem;
-      color: var(--subtext);
-      background: #f2f4f9;
-      border-radius: 999px;
-      padding: 5px 12px;
-    }
-
-    .featured-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-    }
-
-    .featured-links a {
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    .featured-links a:hover {
-      color: var(--primary-dark);
-    }
-
-    .project-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      padding: 4px 12px;
+      margin-bottom: 10px;
     }
 
     .project-card {
@@ -510,13 +418,12 @@
     @media (max-width: 900px) {
       .hero-grid,
       .project-grid,
-      .featured-metrics,
       .skills-grid {
         grid-template-columns: 1fr;
       }
 
-      .project-featured {
-        padding: 22px;
+      .project-card.is-main {
+        grid-column: auto;
       }
     }
 
@@ -700,112 +607,31 @@
 
     <section id="projects" class="section fade-in delay-3">
       <h2 class="section-title" data-i18n="projects_title">Projects</h2>
-      <p class="section-desc" data-i18n="projects_desc">My main work is an FPGA traffic replay engine that reaches the full 100 Gbps line rate. Smaller pieces are listed below it.</p>
-
-      <article class="project-featured">
-        <span class="featured-tag" data-i18n="featured_tag">Main Project</span>
-        <h3 data-i18n="featured_title">An HBM-Based 100 Gbps Traffic Replay Engine on FPGA</h3>
-        <p data-i18n="featured_desc">Recorded network traffic is held in High Bandwidth Memory on a Xilinx Alveo U50 and replayed at the full line rate. The trace is interleaved across all sixteen HBM channels and read back by eight parallel AXI read masters, each owning its own channels so that no arbitration is needed. A three-stage pipeline rebuilds the Ethernet frames while a hardware throttle reproduces the recorded timing, which keeps the host out of the transmit path entirely.</p>
-
-        <div class="featured-figure">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 190" width="100%" role="img" aria-labelledby="dpTitle">
-            <title id="dpTitle">Datapath: host memory to PCIe to HBM to the 100G MAC</title>
-            <defs>
-              <marker id="ar" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-                <polygon points="0 0, 9 3.5, 0 7" fill="#9aa2b8" />
-              </marker>
-            </defs>
-            <g font-family="Arial, sans-serif" font-size="12" text-anchor="middle">
-
-              <rect x="8" y="58" width="96" height="52" rx="10" fill="#eef0ff" stroke="#c7cbf5"/>
-              <text x="56" y="79" fill="#3f43c4" font-weight="700">Host</text>
-              <text x="56" y="96" fill="#6b7280" font-size="11">memory</text>
-
-              <line x1="106" y1="84" x2="150" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
-              <text x="128" y="74" fill="#6b7280" font-size="10">PCIe</text>
-
-              <rect x="152" y="58" width="104" height="52" rx="10" fill="#ffffff" stroke="#c7cbf5"/>
-              <text x="204" y="79" fill="#1f2937" font-weight="700">DMA</text>
-              <text x="204" y="96" fill="#6b7280" font-size="11">ring scheduler</text>
-
-              <line x1="258" y1="84" x2="300" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
-
-              <rect x="302" y="20" width="120" height="138" rx="10" fill="#f7f8fc" stroke="#c7cbf5"/>
-              <text x="362" y="40" fill="#3f43c4" font-weight="700">HBM</text>
-              <text x="362" y="56" fill="#6b7280" font-size="10">16 channels</text>
-              <g fill="#dfe3fb" stroke="#c7cbf5">
-                <rect x="316" y="66" width="92" height="11" rx="3"/>
-                <rect x="316" y="81" width="92" height="11" rx="3"/>
-                <rect x="316" y="96" width="92" height="11" rx="3"/>
-                <rect x="316" y="111" width="92" height="11" rx="3"/>
-                <rect x="316" y="126" width="92" height="11" rx="3"/>
-              </g>
-              <text x="362" y="180" fill="#9aa2b8" font-size="10">batch N goes to channel N mod 16</text>
-
-              <line x1="424" y1="84" x2="466" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
-
-              <rect x="468" y="42" width="118" height="84" rx="10" fill="#ffffff" stroke="#c7cbf5"/>
-              <text x="527" y="63" fill="#1f2937" font-weight="700">8 read</text>
-              <text x="527" y="79" fill="#1f2937" font-weight="700">masters</text>
-              <text x="527" y="99" fill="#6b7280" font-size="10">3-stage pipeline</text>
-              <text x="527" y="113" fill="#6b7280" font-size="10">Fetch / Pace / TX</text>
-
-              <line x1="588" y1="84" x2="628" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
-
-              <rect x="630" y="58" width="82" height="52" rx="10" fill="#eef0ff" stroke="#c7cbf5"/>
-              <text x="671" y="79" fill="#3f43c4" font-weight="700">100G</text>
-              <text x="671" y="96" fill="#6b7280" font-size="11">MAC</text>
-            </g>
-          </svg>
-        </div>
-
-        <div class="featured-metrics">
-          <div class="metric">
-            <div class="metric-value">100 Gbps</div>
-            <div class="metric-label" data-i18n="metric1_label">Line rate reached on the wire</div>
-          </div>
-          <div class="metric">
-            <div class="metric-value">227.800 &micro;s</div>
-            <div class="metric-label" data-i18n="metric2_label">To deliver 32,768 frames into the MAC</div>
-          </div>
-          <div class="metric">
-            <div class="metric-value" data-i18n="metric3_value">Zero loss</div>
-            <div class="metric-label" data-i18n="metric3_label">All frames received by the peer NIC</div>
-          </div>
-        </div>
-
-        <div class="featured-tools">
-          <span class="tool-chip">Xilinx Alveo U50</span>
-          <span class="tool-chip">HBM2</span>
-          <span class="tool-chip">Corundum</span>
-          <span class="tool-chip">Verilog</span>
-          <span class="tool-chip">Vivado</span>
-          <span class="tool-chip">AXI</span>
-          <span class="tool-chip">PCIe</span>
-        </div>
-
-        <div class="featured-links">
-          <span data-i18n="featured_venue">Presented at the UST-CYCU Joint Research Symposium 2026</span>
-        </div>
-      </article>
-
+      <p class="section-desc" data-i18n="projects_desc">Each project has its own page with the design and the measured results.</p>
       <div class="project-grid">
-        <article class="project-card">
-          <h3 data-i18n="project1_title">EDA Environment Setup</h3>
-          <p data-i18n="project1_desc">A portable shell script that sets up Synopsys, Cadence, Siemens and Xilinx tools. The logic is kept separate from the site-specific paths, so the script itself carries no machine details and can be shared.</p>
-          <a href="https://github.com/charlesHYC/EDA_tool_setup" target="_blank" rel="noopener" data-i18n="project1_link">View on GitHub</a>
+        <article class="project-card is-main">
+          <span class="card-tag" data-i18n="card_tag_main">Main Project</span>
+          <h3 data-i18n="project1_title">HBM-Based 100 Gbps Traffic Replay Engine</h3>
+          <p data-i18n="project1_desc">An FPGA engine that holds recorded traffic in High Bandwidth Memory and replays it at the full 100 Gbps line rate.</p>
+          <a href="projects/hbm-replay.html" data-i18n="project1_link">Read more</a>
         </article>
 
         <article class="project-card">
-          <h3 data-i18n="project2_title">IC Design Documentation Tools</h3>
-          <p data-i18n="project2_desc">Two Claude Code skills I use daily: one turns a design into an HTML document with architecture and timing diagrams, the other walks through Verilog line by line.</p>
-          <a href="https://github.com/charlesHYC/skill" target="_blank" rel="noopener" data-i18n="project2_link">View on GitHub</a>
+          <h3 data-i18n="project2_title">EDA Environment Setup</h3>
+          <p data-i18n="project2_desc">A portable shell script for Synopsys, Cadence, Siemens and Xilinx tools, with the site paths kept out of the script itself.</p>
+          <a href="https://github.com/charlesHYC/EDA_tool_setup" target="_blank" rel="noopener" data-i18n="project2_link">View on GitHub</a>
         </article>
 
         <article class="project-card">
-          <h3 data-i18n="project3_title">This Website</h3>
-          <p data-i18n="project3_desc">Written by hand in a single HTML file with no framework and no build step. The Chinese and English versions share one page through a small dictionary in the script.</p>
-          <a href="https://github.com/charlesHYC/my-simple-website" target="_blank" rel="noopener" data-i18n="project3_link">View on GitHub</a>
+          <h3 data-i18n="project3_title">IC Design Documentation Tools</h3>
+          <p data-i18n="project3_desc">Two Claude Code skills: one writes HTML design documents, the other explains Verilog line by line.</p>
+          <a href="https://github.com/charlesHYC/skill" target="_blank" rel="noopener" data-i18n="project3_link">View on GitHub</a>
+        </article>
+
+        <article class="project-card">
+          <h3 data-i18n="project4_title">This Website</h3>
+          <p data-i18n="project4_desc">A single hand-written HTML file, no framework and no build step, with Chinese and English sharing one page.</p>
+          <a href="https://github.com/charlesHYC/my-simple-website" target="_blank" rel="noopener" data-i18n="project4_link">View on GitHub</a>
         </article>
       </div>
     </section>
@@ -884,26 +710,20 @@
         lang_vietnamese: '越語',
 
         projects_title: '我的作品',
-        projects_desc: '主要作品是一套在 FPGA 上達到 100 Gbps 線速的流量重播引擎，其餘較小的專案列在下方。',
-
-        featured_tag: '主要專案',
-        featured_title: '基於高頻寬記憶體之 FPGA 100 Gbps 網路流量重播引擎',
-        featured_desc: '將錄製下來的網路流量存放在 Xilinx Alveo U50 的高頻寬記憶體中，以完整線速重播。流量交錯分布於全部十六個 HBM 通道，由八個平行的 AXI read master 讀回，各自獨占自己的通道，因此不需要任何仲裁機制。三級管線負責重組乙太網路訊框，並由硬體節流器還原錄製時的時間間隔，讓主機完全不介入傳送路徑。',
-        metric1_label: '線上實際達成的速率',
-        metric2_label: '將 32,768 個訊框交付至 MAC 的耗時',
-        metric3_value: '零丟包',
-        metric3_label: '對端網路卡完整收到所有訊框',
-        featured_venue: '發表於 UST-CYCU Joint Research Symposium 2026',
-
-        project1_title: 'EDA 環境設定腳本',
-        project1_desc: '可移植的 shell 腳本，設定 Synopsys、Cadence、Siemens 與 Xilinx 的工具環境。邏輯與站點路徑分離，腳本本身不含任何機器資訊，可以安全公開共用。',
-        project1_link: '在 GitHub 上查看',
-        project2_title: 'IC 設計文件工具',
-        project2_desc: '兩個我每天在用的 Claude Code skill：一個把設計轉成含架構圖與時序圖的 HTML 文件，另一個逐行講解 Verilog。',
+        projects_desc: '每個專案都有獨立的頁面，記錄設計方式與實測結果。',
+        card_tag_main: '主要專案',
+        project1_title: '基於高頻寬記憶體的 100 Gbps 流量重播引擎',
+        project1_desc: '在 FPGA 上把錄製下來的網路流量存進高頻寬記憶體，以完整的 100 Gbps 線速重播。',
+        project1_link: '看詳細內容',
+        project2_title: 'EDA 環境設定腳本',
+        project2_desc: '可移植的 shell 腳本，涵蓋 Synopsys、Cadence、Siemens 與 Xilinx，站點路徑不寫進腳本本身。',
         project2_link: '在 GitHub 上查看',
-        project3_title: '這個網站',
-        project3_desc: '手寫的單一 HTML 檔，沒有框架也沒有建置流程。中英文版共用同一個頁面，靠腳本裡的一本小字典切換。',
+        project3_title: 'IC 設計文件工具',
+        project3_desc: '兩個 Claude Code skill：一個產生 HTML 設計文件，另一個逐行講解 Verilog。',
         project3_link: '在 GitHub 上查看',
+        project4_title: '這個網站',
+        project4_desc: '手寫的單一 HTML 檔，沒有框架也沒有建置流程，中英文共用同一頁。',
+        project4_link: '在 GitHub 上查看',
 
         contact_title: '聯絡方式',
         contact_desc: '',
@@ -985,26 +805,20 @@
         lang_vietnamese: 'Vietnamese',
 
         projects_title: 'Projects',
-        projects_desc: 'My main work is an FPGA traffic replay engine that reaches the full 100 Gbps line rate. Smaller pieces are listed below it.',
-
-        featured_tag: 'Main Project',
-        featured_title: 'An HBM-Based 100 Gbps Traffic Replay Engine on FPGA',
-        featured_desc: 'Recorded network traffic is held in High Bandwidth Memory on a Xilinx Alveo U50 and replayed at the full line rate. The trace is interleaved across all sixteen HBM channels and read back by eight parallel AXI read masters, each owning its own channels so that no arbitration is needed. A three-stage pipeline rebuilds the Ethernet frames while a hardware throttle reproduces the recorded timing, which keeps the host out of the transmit path entirely.',
-        metric1_label: 'Line rate reached on the wire',
-        metric2_label: 'To deliver 32,768 frames into the MAC',
-        metric3_value: 'Zero loss',
-        metric3_label: 'All frames received by the peer NIC',
-        featured_venue: 'Presented at the UST-CYCU Joint Research Symposium 2026',
-
-        project1_title: 'EDA Environment Setup',
-        project1_desc: 'A portable shell script that sets up Synopsys, Cadence, Siemens and Xilinx tools. The logic is kept separate from the site-specific paths, so the script itself carries no machine details and can be shared.',
-        project1_link: 'View on GitHub',
-        project2_title: 'IC Design Documentation Tools',
-        project2_desc: 'Two Claude Code skills I use daily: one turns a design into an HTML document with architecture and timing diagrams, the other walks through Verilog line by line.',
+        projects_desc: 'Each project has its own page with the design and the measured results.',
+        card_tag_main: 'Main Project',
+        project1_title: 'HBM-Based 100 Gbps Traffic Replay Engine',
+        project1_desc: 'An FPGA engine that holds recorded traffic in High Bandwidth Memory and replays it at the full 100 Gbps line rate.',
+        project1_link: 'Read more',
+        project2_title: 'EDA Environment Setup',
+        project2_desc: 'A portable shell script for Synopsys, Cadence, Siemens and Xilinx tools, with the site paths kept out of the script itself.',
         project2_link: 'View on GitHub',
-        project3_title: 'This Website',
-        project3_desc: 'Written by hand in a single HTML file with no framework and no build step. The Chinese and English versions share one page through a small dictionary in the script.',
+        project3_title: 'IC Design Documentation Tools',
+        project3_desc: 'Two Claude Code skills: one writes HTML design documents, the other explains Verilog line by line.',
         project3_link: 'View on GitHub',
+        project4_title: 'This Website',
+        project4_desc: 'A single hand-written HTML file, no framework and no build step, with Chinese and English sharing one page.',
+        project4_link: 'View on GitHub',
 
         contact_title: 'Contact',
         contact_desc: '',
