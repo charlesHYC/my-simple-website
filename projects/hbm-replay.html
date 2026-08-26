@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HBM 100 Gbps Traffic Replay Engine | Charles-Hong</title>
+  <style>
+    :root {
+      --bg: #f7f8fc;
+      --card: #ffffff;
+      --primary: #5b5ff5;
+      --primary-dark: #4347d9;
+      --text: #1f2937;
+      --subtext: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      background: linear-gradient(180deg, #f8f8ff 0%, #eef2ff 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .container { width: min(920px, 92%); margin: 0 auto; }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.82);
+      border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+
+    .back-link {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .back-link:hover { color: var(--primary-dark); }
+
+    .lang-toggle {
+      font-family: inherit;
+      font-size: 0.88rem;
+      color: var(--primary);
+      background: #eef0ff;
+      border: none;
+      border-radius: 999px;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .lang-toggle:hover { background: #e0e4ff; }
+
+    header.page-head { padding: 52px 0 30px; }
+
+    .head-tag {
+      display: inline-block;
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: #eef0ff;
+      border-radius: 999px;
+      padding: 5px 13px;
+      margin-bottom: 16px;
+    }
+
+    header.page-head h1 {
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      line-height: 1.3;
+      margin-bottom: 14px;
+    }
+
+    .head-meta { color: var(--subtext); }
+
+    .tool-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .tool-chip {
+      font-size: 0.8rem;
+      color: var(--subtext);
+      background: #f2f4f9;
+      border-radius: 999px;
+      padding: 5px 12px;
+    }
+
+    section.block {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 30px;
+      margin-bottom: 22px;
+    }
+
+    section.block h2 {
+      font-size: 1.24rem;
+      margin-bottom: 14px;
+    }
+
+    section.block p { color: var(--subtext); }
+    section.block p + p { margin-top: 12px; }
+
+    .figure {
+      background: #fbfbfe;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 14px;
+      margin-top: 18px;
+      overflow-x: auto;
+    }
+
+    .figure svg { display: block; margin: 0 auto; min-width: 560px; }
+
+    .figure figcaption {
+      text-align: center;
+      font-size: 0.84rem;
+      color: var(--subtext);
+      margin-top: 12px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .metric {
+      background: #f7f8fc;
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+
+    .metric-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.25;
+    }
+
+    .metric-label {
+      font-size: 0.84rem;
+      color: var(--subtext);
+      margin-top: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th { color: var(--text); font-size: 0.84rem; letter-spacing: 0.02em; }
+    td { color: var(--subtext); }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .table-wrap { overflow-x: auto; }
+
+    .poster-slot {
+      border: 1px dashed #c7cbf5;
+      border-radius: 14px;
+      background: #fbfbfe;
+      padding: 40px 24px;
+      text-align: center;
+      color: var(--subtext);
+      font-size: 0.92rem;
+    }
+
+    .links-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .links-row a { color: var(--primary); font-weight: 600; }
+    .links-row a:hover { color: var(--primary-dark); }
+
+    footer {
+      text-align: center;
+      color: var(--subtext);
+      font-size: 0.88rem;
+      padding: 34px 0 44px;
+    }
+
+    @media (max-width: 760px) {
+      .metrics { grid-template-columns: 1fr; }
+      section.block { padding: 22px; }
+      header.page-head { padding: 34px 0 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a class="back-link" href="../index.html#projects" data-i18n="nav_back">&larr; Back to projects</a>
+      <button id="langToggle" class="lang-toggle">中文</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <header class="page-head">
+      <span class="head-tag" data-i18n="head_tag">Main Project</span>
+      <h1 data-i18n="head_title">An HBM-Based 100 Gbps Traffic Replay Engine on FPGA</h1>
+      <p class="head-meta" data-i18n="head_meta">Presented at the UST-CYCU Joint Research Symposium 2026, University of Santo Tomas, Philippines. Advised by Prof. Yu-Kuen Lai, Department of Electrical Engineering, Chung Yuan Christian University.</p>
+      <div class="tool-row">
+        <span class="tool-chip">Xilinx Alveo U50</span>
+        <span class="tool-chip">HBM2</span>
+        <span class="tool-chip">Corundum</span>
+        <span class="tool-chip">Verilog</span>
+        <span class="tool-chip">Vivado</span>
+        <span class="tool-chip">AXI</span>
+        <span class="tool-chip">PCIe</span>
+        <span class="tool-chip">100G Ethernet</span>
+      </div>
+    </header>
+
+    <section class="block">
+      <h2 data-i18n="s1_title">The problem</h2>
+      <p data-i18n="s1_p1">Replaying recorded traffic is how high-speed network equipment gets tested. Software cannot do it at 100 Gbps: packets are handled one at a time on the CPU, so throughput collapses for the short frames that make up most real traffic, and scheduling jitter distorts the very packet spacing the replay is supposed to preserve.</p>
+      <p data-i18n="s1_p2">This design moves the whole job into hardware. The trace lives in High Bandwidth Memory on the FPGA card and is replayed without the host touching the transmit path at all.</p>
+    </section>
+
+    <section class="block">
+      <h2 data-i18n="s2_title">How it works</h2>
+      <p data-i18n="s2_p1">The trace is split into 512-byte batches and spread across all sixteen HBM channels, with batch N landing in channel N mod 16. Eight AXI read masters pull it back, each statically owning its own pair of channels, so no arbitration is needed and no two masters ever contend.</p>
+      <p data-i18n="s2_p2">A three-stage pipeline reassembles the Ethernet frames. A hardware throttle reproduces the recorded timestamps and gates only the final stage, so prefetching never stalls while the engine waits for the right moment to transmit.</p>
+
+      <figure class="figure">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 190" width="100%" role="img" aria-labelledby="dpTitle">
+          <title id="dpTitle">Datapath: host memory to PCIe to HBM to the 100G MAC</title>
+          <defs>
+            <marker id="ar" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+              <polygon points="0 0, 9 3.5, 0 7" fill="#9aa2b8" />
+            </marker>
+          </defs>
+          <g font-family="Arial, sans-serif" font-size="12" text-anchor="middle">
+
+            <rect x="8" y="58" width="96" height="52" rx="10" fill="#eef0ff" stroke="#c7cbf5"/>
+            <text x="56" y="79" fill="#3f43c4" font-weight="700">Host</text>
+            <text x="56" y="96" fill="#6b7280" font-size="11">memory</text>
+
+            <line x1="106" y1="84" x2="150" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
+            <text x="128" y="74" fill="#6b7280" font-size="10">PCIe</text>
+
+            <rect x="152" y="58" width="104" height="52" rx="10" fill="#ffffff" stroke="#c7cbf5"/>
+            <text x="204" y="79" fill="#1f2937" font-weight="700">DMA</text>
+            <text x="204" y="96" fill="#6b7280" font-size="11">ring scheduler</text>
+
+            <line x1="258" y1="84" x2="300" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+            <rect x="302" y="20" width="120" height="138" rx="10" fill="#f7f8fc" stroke="#c7cbf5"/>
+            <text x="362" y="40" fill="#3f43c4" font-weight="700">HBM</text>
+            <text x="362" y="56" fill="#6b7280" font-size="10">16 channels</text>
+            <g fill="#dfe3fb" stroke="#c7cbf5">
+              <rect x="316" y="66" width="92" height="11" rx="3"/>
+              <rect x="316" y="81" width="92" height="11" rx="3"/>
+              <rect x="316" y="96" width="92" height="11" rx="3"/>
+              <rect x="316" y="111" width="92" height="11" rx="3"/>
+              <rect x="316" y="126" width="92" height="11" rx="3"/>
+            </g>
+            <text x="362" y="180" fill="#9aa2b8" font-size="10">batch N goes to channel N mod 16</text>
+
+            <line x1="424" y1="84" x2="466" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+            <rect x="468" y="42" width="118" height="84" rx="10" fill="#ffffff" stroke="#c7cbf5"/>
+            <text x="527" y="63" fill="#1f2937" font-weight="700">8 read</text>
+            <text x="527" y="79" fill="#1f2937" font-weight="700">masters</text>
+            <text x="527" y="99" fill="#6b7280" font-size="10">3-stage pipeline</text>
+            <text x="527" y="113" fill="#6b7280" font-size="10">Fetch / Pace / TX</text>
+
+            <line x1="588" y1="84" x2="628" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+            <rect x="630" y="58" width="82" height="52" rx="10" fill="#eef0ff" stroke="#c7cbf5"/>
+            <text x="671" y="79" fill="#3f43c4" font-weight="700">100G</text>
+            <text x="671" y="96" fill="#6b7280" font-size="11">MAC</text>
+          </g>
+        </svg>
+        <figcaption data-i18n="fig1_caption">Fig. 1. Datapath: host memory, PCIe, HBM and the 100G MAC.</figcaption>
+      </figure>
+    </section>
+
+    <section class="block">
+      <h2 data-i18n="s3_title">Results</h2>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-value">100 Gbps</div>
+          <div class="metric-label" data-i18n="m1_label">Line rate reached on the wire</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">227.800 &micro;s</div>
+          <div class="metric-label" data-i18n="m2_label">To deliver 32,768 frames into the MAC</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value" data-i18n="m3_value">Zero loss</div>
+          <div class="metric-label" data-i18n="m3_label">All frames received by the peer NIC</div>
+        </div>
+      </div>
+
+      <p data-i18n="s3_p1">Verification used a second 100 Gbps NIC on a back-to-back link. In timestamp mode, 998 of 1,000 replayed packets matched the source records field by field; the two that did not appear are malformed entries in the source trace itself. In max-rate mode the receiver counted all 32,768 frames with nothing dropped.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="t_h1">Stage</th>
+              <th data-i18n="t_h2">Measured</th>
+              <th data-i18n="t_h3">Limited by</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-i18n="t_r1c1">Host to HBM (write)</td>
+              <td>7.855 GB/s</td>
+              <td data-i18n="t_r1c3">PCIe and the DMA engine</td>
+            </tr>
+            <tr>
+              <td data-i18n="t_r2c1">HBM to MAC (read)</td>
+              <td data-i18n="t_r2c2">Full line rate</td>
+              <td data-i18n="t_r2c3">The 100G MAC</td>
+            </tr>
+            <tr>
+              <td data-i18n="t_r3c1">A single HBM channel</td>
+              <td>8.0 GB/s</td>
+              <td>32 B &times; 250 MHz</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p data-i18n="s3_p2">Timing closes with 0.057 ns of setup slack and 0.010 ns of hold slack, with no failing endpoints.</p>
+    </section>
+
+    <section class="block">
+      <h2 data-i18n="s4_title">Poster</h2>
+      <div class="poster-slot" data-i18n="poster_placeholder">The conference poster will be added here.</div>
+    </section>
+
+    <section class="block">
+      <h2 data-i18n="s5_title">Links</h2>
+      <div class="links-row">
+        <a href="../index.html#projects" data-i18n="link_back">Back to projects</a>
+        <a href="../index.html#contact" data-i18n="link_contact">Contact me</a>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="container">&copy; 2026 Charles-Hong.</div>
+  </footer>
+
+  <script>
+    const translations = {
+      zh: {
+        page_title: 'HBM 100 Gbps 流量重播引擎 | Charles-Hong',
+        lang_button: 'EN',
+        nav_back: '← 回到作品',
+
+        head_tag: '主要專案',
+        head_title: '基於高頻寬記憶體之 FPGA 100 Gbps 網路流量重播引擎',
+        head_meta: '發表於 UST-CYCU Joint Research Symposium 2026，University of Santo Tomas, Philippines。指導教授：中原大學電機工程學系 賴裕坤教授。',
+
+        s1_title: '問題',
+        s1_p1: '重播錄製流量是驗證高速網路設備的必要手段。軟體做不到 100 Gbps：封包必須逐一經過 CPU，面對真實流量中佔多數的短訊框時吞吐量急遽衰減，而作業系統的排程抖動又會扭曲封包間隔——那正是重播本身要保存的東西。',
+        s1_p2: '這個設計把整件事搬進硬體。流量存放在 FPGA 卡上的高頻寬記憶體裡，重播時主機完全不介入傳送路徑。',
+
+        s2_title: '運作方式',
+        s2_p1: '流量被切成 512 位元組的區塊，分散到全部十六個 HBM 通道，第 N 塊落在第 N mod 16 個通道。八個 AXI read master 負責讀回，各自靜態獨占自己的兩個通道，因此不需要仲裁，也不會有兩個 master 搶同一個通道。',
+        s2_p2: '三級管線負責重組乙太網路訊框。硬體節流器還原錄製時的時間戳，且只管制最後一級，所以引擎在等待送出時機時，前面的預讀不會停下來。',
+        fig1_caption: '圖一、資料路徑：主機記憶體、PCIe、HBM 與 100G MAC。',
+
+        s3_title: '實測結果',
+        m1_label: '線上實際達成的速率',
+        m2_label: '將 32,768 個訊框交付至 MAC 的耗時',
+        m3_value: '零丟包',
+        m3_label: '對端網路卡完整收到所有訊框',
+        s3_p1: '驗證方式是與另一張 100 Gbps 網路卡以 back-to-back 直連。在時間戳模式下，1,000 個重播封包中有 998 個與來源記錄逐欄相符，沒出現的那兩筆是來源錄製檔本身就異常的記錄。在最高速模式下，接收端完整收到全部 32,768 個訊框，一個都沒掉。',
+        t_h1: '階段',
+        t_h2: '實測',
+        t_h3: '受限於',
+        t_r1c1: '主機到 HBM（寫入）',
+        t_r1c3: 'PCIe 與 DMA 引擎',
+        t_r2c1: 'HBM 到 MAC（讀出）',
+        t_r2c2: '完整線速',
+        t_r2c3: '100G MAC',
+        t_r3c1: '單一 HBM 通道',
+        s3_p2: '時序收斂於 setup 餘裕 0.057 ns、hold 餘裕 0.010 ns，沒有任何未達標的端點。',
+
+        s4_title: '海報',
+        poster_placeholder: '會議海報之後會放在這裡。',
+
+        s5_title: '連結',
+        link_back: '回到作品',
+        link_contact: '聯絡我'
+      },
+      en: {
+        page_title: 'HBM 100 Gbps Traffic Replay Engine | Charles-Hong',
+        lang_button: '中文',
+        nav_back: '← Back to projects',
+
+        head_tag: 'Main Project',
+        head_title: 'An HBM-Based 100 Gbps Traffic Replay Engine on FPGA',
+        head_meta: 'Presented at the UST-CYCU Joint Research Symposium 2026, University of Santo Tomas, Philippines. Advised by Prof. Yu-Kuen Lai, Department of Electrical Engineering, Chung Yuan Christian University.',
+
+        s1_title: 'The problem',
+        s1_p1: 'Replaying recorded traffic is how high-speed network equipment gets tested. Software cannot do it at 100 Gbps: packets are handled one at a time on the CPU, so throughput collapses for the short frames that make up most real traffic, and scheduling jitter distorts the very packet spacing the replay is supposed to preserve.',
+        s1_p2: 'This design moves the whole job into hardware. The trace lives in High Bandwidth Memory on the FPGA card and is replayed without the host touching the transmit path at all.',
+
+        s2_title: 'How it works',
+        s2_p1: 'The trace is split into 512-byte batches and spread across all sixteen HBM channels, with batch N landing in channel N mod 16. Eight AXI read masters pull it back, each statically owning its own pair of channels, so no arbitration is needed and no two masters ever contend.',
+        s2_p2: 'A three-stage pipeline reassembles the Ethernet frames. A hardware throttle reproduces the recorded timestamps and gates only the final stage, so prefetching never stalls while the engine waits for the right moment to transmit.',
+        fig1_caption: 'Fig. 1. Datapath: host memory, PCIe, HBM and the 100G MAC.',
+
+        s3_title: 'Results',
+        m1_label: 'Line rate reached on the wire',
+        m2_label: 'To deliver 32,768 frames into the MAC',
+        m3_value: 'Zero loss',
+        m3_label: 'All frames received by the peer NIC',
+        s3_p1: 'Verification used a second 100 Gbps NIC on a back-to-back link. In timestamp mode, 998 of 1,000 replayed packets matched the source records field by field; the two that did not appear are malformed entries in the source trace itself. In max-rate mode the receiver counted all 32,768 frames with nothing dropped.',
+        t_h1: 'Stage',
+        t_h2: 'Measured',
+        t_h3: 'Limited by',
+        t_r1c1: 'Host to HBM (write)',
+        t_r1c3: 'PCIe and the DMA engine',
+        t_r2c1: 'HBM to MAC (read)',
+        t_r2c2: 'Full line rate',
+        t_r2c3: 'The 100G MAC',
+        t_r3c1: 'A single HBM channel',
+        s3_p2: 'Timing closes with 0.057 ns of setup slack and 0.010 ns of hold slack, with no failing endpoints.',
+
+        s4_title: 'Poster',
+        poster_placeholder: 'The conference poster will be added here.',
+
+        s5_title: 'Links',
+        link_back: 'Back to projects',
+        link_contact: 'Contact me'
+      }
+    };
+
+    const langToggle = document.getElementById('langToggle');
+    let currentLang = localStorage.getItem('language') || 'zh';
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      const dict = translations[lang];
+
+      document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
+      document.title = dict.page_title;
+      langToggle.textContent = dict.lang_button;
+
+      document.querySelectorAll('[data-i18n]').forEach((element) => {
+        const key = element.dataset.i18n;
+        if (dict[key] !== undefined) {
+          element.textContent = dict[key];
+        }
+      });
+
+      localStorage.setItem('language', lang);
+    }
+
+    langToggle.addEventListener('click', () => {
+      applyLanguage(currentLang === 'zh' ? 'en' : 'zh');
+    });
+
+    applyLanguage(currentLang);
+  </script>
+</body>
+</html>
