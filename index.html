@@ -1,480 +1,612 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Charles-Hong - IC design, FPGA and networking. Builder of an HBM-based 100 Gbps traffic replay engine." />
   <title>Charles-Hong | Personal Website</title>
   <style>
     :root {
-      --bg: #f7f8fc;
-      --card: #ffffff;
-      --primary: #5b5ff5;
-      --primary-dark: #4347d9;
-      --text: #1f2937;
-      --subtext: #6b7280;
-      --border: #e5e7eb;
-      --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-      --radius: 20px;
+      --bg:          #fbfbfe;
+      --bg-tint:     #f1f3fd;
+      --surface:     #ffffff;
+      --ink:         #16181d;
+      --ink-soft:    #5b6070;
+      --ink-faint:   #8b90a0;
+      --primary:     #4f46e5;
+      --primary-dk:  #3f37c9;
+      --primary-lt:  #eef0ff;
+      --line:        #e4e6f0;
+      --line-soft:   #eef0f6;
+
+      /* One shadow scale, applied sparingly.  Only the two elements that
+         should lead the eye get lift; everything else is held down by a
+         border, which is what actually creates the hierarchy. */
+      --lift:      0 1px 2px rgba(22,24,29,.04), 0 12px 32px rgba(37,35,110,.10);
+      --lift-soft: 0 1px 2px rgba(22,24,29,.03), 0 4px 12px rgba(37,35,110,.05);
+
+      --r-lg: 18px;
+      --r-md: 12px;
+      --r-sm: 8px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: Arial, "Noto Sans TC", sans-serif;
-      background: linear-gradient(180deg, #f8f8ff 0%, #eef2ff 100%);
-      color: var(--text);
-      line-height: 1.7;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .container { width: min(1080px, 90%); margin: 0 auto; }
+
+    /* ---------- type scale ---------- */
+    .eyebrow {
+      font-size: .74rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--primary);
     }
 
-    img {
-      max-width: 100%;
-      display: block;
+    .section-head { margin-bottom: 26px; }
+
+    .section-title {
+      font-size: clamp(1.5rem, 2.4vw, 1.85rem);
+      font-weight: 750;
+      letter-spacing: -.02em;
     }
 
-    .container {
-      width: min(1120px, 92%);
-      margin: 0 auto;
+    .section-desc {
+      color: var(--ink-soft);
+      margin-top: 6px;
+      max-width: 62ch;
     }
 
+    /* ---------- nav ---------- */
     .navbar {
       position: sticky;
       top: 0;
       z-index: 100;
-      backdrop-filter: blur(12px);
-      background: rgba(255, 255, 255, 0.82);
-      border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+      backdrop-filter: saturate(180%) blur(14px);
+      background: rgba(251,251,254,.86);
+      border-bottom: 1px solid var(--line-soft);
     }
 
     .nav-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 0;
+      padding: 14px 0;
       gap: 16px;
     }
 
     .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--primary);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      font-size: 1.02rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
     }
 
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+    .logo-mark {
+      width: 26px; height: 26px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--primary), #7c74f0);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: 0;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+
+    .nav-links { display: flex; gap: 4px; }
 
     .nav-links a {
-      color: var(--subtext);
+      color: var(--ink-soft);
       font-weight: 600;
-      transition: 0.25s;
+      font-size: .92rem;
+      padding: 7px 12px;
+      border-radius: var(--r-sm);
+      transition: color .2s, background .2s;
     }
 
-    .nav-links a:hover {
-      color: var(--primary);
-    }
+    .nav-links a:hover { color: var(--primary); background: var(--primary-lt); }
 
     .lang-toggle {
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--primary);
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
       border-radius: 999px;
-      padding: 8px 14px;
+      padding: 6px 14px;
+      font: inherit;
+      font-size: .85rem;
       font-weight: 700;
       cursor: pointer;
-      transition: 0.25s;
+      transition: .2s;
     }
 
-    .lang-toggle:hover {
-      background: #eef2ff;
-    }
+    .lang-toggle:hover { border-color: var(--primary); color: var(--primary); }
 
-    .hero {
-      padding: 72px 0 48px;
-    }
+    /* ---------- hero ---------- */
+    .hero { padding: 68px 0 40px; }
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 28px;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 48px;
       align-items: center;
-    }
-
-    .hero-title-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
     }
 
     .hero-text h1 {
-      font-size: clamp(2.2rem, 4vw, 3.6rem);
-      line-height: 1.18;
-      margin-bottom: 0;
-      flex: 1;
+      font-size: clamp(2.1rem, 4.4vw, 3.15rem);
+      line-height: 1.1;
+      letter-spacing: -.035em;
+      font-weight: 800;
+      margin: 12px 0 0;
     }
 
-    .hero-text h1 span {
-      color: var(--primary);
+    .hero-text h1 .hero-name {
+      white-space: nowrap;
+      background: linear-gradient(100deg, var(--primary), #8b7ff5);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .hero-name {
-      display: block;
+    .hero-role {
+      margin-top: 14px;
+      font-size: 1.02rem;
+      font-weight: 650;
+      color: var(--ink);
     }
 
-    .hero-main-photo {
-      width: 170px;
-      height: 170px;
-      border-radius: 28px;
-      object-fit: cover;
-      object-position: center top;
-      box-shadow: var(--shadow);
-      border: 4px solid rgba(255,255,255,0.9);
-      flex-shrink: 0;
-      background: #fff;
+    .hero-role span { color: var(--ink-faint); font-weight: 500; margin: 0 7px; }
+
+    .hero-text p.hero-desc {
+      font-size: 1rem;
+      color: var(--ink-soft);
+      margin-top: 14px;
+      max-width: 56ch;
     }
 
-    .hero-text p {
-      font-size: 1.05rem;
-      color: var(--subtext);
-      margin-bottom: 24px;
-      max-width: 680px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-    }
+    .hero-actions { display: flex; gap: 11px; flex-wrap: wrap; margin-top: 26px; }
 
     .btn {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      padding: 12px 22px;
+      gap: 7px;
+      padding: 11px 20px;
       border-radius: 999px;
-      font-weight: 700;
+      font-weight: 650;
+      font-size: .93rem;
       border: 1px solid transparent;
-      transition: transform 0.25s, background 0.25s, color 0.25s;
+      transition: transform .2s, background .2s, border-color .2s, color .2s;
       cursor: pointer;
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-    }
+    .btn:hover { transform: translateY(-1px); }
 
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dk); }
 
-    .btn-primary:hover {
-      background: var(--primary-dark);
-    }
+    .btn-ghost { background: var(--surface); color: var(--ink); border-color: var(--line); }
+    .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
 
-    .btn-secondary {
-      background: #fff;
-      color: var(--primary);
-      border-color: var(--border);
-    }
-
-    .hero-card {
-      background: var(--card);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      padding: 24px;
-      animation: floatCard 3.6s ease-in-out infinite;
-    }
+    /* portrait + slideshow share one column, portrait overlapping the frame */
+    .hero-visual { position: relative; }
 
     .slideshow-frame {
       width: 100%;
-      aspect-ratio: 1 / 1;
-      border-radius: 22px;
+      aspect-ratio: 4 / 5;
+      border-radius: var(--r-lg);
       overflow: hidden;
-      background: #eef2ff;
-      margin-bottom: 18px;
+      background: var(--bg-tint);
+      box-shadow: var(--lift);
+      border: 1px solid var(--line-soft);
     }
 
     .slideshow-image {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: cover;
-      transition: opacity 0.45s ease;
+      transition: opacity .45s ease;
     }
 
-    .slideshow-image.is-fading {
-      opacity: 0.25;
+    .slideshow-image.is-fading { opacity: .3; }
+
+    .hero-portrait {
+      position: absolute;
+      left: -26px;
+      bottom: -22px;
+      width: 108px; height: 108px;
+      border-radius: 16px;
+      object-fit: cover;
+      object-position: center top;
+      border: 4px solid var(--bg);
+      box-shadow: var(--lift);
+      background: var(--surface);
     }
 
-    .hero-card h2 {
-      margin-bottom: 8px;
-      color: var(--primary);
+    .slideshow-caption {
+      position: absolute;
+      right: 14px; bottom: 14px;
+      background: rgba(22,24,29,.62);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      font-size: .74rem;
+      font-weight: 600;
+      padding: 5px 11px;
+      border-radius: 999px;
     }
 
-    .hero-card p {
-      color: var(--subtext);
+    /* ---------- stat band : the first hierarchy step ---------- */
+    .statband {
+      background: var(--bg-tint);
+      border-top: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+      padding: 26px 0;
+      margin-top: 26px;
     }
 
-    .section {
-      padding: 28px 0;
-    }
-
-    .section-title {
-      font-size: 1.9rem;
-      margin-bottom: 10px;
-    }
-
-    .section-desc {
-      color: var(--subtext);
-      margin-bottom: 22px;
-    }
-
-    .about-card,
-    .contact-card {
-      background: var(--card);
-      padding: 28px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .about-lines {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .about-item {
-      color: var(--text);
-      font-size: 1rem;
-    }
-
-    .about-item strong {
-      color: var(--primary);
-      margin-right: 6px;
-    }
-
-    .about-space {
-      height: 12px;
-    }
-
-    .skills-grid {
+    .statband-inner {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
     }
 
-    .skill-group {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 22px;
-      box-shadow: var(--shadow);
-    }
+    .stat { text-align: center; }
 
-    .skill-group h3 {
+    .stat-value {
+      font-size: clamp(1.5rem, 3vw, 2.05rem);
+      font-weight: 800;
+      letter-spacing: -.035em;
       color: var(--primary);
-      margin-bottom: 14px;
-      font-size: 1.1rem;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.15;
     }
 
-    .skills-wrap {
+    .stat-value small { font-size: .52em; font-weight: 700; margin-left: 2px; }
+
+    .stat-label {
+      font-size: .79rem;
+      color: var(--ink-soft);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .statband-note {
+      text-align: center;
+      font-size: .76rem;
+      color: var(--ink-faint);
+      margin-top: 16px;
+    }
+
+    /* ---------- generic section ---------- */
+    .section { padding: 56px 0; }
+    .section + .section { padding-top: 0; }
+
+    /* ---------- featured project : heaviest element on the page ---------- */
+    .featured {
+      background: linear-gradient(145deg, #232349 0%, #2f2d63 55%, #3b3480 100%);
+      border-radius: var(--r-lg);
+      padding: 38px;
+      color: #fff;
+      box-shadow: var(--lift);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured::after {
+      content: "";
+      position: absolute;
+      right: -90px; top: -90px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,127,245,.4), transparent 68%);
+      pointer-events: none;
+    }
+
+    .featured-tag {
+      display: inline-block;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 15px;
+    }
+
+    .featured h3 {
+      font-size: clamp(1.35rem, 2.6vw, 1.95rem);
+      line-height: 1.2;
+      letter-spacing: -.025em;
+      font-weight: 750;
+      max-width: 22ch;
+    }
+
+    .featured p {
+      color: rgba(255,255,255,.76);
+      margin-top: 13px;
+      max-width: 58ch;
+      font-size: .97rem;
+    }
+
+    .featured-metrics {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
+      margin-top: 24px;
     }
 
-    .skill-tag {
-      padding: 10px 16px;
+    .fm {
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--r-md);
+      padding: 11px 16px;
+      min-width: 132px;
+    }
+
+    .fm-value {
+      font-size: 1.16rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .fm-label {
+      font-size: .73rem;
+      color: rgba(255,255,255,.66);
+      margin-top: 1px;
+    }
+
+    .featured-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 26px;
+      background: #fff;
+      color: #2f2d63;
+      padding: 11px 20px;
       border-radius: 999px;
-      background: #eef2ff;
-      color: var(--primary);
       font-weight: 700;
-      border: 1px solid #dfe4ff;
-      font-size: 0.95rem;
+      font-size: .93rem;
+      transition: transform .2s, box-shadow .2s;
     }
 
-    .project-grid {
+    .featured-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,.22); }
+
+    .featured-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,.14);
+    }
+
+    .featured-tools span {
+      font-size: .74rem;
+      font-weight: 600;
+      color: rgba(255,255,255,.72);
+      background: rgba(255,255,255,.07);
+      padding: 4px 11px;
+      border-radius: 999px;
+    }
+
+    /* ---------- about : plain list, no card, so it sits below the featured ---------- */
+    .about-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      gap: 1px;
+      background: var(--line-soft);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--r-lg);
+      overflow: hidden;
     }
 
-    .project-card.is-main {
-      grid-column: 1 / -1;
-      border-color: #d8ddff;
-    }
+    .about-row { background: var(--surface); padding: 20px 22px; }
 
-    .card-tag {
-      display: inline-block;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
+    .about-row.is-wide { grid-column: 1 / -1; }
+
+    .about-key {
+      font-size: .74rem;
+      font-weight: 700;
+      letter-spacing: .09em;
       text-transform: uppercase;
-      color: var(--primary);
-      background: #eef0ff;
+      color: var(--ink-faint);
+    }
+
+    .about-val { margin-top: 5px; font-size: .97rem; color: var(--ink); }
+
+    /* ---------- skills : core group carries more weight ---------- */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      align-items: start;
+      gap: 16px;
+    }
+
+    .skill-group {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      padding: 22px;
+    }
+
+    .skill-group.is-core {
+      border-color: #d5d3f7;
+      background: linear-gradient(180deg, #fbfbff, var(--surface));
+    }
+
+    .skill-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .skill-head h3 { font-size: .99rem; font-weight: 700; letter-spacing: -.01em; }
+
+    .skill-count { font-size: .74rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+    .skills-wrap { display: flex; flex-wrap: wrap; gap: 7px; }
+
+    .skill-tag {
+      padding: 6px 13px;
       border-radius: 999px;
-      padding: 4px 12px;
-      margin-bottom: 10px;
+      background: var(--bg-tint);
+      color: var(--ink);
+      font-weight: 600;
+      border: 1px solid var(--line-soft);
+      font-size: .855rem;
+    }
+
+    .skill-group.is-core .skill-tag {
+      background: var(--primary-lt);
+      border-color: #dcdcfb;
+      color: var(--primary-dk);
+    }
+
+    /* ---------- secondary projects : lightest cards ---------- */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
 
     .project-card {
-      background: var(--card);
-      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
       padding: 22px;
-      box-shadow: var(--shadow);
-      border: 1px solid transparent;
-      transition: transform 0.25s, border-color 0.25s;
+      display: flex;
+      flex-direction: column;
+      transition: border-color .2s, box-shadow .2s, transform .2s;
     }
 
     .project-card:hover {
-      transform: translateY(-6px);
-      border-color: #d8ddff;
+      border-color: #cfcdf3;
+      box-shadow: var(--lift-soft);
+      transform: translateY(-2px);
     }
 
-    .project-card h3 {
-      color: var(--primary);
-      margin-bottom: 10px;
-    }
+    .project-card h3 { font-size: 1rem; font-weight: 700; letter-spacing: -.01em; }
 
     .project-card p {
-      color: var(--subtext);
-      margin-bottom: 16px;
+      color: var(--ink-soft);
+      font-size: .9rem;
+      margin-top: 8px;
+      flex: 1;
     }
 
-    .project-card a {
+    .card-link {
       color: var(--primary);
-      font-weight: 700;
+      font-weight: 650;
+      font-size: .89rem;
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
-    .contact-list {
+    .card-link:hover { gap: 9px; }
+
+    /* ---------- contact ---------- */
+    .contact-row {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
       gap: 10px;
-      margin-top: 10px;
+      align-items: center;
     }
 
-    .contact-list a,
-    .contact-list p {
-      color: var(--primary);
-      font-weight: 700;
-      word-break: break-word;
+    .contact-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-weight: 620;
+      font-size: .92rem;
+      transition: border-color .2s, color .2s;
     }
+
+    .contact-chip:hover { border-color: var(--primary); color: var(--primary); }
 
     footer {
-      text-align: center;
-      padding: 36px 0 44px;
-      color: var(--subtext);
-      font-size: 0.95rem;
+      border-top: 1px solid var(--line-soft);
+      margin-top: 60px;
+      padding: 26px 0 40px;
+      color: var(--ink-faint);
+      font-size: .86rem;
     }
 
+    .footer-inner { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+
+    /* ---------- entrance ---------- */
     .fade-in {
       opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 0.8s ease forwards;
+      transform: translateY(14px);
+      animation: fadeUp .6s cubic-bezier(.22,.61,.36,1) forwards;
     }
 
-    .delay-1 { animation-delay: 0.12s; }
-    .delay-2 { animation-delay: 0.24s; }
-    .delay-3 { animation-delay: 0.36s; }
+    .delay-1 { animation-delay: .07s; }
+    .delay-2 { animation-delay: .14s; }
+    .delay-3 { animation-delay: .21s; }
 
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in { animation: none; opacity: 1; transform: none; }
+      html { scroll-behavior: auto; }
+      .slideshow-image { transition: none; }
     }
 
-    @keyframes floatCard {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-8px);
-      }
-    }
-
-    @media (max-width: 900px) {
-      .hero-grid,
-      .project-grid,
-      .skills-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .project-card.is-main {
-        grid-column: auto;
-      }
+    /* ---------- responsive ---------- */
+    @media (max-width: 940px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero-visual { max-width: 380px; }
+      .project-grid { grid-template-columns: repeat(2, 1fr); }
+      .statband-inner { grid-template-columns: repeat(2, 1fr); gap: 24px; }
     }
 
     @media (max-width: 640px) {
-      .nav-inner {
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .nav-right {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .hero {
-        padding-top: 44px;
-      }
-
-      .hero-title-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .hero-main-photo {
-        width: 130px;
-        height: 130px;
-      }
-
-      .hero-text h1 {
-        font-size: 2rem;
-      }
-
-      .about-card,
-      .contact-card,
-      .project-card,
-      .hero-card,
-      .skill-group {
-        padding: 20px;
-      }
+      .nav-links { display: none; }
+      .hero { padding-top: 40px; }
+      .section { padding: 40px 0; }
+      .featured { padding: 26px 22px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .skills-grid, .project-grid { grid-template-columns: 1fr; }
+      .hero-portrait { left: -12px; width: 88px; height: 88px; }
+      .fm { flex: 1 1 calc(50% - 6px); min-width: 0; }
     }
   </style>
 </head>
 <body>
   <nav class="navbar">
     <div class="container nav-inner">
-      <a href="#top" class="logo">Charles-Hong</a>
+      <a href="#top" class="logo"><span class="logo-mark">CH</span>Charles-Hong</a>
       <div class="nav-right">
         <div class="nav-links">
+          <a href="#work" data-i18n="nav_work">Work</a>
           <a href="#about" data-i18n="nav_about">About</a>
           <a href="#skills" data-i18n="nav_skills">Skills</a>
-          <a href="#projects" data-i18n="nav_projects">Projects</a>
           <a href="#contact" data-i18n="nav_contact">Contact</a>
         </div>
         <button id="langToggle" class="lang-toggle">中文</button>
@@ -482,88 +614,163 @@
     </div>
   </nav>
 
-  <main id="top" class="container">
-    <section class="hero">
+  <main id="top">
+    <section class="hero container">
       <div class="hero-grid">
         <div class="hero-text fade-in">
-          <div class="hero-title-row">
-            <h1 data-i18n-html="hero_title">Hello, I am <span class="hero-name">Charles-Hong</span></h1>
-            <img
-              class="hero-main-photo"
-              id="heroMainPhoto"
-              src="images/profile-main.jpg"
-              alt="Portrait of Charles-Hong"
-            />
-          </div>
-
-          <p data-i18n="hero_desc">
-            This is my personal website. I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. Here I organize my learning journey, publications, work experience, project showcase, and my technical exploration in IC design, FPGA, and networking-related applications.
+          <p class="eyebrow" data-i18n="hero_eyebrow">IC Design · FPGA · Networking</p>
+          <h1 data-i18n-html="hero_title">Hello, I am <span class="hero-name">Charles-Hong</span></h1>
+          <p class="hero-role" data-i18n-html="hero_role">Chung Yuan Christian University <span>/</span> Electrical Engineering</p>
+          <p class="hero-desc" data-i18n="hero_desc">
+            I build hardware that moves packets fast. My main work is an FPGA engine that stores recorded network traffic in High Bandwidth Memory and replays it at the full 100 Gbps line rate, verified on real silicon rather than in simulation alone.
           </p>
           <div class="hero-actions">
-            <a href="#projects" class="btn btn-primary" data-i18n="hero_btn_projects">View Projects</a>
-            <a href="#" class="btn btn-secondary" data-i18n="hero_btn_linkedin">LinkedIn</a>
+            <a href="#work" class="btn btn-primary" data-i18n="hero_btn_work">See the work</a>
+            <a href="https://github.com/charlesHYC" target="_blank" rel="noopener" class="btn btn-ghost" data-i18n="hero_btn_github">GitHub</a>
           </div>
         </div>
 
-        <div class="hero-card fade-in delay-1">
+        <div class="hero-visual fade-in delay-1">
           <div class="slideshow-frame">
-            <img
-              class="slideshow-image"
-              id="slideshowImage"
-              src="images/moment0.jpg"
-              alt="Highlight photo of Charles-Hong"
-            />
+            <img class="slideshow-image" id="slideshowImage" src="images/moment0.jpg" alt="Highlight photo of Charles-Hong" />
           </div>
-          <h2 data-i18n="intro_title">Highlights</h2>
-          <p id="slideshowCaption" data-i18n="intro_desc">
-            A few snapshots from my life and experiences.
-          </p>
+          <span class="slideshow-caption" id="slideshowCaption">Highlights</span>
+          <img class="hero-portrait" id="heroMainPhoto" src="images/profile-main.jpg" alt="Portrait of Charles-Hong" />
         </div>
       </div>
     </section>
 
-    <section id="about" class="section fade-in delay-1">
-      <h2 class="section-title" data-i18n="about_title">About Me</h2>
-      <p class="section-desc" data-i18n="about_desc">Below is my basic background information for quick and clear reading.</p>
-      <div class="about-card">
-        <div class="about-lines">
-          <p class="about-item">
-            <strong data-i18n="about_label_school">Education:</strong>
-            <span data-i18n="about_school">Chung Yuan Christian University, Department of Electrical Engineering</span>
-          </p>
+    <section class="statband fade-in delay-2">
+      <div class="container">
+        <div class="statband-inner">
+          <div class="stat">
+            <div class="stat-value">100<small>%</small></div>
+            <div class="stat-label" data-i18n="stat1_label">of the 100 Gbps line rate reached on the wire</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">149.3<small>M</small></div>
+            <div class="stat-label" data-i18n="stat2_label">frames per second at minimum frame size</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">7.9<small> GB/s</small></div>
+            <div class="stat-label" data-i18n="stat3_label">sustained host to HBM write bandwidth</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">0</div>
+            <div class="stat-label" data-i18n="stat4_label">frames lost across 32,768 sent to a peer NIC</div>
+          </div>
+        </div>
+        <p class="statband-note" data-i18n="stat_note">Measured on a Xilinx Alveo U50 with an on-chip cycle counter, cross-checked against the receiving NIC.</p>
+      </div>
+    </section>
 
-          <div class="about-space"></div>
+    <section id="work" class="section container fade-in delay-2">
+      <div class="section-head">
+        <h2 class="section-title" data-i18n="work_title">Selected Work</h2>
+        <p class="section-desc" data-i18n="work_desc">The main project first, with the design and every measured number written up on its own page.</p>
+      </div>
 
-          <p class="about-item">
-            <strong data-i18n="about_label_domain">Professional Fields:</strong>
-            <span data-i18n="about_domain">Cell-based IC Design, ASIC, FPGA, Application of Networking</span>
-          </p>
+      <article class="featured">
+        <span class="featured-tag" data-i18n="featured_tag">Main Project</span>
+        <h3 data-i18n="featured_title">An HBM-Based 100 Gbps Traffic Replay Engine</h3>
+        <p data-i18n="featured_desc">
+          Recorded traffic is loaded into High Bandwidth Memory over PCIe, then read back out by eight parallel read masters and rebuilt into Ethernet frames one per clock cycle. It can either honour the original capture timing or push everything back to back at the line rate.
+        </p>
 
-          <p class="about-item">
-            <strong data-i18n="about_label_eda">EDA Tools:</strong>
-            <span data-i18n="about_eda">Design Compiler, ICC/ICC2/Fusion Compiler, Custom Compiler, Laker, Virtuoso, Catapult, Vivado</span>
-          </p>
+        <div class="featured-metrics">
+          <div class="fm">
+            <div class="fm-value">227.8 &micro;s</div>
+            <div class="fm-label" data-i18n="fm1_label">to deliver 32,768 frames</div>
+          </div>
+          <div class="fm">
+            <div class="fm-value">1.67</div>
+            <div class="fm-label" data-i18n="fm2_label">clock cycles per packet</div>
+          </div>
+          <div class="fm">
+            <div class="fm-value">16</div>
+            <div class="fm-label" data-i18n="fm3_label">HBM channels driven in parallel</div>
+          </div>
+          <div class="fm">
+            <div class="fm-value">0.16<small>%</small></div>
+            <div class="fm-label" data-i18n="fm4_label">timing error when replaying a capture</div>
+          </div>
+        </div>
 
-          <p class="about-item">
-            <strong data-i18n="about_label_langprog">Programming Languages:</strong>
-            <span data-i18n="about_programming">Python, C, Verilog</span>
-          </p>
+        <a class="featured-cta" href="projects/hbm-replay.html" data-i18n="featured_cta">Read the full write-up &rarr;</a>
 
-          <p class="about-item">
-            <strong data-i18n="about_label_language">Languages:</strong>
-            <span data-i18n="about_languages">Chinese, English, Vietnamese</span>
-          </p>
+        <div class="featured-tools">
+          <span>Xilinx Alveo U50</span><span>HBM2</span><span>Corundum</span>
+          <span>Verilog</span><span>Vivado</span><span>AXI</span>
+          <span>PCIe</span><span>100G Ethernet</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="section container fade-in">
+      <div class="section-head">
+        <h2 class="section-title" data-i18n="more_title">Other Projects</h2>
+        <p class="section-desc" data-i18n="more_desc">Smaller things I built because I needed them.</p>
+      </div>
+
+      <div class="project-grid">
+        <article class="project-card">
+          <h3 data-i18n="project2_title">EDA Environment Setup</h3>
+          <p data-i18n="project2_desc">A portable shell script for Synopsys, Cadence, Siemens and Xilinx tools, with the site paths kept out of the script itself.</p>
+          <a class="card-link" href="https://github.com/charlesHYC/EDA_tool_setup" target="_blank" rel="noopener" data-i18n="project2_link">View on GitHub &rarr;</a>
+        </article>
+
+        <article class="project-card">
+          <h3 data-i18n="project3_title">IC Design Documentation Tools</h3>
+          <p data-i18n="project3_desc">Two Claude Code skills: one writes HTML design documents, the other explains Verilog line by line.</p>
+          <a class="card-link" href="https://github.com/charlesHYC/skill" target="_blank" rel="noopener" data-i18n="project3_link">View on GitHub &rarr;</a>
+        </article>
+
+        <article class="project-card">
+          <h3 data-i18n="project4_title">This Website</h3>
+          <p data-i18n="project4_desc">A single hand-written HTML file, no framework and no build step, with Chinese and English sharing one page.</p>
+          <a class="card-link" href="https://github.com/charlesHYC/my-simple-website" target="_blank" rel="noopener" data-i18n="project4_link">View on GitHub &rarr;</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="section container fade-in">
+      <div class="section-head">
+        <h2 class="section-title" data-i18n="about_title">About Me</h2>
+        <p class="section-desc" data-i18n="about_desc">The short version of my background.</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-row is-wide">
+          <div class="about-key" data-i18n="about_label_school">Education</div>
+          <div class="about-val" data-i18n="about_school">Chung Yuan Christian University, Department of Electrical Engineering</div>
+        </div>
+        <div class="about-row is-wide">
+          <div class="about-key" data-i18n="about_label_domain">Professional Fields</div>
+          <div class="about-val" data-i18n="about_domain">Cell-based IC Design, ASIC, FPGA, Application of Networking</div>
+        </div>
+        <div class="about-row">
+          <div class="about-key" data-i18n="about_label_langprog">Programming Languages</div>
+          <div class="about-val" data-i18n="about_programming">Python, C, Verilog</div>
+        </div>
+        <div class="about-row">
+          <div class="about-key" data-i18n="about_label_language">Languages</div>
+          <div class="about-val" data-i18n="about_languages">Chinese, English, Vietnamese</div>
         </div>
       </div>
     </section>
 
-    <section id="skills" class="section fade-in delay-2">
-      <h2 class="section-title" data-i18n="skills_title">Skills</h2>
-      <p class="section-desc" data-i18n="skills_desc">My skills are grouped by category below so the information is cleaner and easier to read.</p>
+    <section id="skills" class="section container fade-in">
+      <div class="section-head">
+        <h2 class="section-title" data-i18n="skills_title">Skills</h2>
+        <p class="section-desc" data-i18n="skills_desc">Grouped by what I reach for most.</p>
+      </div>
 
       <div class="skills-grid">
-        <div class="skill-group">
-          <h3 data-i18n="skills_group_domain">Professional Fields</h3>
+        <div class="skill-group is-core">
+          <div class="skill-head">
+            <h3 data-i18n="skills_group_domain">Professional Fields</h3>
+            <span class="skill-count">04</span>
+          </div>
           <div class="skills-wrap">
             <span class="skill-tag" data-i18n="skill_domain_1">Cell-based IC Design</span>
             <span class="skill-tag" data-i18n="skill_domain_2">ASIC</span>
@@ -572,8 +779,23 @@
           </div>
         </div>
 
+        <div class="skill-group is-core">
+          <div class="skill-head">
+            <h3 data-i18n="skills_group_programming">Programming Languages</h3>
+            <span class="skill-count">03</span>
+          </div>
+          <div class="skills-wrap">
+            <span class="skill-tag" data-i18n="skill_prog_1">Python</span>
+            <span class="skill-tag" data-i18n="skill_prog_2">C</span>
+            <span class="skill-tag" data-i18n="skill_prog_3">Verilog</span>
+          </div>
+        </div>
+
         <div class="skill-group">
-          <h3 data-i18n="skills_group_eda">EDA Tools</h3>
+          <div class="skill-head">
+            <h3 data-i18n="skills_group_eda">EDA Tools</h3>
+            <span class="skill-count">07</span>
+          </div>
           <div class="skills-wrap">
             <span class="skill-tag" data-i18n="skill_eda_1">Design Compiler</span>
             <span class="skill-tag" data-i18n="skill_eda_2">ICC / ICC2 / Fusion Compiler</span>
@@ -586,16 +808,10 @@
         </div>
 
         <div class="skill-group">
-          <h3 data-i18n="skills_group_programming">Programming Languages</h3>
-          <div class="skills-wrap">
-            <span class="skill-tag" data-i18n="skill_prog_1">Python</span>
-            <span class="skill-tag" data-i18n="skill_prog_2">C</span>
-            <span class="skill-tag" data-i18n="skill_prog_3">Verilog</span>
+          <div class="skill-head">
+            <h3 data-i18n="skills_group_languages">Languages</h3>
+            <span class="skill-count">03</span>
           </div>
-        </div>
-
-        <div class="skill-group">
-          <h3 data-i18n="skills_group_languages">Languages</h3>
           <div class="skills-wrap">
             <span class="skill-tag" data-i18n="lang_chinese">Chinese</span>
             <span class="skill-tag" data-i18n="lang_english">English</span>
@@ -605,84 +821,84 @@
       </div>
     </section>
 
-    <section id="projects" class="section fade-in delay-3">
-      <h2 class="section-title" data-i18n="projects_title">Projects</h2>
-      <p class="section-desc" data-i18n="projects_desc">Each project has its own page with the design and the measured results.</p>
-      <div class="project-grid">
-        <article class="project-card is-main">
-          <span class="card-tag" data-i18n="card_tag_main">Main Project</span>
-          <h3 data-i18n="project1_title">HBM-Based 100 Gbps Traffic Replay Engine</h3>
-          <p data-i18n="project1_desc">An FPGA engine that holds recorded traffic in High Bandwidth Memory and replays it at the full 100 Gbps line rate.</p>
-          <a href="projects/hbm-replay.html" data-i18n="project1_link">Read more</a>
-        </article>
-
-        <article class="project-card">
-          <h3 data-i18n="project2_title">EDA Environment Setup</h3>
-          <p data-i18n="project2_desc">A portable shell script for Synopsys, Cadence, Siemens and Xilinx tools, with the site paths kept out of the script itself.</p>
-          <a href="https://github.com/charlesHYC/EDA_tool_setup" target="_blank" rel="noopener" data-i18n="project2_link">View on GitHub</a>
-        </article>
-
-        <article class="project-card">
-          <h3 data-i18n="project3_title">IC Design Documentation Tools</h3>
-          <p data-i18n="project3_desc">Two Claude Code skills: one writes HTML design documents, the other explains Verilog line by line.</p>
-          <a href="https://github.com/charlesHYC/skill" target="_blank" rel="noopener" data-i18n="project3_link">View on GitHub</a>
-        </article>
-
-        <article class="project-card">
-          <h3 data-i18n="project4_title">This Website</h3>
-          <p data-i18n="project4_desc">A single hand-written HTML file, no framework and no build step, with Chinese and English sharing one page.</p>
-          <a href="https://github.com/charlesHYC/my-simple-website" target="_blank" rel="noopener" data-i18n="project4_link">View on GitHub</a>
-        </article>
+    <section id="contact" class="section container fade-in">
+      <div class="section-head">
+        <h2 class="section-title" data-i18n="contact_title">Contact</h2>
+        <p class="section-desc" data-i18n="contact_desc">Happy to talk about IC design, FPGA work, or high-speed networking.</p>
       </div>
-    </section>
-
-    <section id="contact" class="section fade-in delay-3">
-      <h2 class="section-title" data-i18n="contact_title">Contact</h2>
-      <p class="section-desc" data-i18n="contact_desc"></p>
-      <div class="contact-card">
-        <div class="contact-list">
-          <p data-i18n="contact_email">Email: charles5000017@gmail.com</p>
-          <a href="https://github.com/" target="_blank" data-i18n="contact_github">GitHub</a>
-        </div>
+      <div class="contact-row">
+        <a class="contact-chip" href="mailto:charles5000017@gmail.com">charles5000017@gmail.com</a>
+        <a class="contact-chip" href="https://github.com/charlesHYC" target="_blank" rel="noopener">GitHub</a>
       </div>
     </section>
   </main>
 
   <footer>
-    <p data-i18n="footer_text">© 2026 Charles-Hong. All rights reserved.</p>
+    <div class="container footer-inner">
+      <span data-i18n="footer_text">&copy; 2026 Charles-Hong. All rights reserved.</span>
+      <span data-i18n="footer_built">Hand-written HTML. No framework, no build step.</span>
+    </div>
   </footer>
 
   <script>
     const translations = {
       zh: {
         page_title: 'Charles-Hong | 個人網站',
+        nav_work: '作品',
         nav_about: '關於我',
         nav_skills: '技能',
-        nav_projects: '作品',
         nav_contact: '聯絡',
 
+        hero_eyebrow: 'IC 設計 · FPGA · 網路應用',
         hero_title: '你好，我是 <span class="hero-name">Charles-Hong</span>',
-        hero_desc: '這是我的個人網站。我畢業於中原大學電機工程學系，網站內容會整理我的學習歷程、發表文獻、工作經驗、作品展示，以及我在 IC 設計、FPGA 與網路應用相關領域的技術探索。',
-        hero_btn_projects: '查看作品',
-        hero_btn_linkedin: 'LinkedIn',
+        hero_role: '中原大學 <span>/</span> 電機工程學系',
+        hero_desc: '我做的是讓封包跑得更快的硬體。主要作品是一套 FPGA 引擎，把錄製下來的網路流量存進高頻寬記憶體，再以完整的 100 Gbps 線速重播；所有數字都在實際晶片上量到，不只是模擬結果。',
+        hero_btn_work: '看我的作品',
+        hero_btn_github: 'GitHub',
 
-        intro_title: '生活花絮',
+        stat1_label: '達成 100 Gbps 線速的比例',
+        stat2_label: '最小封包尺寸下每秒送出的框數',
+        stat3_label: '主機寫入高頻寬記憶體的持續頻寬',
+        stat4_label: '送出 32,768 個框、對端網卡一個都沒掉',
+        stat_note: '在 Xilinx Alveo U50 上以晶片內建的週期計數器量測，並與接收端網卡的計數器交叉比對。',
+
+        work_title: '主要作品',
+        work_desc: '主專案放在最前面，設計方式與每一個實測數字都寫在它自己的頁面裡。',
+
+        featured_tag: '主要專案',
+        featured_title: '基於高頻寬記憶體的 100 Gbps 流量重播引擎',
+        featured_desc: '錄製下來的流量經由 PCIe 載入高頻寬記憶體，再由八個平行讀取單元取出，以每個時脈週期一個封包的速度重組成乙太網框。可以忠實還原原始擷取的時間間距，也可以背靠背用線速全速送出。',
+        fm1_label: '送完 32,768 個框所需時間',
+        fm2_label: '每個封包平均耗用的時脈週期',
+        fm3_label: '同時驅動的高頻寬記憶體通道數',
+        fm4_label: '還原原始擷取時間間距的誤差',
+        featured_cta: '閱讀完整說明 →',
+
+        more_title: '其他作品',
+        more_desc: '因為自己需要而做出來的小工具。',
+        project2_title: 'EDA 環境設定腳本',
+        project2_desc: '可移植的 shell 腳本，涵蓋 Synopsys、Cadence、Siemens 與 Xilinx，站點路徑不寫進腳本本身。',
+        project2_link: '在 GitHub 上查看 →',
+        project3_title: 'IC 設計文件工具',
+        project3_desc: '兩個 Claude Code skill：一個產生 HTML 設計文件，另一個逐行講解 Verilog。',
+        project3_link: '在 GitHub 上查看 →',
+        project4_title: '這個網站',
+        project4_desc: '手寫的單一 HTML 檔，沒有框架也沒有建置流程，中英文共用同一頁。',
+        project4_link: '在 GitHub 上查看 →',
 
         about_title: '關於我',
-        about_desc: '以下為我的基本背景資訊，方便閱讀與快速掌握。',
-        about_label_school: '畢業學校：',
+        about_desc: '我的背景簡述。',
+        about_label_school: '畢業學校',
         about_school: '中原大學 電機工程學系',
-        about_label_domain: '專業領域：',
+        about_label_domain: '專業領域',
         about_domain: 'Cell-based IC Design、ASIC、FPGA、Application of Networking',
-        about_label_eda: 'EDA tools：',
-        about_eda: 'Design Compiler、ICC/ICC2/Fusion Compiler、Custom Compiler、Laker、Virtuoso、Catapult、Vivado',
-        about_label_langprog: '程式語言：',
+        about_label_langprog: '程式語言',
         about_programming: 'Python、C、Verilog',
-        about_label_language: '語言：',
+        about_label_language: '語言',
         about_languages: '中文、英文、越語',
 
         skills_title: '技能',
-        skills_desc: '以下依類別整理技能，讓版面更清楚。',
+        skills_desc: '依照我最常使用的程度分組。',
         skills_group_domain: '專業領域',
         skills_group_eda: 'EDA Tools',
         skills_group_programming: '程式語言',
@@ -692,7 +908,6 @@
         skill_domain_2: 'ASIC',
         skill_domain_3: 'FPGA',
         skill_domain_4: 'Application of Networking',
-
         skill_eda_1: 'Design Compiler',
         skill_eda_2: 'ICC / ICC2 / Fusion Compiler',
         skill_eda_3: 'Custom Compiler',
@@ -700,84 +915,94 @@
         skill_eda_5: 'Virtuoso',
         skill_eda_6: 'Catapult',
         skill_eda_7: 'Vivado',
-
         skill_prog_1: 'Python',
         skill_prog_2: 'C',
         skill_prog_3: 'Verilog',
-
         lang_chinese: '中文',
         lang_english: '英文',
         lang_vietnamese: '越語',
 
-        projects_title: '我的作品',
-        projects_desc: '每個專案都有獨立的頁面，記錄設計方式與實測結果。',
-        card_tag_main: '主要專案',
-        project1_title: '基於高頻寬記憶體的 100 Gbps 流量重播引擎',
-        project1_desc: '在 FPGA 上把錄製下來的網路流量存進高頻寬記憶體，以完整的 100 Gbps 線速重播。',
-        project1_link: '看詳細內容',
-        project2_title: 'EDA 環境設定腳本',
-        project2_desc: '可移植的 shell 腳本，涵蓋 Synopsys、Cadence、Siemens 與 Xilinx，站點路徑不寫進腳本本身。',
-        project2_link: '在 GitHub 上查看',
-        project3_title: 'IC 設計文件工具',
-        project3_desc: '兩個 Claude Code skill：一個產生 HTML 設計文件，另一個逐行講解 Verilog。',
-        project3_link: '在 GitHub 上查看',
-        project4_title: '這個網站',
-        project4_desc: '手寫的單一 HTML 檔，沒有框架也沒有建置流程，中英文共用同一頁。',
-        project4_link: '在 GitHub 上查看',
-
         contact_title: '聯絡方式',
-        contact_desc: '',
-        contact_email: 'Email：charles5000017@gmail.com',
-        contact_github: 'GitHub',
+        contact_desc: '歡迎聊聊 IC 設計、FPGA 或高速網路相關的題目。',
 
         footer_text: '© 2026 Charles-Hong. All rights reserved.',
+        footer_built: '手寫 HTML，沒有框架，也沒有建置流程。',
+
         lang_button: 'EN',
         hero_main_alt: 'Charles-Hong 的主照片',
         slideshow_alt: 'Charles-Hong 的生活花絮照片',
 
-        slide_caption_0: '生活花絮照片 1',
-        slide_caption_1: '生活花絮照片 2',
-        slide_caption_2: '生活花絮照片 3',
-        slide_caption_3: '生活花絮照片 4',
-        slide_caption_4: '生活花絮照片 5',
-        slide_caption_5: '生活花絮照片 6',
-        slide_caption_6: '生活花絮照片 7',
-        slide_caption_7: '生活花絮照片 8',
-        slide_caption_8: '生活花絮照片 9',
-        slide_caption_9: '生活花絮照片 10',
-        slide_caption_10: '生活花絮照片 11',
-        slide_caption_11: '生活花絮照片 12'
+        slide_caption_0: '生活花絮 1',
+        slide_caption_1: '生活花絮 2',
+        slide_caption_2: '生活花絮 3',
+        slide_caption_3: '生活花絮 4',
+        slide_caption_4: '生活花絮 5',
+        slide_caption_5: '生活花絮 6',
+        slide_caption_6: '生活花絮 7',
+        slide_caption_7: '生活花絮 8',
+        slide_caption_8: '生活花絮 9',
+        slide_caption_9: '生活花絮 10',
+        slide_caption_10: '生活花絮 11',
+        slide_caption_11: '生活花絮 12'
       },
 
       en: {
         page_title: 'Charles-Hong | Personal Website',
+        nav_work: 'Work',
         nav_about: 'About',
         nav_skills: 'Skills',
-        nav_projects: 'Projects',
         nav_contact: 'Contact',
 
+        hero_eyebrow: 'IC Design · FPGA · Networking',
         hero_title: 'Hello, I am <span class="hero-name">Charles-Hong</span>',
-        hero_desc: 'This is my personal website. I graduated from the Department of Electrical Engineering at Chung Yuan Christian University. Here I organize my learning journey, publications, work experience, project showcase, and my technical exploration in IC design, FPGA, and networking-related applications.',
-        hero_btn_projects: 'View Projects',
-        hero_btn_linkedin: 'LinkedIn',
+        hero_role: 'Chung Yuan Christian University <span>/</span> Electrical Engineering',
+        hero_desc: 'I build hardware that moves packets fast. My main work is an FPGA engine that stores recorded network traffic in High Bandwidth Memory and replays it at the full 100 Gbps line rate, with every figure measured on real silicon rather than in simulation alone.',
+        hero_btn_work: 'See the work',
+        hero_btn_github: 'GitHub',
 
-        intro_title: 'Highlights',
+        stat1_label: 'of the 100 Gbps line rate reached on the wire',
+        stat2_label: 'frames per second at minimum frame size',
+        stat3_label: 'sustained host to HBM write bandwidth',
+        stat4_label: 'frames lost across 32,768 sent to a peer NIC',
+        stat_note: 'Measured on a Xilinx Alveo U50 with an on-chip cycle counter, cross-checked against the receiving NIC.',
+
+        work_title: 'Selected Work',
+        work_desc: 'The main project first, with the design and every measured number written up on its own page.',
+
+        featured_tag: 'Main Project',
+        featured_title: 'An HBM-Based 100 Gbps Traffic Replay Engine',
+        featured_desc: 'Recorded traffic is loaded into High Bandwidth Memory over PCIe, then read back out by eight parallel read masters and rebuilt into Ethernet frames one per clock cycle. It can either honour the original capture timing or push everything back to back at the line rate.',
+        fm1_label: 'to deliver 32,768 frames',
+        fm2_label: 'clock cycles per packet',
+        fm3_label: 'HBM channels driven in parallel',
+        fm4_label: 'timing error when replaying a capture',
+        featured_cta: 'Read the full write-up &rarr;',
+
+        more_title: 'Other Projects',
+        more_desc: 'Smaller things I built because I needed them.',
+        project2_title: 'EDA Environment Setup',
+        project2_desc: 'A portable shell script for Synopsys, Cadence, Siemens and Xilinx tools, with the site paths kept out of the script itself.',
+        project2_link: 'View on GitHub &rarr;',
+        project3_title: 'IC Design Documentation Tools',
+        project3_desc: 'Two Claude Code skills: one writes HTML design documents, the other explains Verilog line by line.',
+        project3_link: 'View on GitHub &rarr;',
+        project4_title: 'This Website',
+        project4_desc: 'A single hand-written HTML file, no framework and no build step, with Chinese and English sharing one page.',
+        project4_link: 'View on GitHub &rarr;',
 
         about_title: 'About Me',
-        about_desc: 'Below is my basic background information for quick and clear reading.',
-        about_label_school: 'Education:',
+        about_desc: 'The short version of my background.',
+        about_label_school: 'Education',
         about_school: 'Chung Yuan Christian University, Department of Electrical Engineering',
-        about_label_domain: 'Professional Fields:',
+        about_label_domain: 'Professional Fields',
         about_domain: 'Cell-based IC Design, ASIC, FPGA, Application of Networking',
-        about_label_eda: 'EDA Tools:',
-        about_eda: 'Design Compiler, ICC/ICC2/Fusion Compiler, Custom Compiler, Laker, Virtuoso, Catapult, Vivado',
-        about_label_langprog: 'Programming Languages:',
+        about_label_langprog: 'Programming Languages',
         about_programming: 'Python, C, Verilog',
-        about_label_language: 'Languages:',
+        about_label_language: 'Languages',
         about_languages: 'Chinese, English, Vietnamese',
 
         skills_title: 'Skills',
-        skills_desc: 'My skills are grouped by category below so the layout stays clear and easy to read.',
+        skills_desc: 'Grouped by what I reach for most.',
         skills_group_domain: 'Professional Fields',
         skills_group_eda: 'EDA Tools',
         skills_group_programming: 'Programming Languages',
@@ -787,7 +1012,6 @@
         skill_domain_2: 'ASIC',
         skill_domain_3: 'FPGA',
         skill_domain_4: 'Application of Networking',
-
         skill_eda_1: 'Design Compiler',
         skill_eda_2: 'ICC / ICC2 / Fusion Compiler',
         skill_eda_3: 'Custom Compiler',
@@ -795,70 +1019,42 @@
         skill_eda_5: 'Virtuoso',
         skill_eda_6: 'Catapult',
         skill_eda_7: 'Vivado',
-
         skill_prog_1: 'Python',
         skill_prog_2: 'C',
         skill_prog_3: 'Verilog',
-
         lang_chinese: 'Chinese',
         lang_english: 'English',
         lang_vietnamese: 'Vietnamese',
 
-        projects_title: 'Projects',
-        projects_desc: 'Each project has its own page with the design and the measured results.',
-        card_tag_main: 'Main Project',
-        project1_title: 'HBM-Based 100 Gbps Traffic Replay Engine',
-        project1_desc: 'An FPGA engine that holds recorded traffic in High Bandwidth Memory and replays it at the full 100 Gbps line rate.',
-        project1_link: 'Read more',
-        project2_title: 'EDA Environment Setup',
-        project2_desc: 'A portable shell script for Synopsys, Cadence, Siemens and Xilinx tools, with the site paths kept out of the script itself.',
-        project2_link: 'View on GitHub',
-        project3_title: 'IC Design Documentation Tools',
-        project3_desc: 'Two Claude Code skills: one writes HTML design documents, the other explains Verilog line by line.',
-        project3_link: 'View on GitHub',
-        project4_title: 'This Website',
-        project4_desc: 'A single hand-written HTML file, no framework and no build step, with Chinese and English sharing one page.',
-        project4_link: 'View on GitHub',
-
         contact_title: 'Contact',
-        contact_desc: '',
-        contact_email: 'Email: charles5000017@gmail.com',
-        contact_github: 'GitHub',
+        contact_desc: 'Happy to talk about IC design, FPGA work, or high-speed networking.',
 
-        footer_text: '© 2026 Charles-Hong. All rights reserved.',
+        footer_text: '&copy; 2026 Charles-Hong. All rights reserved.',
+        footer_built: 'Hand-written HTML. No framework, no build step.',
+
         lang_button: '中文',
         hero_main_alt: 'Portrait of Charles-Hong',
         slideshow_alt: 'Highlight photo of Charles-Hong',
 
-        slide_caption_0: 'Highlight photo 1',
-        slide_caption_1: 'Highlight photo 2',
-        slide_caption_2: 'Highlight photo 3',
-        slide_caption_3: 'Highlight photo 4',
-        slide_caption_4: 'Highlight photo 5',
-        slide_caption_5: 'Highlight photo 6',
-        slide_caption_6: 'Highlight photo 7',
-        slide_caption_7: 'Highlight photo 8',
-        slide_caption_8: 'Highlight photo 9',
-        slide_caption_9: 'Highlight photo 10',
-        slide_caption_10: 'Highlight photo 11',
-        slide_caption_11: 'Highlight photo 12'
+        slide_caption_0: 'Highlight 1',
+        slide_caption_1: 'Highlight 2',
+        slide_caption_2: 'Highlight 3',
+        slide_caption_3: 'Highlight 4',
+        slide_caption_4: 'Highlight 5',
+        slide_caption_5: 'Highlight 6',
+        slide_caption_6: 'Highlight 7',
+        slide_caption_7: 'Highlight 8',
+        slide_caption_8: 'Highlight 9',
+        slide_caption_9: 'Highlight 10',
+        slide_caption_10: 'Highlight 11',
+        slide_caption_11: 'Highlight 12'
       }
     };
 
-    const slideshowPhotos = [
-      { src: 'images/moment0.jpg', key: 'slide_caption_0' },
-      { src: 'images/moment1.jpg', key: 'slide_caption_1' },
-      { src: 'images/moment2.jpg', key: 'slide_caption_2' },
-      { src: 'images/moment3.jpg', key: 'slide_caption_3' },
-      { src: 'images/moment4.jpg', key: 'slide_caption_4' },
-      { src: 'images/moment5.jpg', key: 'slide_caption_5' },
-      { src: 'images/moment6.jpg', key: 'slide_caption_6' },
-      { src: 'images/moment7.jpg', key: 'slide_caption_7' },
-      { src: 'images/moment8.jpg', key: 'slide_caption_8' },
-      { src: 'images/moment9.jpg', key: 'slide_caption_9' },
-      { src: 'images/moment10.jpg', key: 'slide_caption_10' },
-      { src: 'images/moment11.jpg', key: 'slide_caption_11' }
-    ];
+    const slideshowPhotos = Array.from({ length: 12 }, (_, i) => ({
+      src: `images/moment${i}.jpg`,
+      key: `slide_caption_${i}`
+    }));
 
     let currentLang = localStorage.getItem('language') || 'en';
     let currentSlideIndex = 0;
@@ -895,18 +1091,14 @@
       heroMainPhoto.alt = dict.hero_main_alt;
       slideshowImage.alt = dict.slideshow_alt;
 
-      document.querySelectorAll('[data-i18n]').forEach((element) => {
-        const key = element.dataset.i18n;
-        if (dict[key] !== undefined) {
-          element.textContent = dict[key];
-        }
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.dataset.i18n;
+        if (dict[key] !== undefined) el.innerHTML = dict[key];
       });
 
-      document.querySelectorAll('[data-i18n-html]').forEach((element) => {
-        const key = element.dataset.i18nHtml;
-        if (dict[key] !== undefined) {
-          element.innerHTML = dict[key];
-        }
+      document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+        const key = el.dataset.i18nHtml;
+        if (dict[key] !== undefined) el.innerHTML = dict[key];
       });
 
       slideshowCaption.textContent = dict[slideshowPhotos[currentSlideIndex].key];
@@ -914,16 +1106,13 @@
     }
 
     langToggle.addEventListener('click', () => {
-      const nextLang = currentLang === 'zh' ? 'en' : 'zh';
-      applyLanguage(nextLang);
+      applyLanguage(currentLang === 'zh' ? 'en' : 'zh');
     });
 
     applyLanguage(currentLang);
     updateSlideshowContent();
 
-    if (slideshowPhotos.length > 1) {
-      setInterval(nextSlide, 3000);
-    }
+    if (slideshowPhotos.length > 1) setInterval(nextSlide, 4000);
   </script>
 </body>
 </html>
