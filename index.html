@@ -7,7 +7,7 @@
   <title>Charles Hong</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg:      #fdfcfa;
@@ -21,7 +21,7 @@
 
       /* One family, one restrained size scale. Everything on the page is a
          step on this ladder, so nothing looks arbitrarily large or small. */
-      --t-name: 1.45rem;
+      --t-name: 1.32rem;
       --t-h2:   1.06rem;
       --t-h3:   1rem;
       --t-body: .95rem;
@@ -35,7 +35,8 @@
     body {
       background: var(--bg);
       color: var(--ink);
-      font-family: "IBM Plex Sans", "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "PingFang TC", "Noto Sans TC", sans-serif;
       font-size: var(--t-body);
       line-height: 1.72;
       -webkit-font-smoothing: antialiased;
@@ -55,49 +56,47 @@
       padding: 56px 0 80px;
     }
 
-    .side { position: sticky; top: 40px; }
+    /* The profile column is centred on itself: a small portrait with the name
+       directly beneath it, which is how a personal page introduces someone. */
+    .side { position: sticky; top: 40px; text-align: center; }
 
     .avatar {
-      width: 100%;
-      max-width: 210px;
-      aspect-ratio: 1 / 1;
+      width: 132px;
+      height: 132px;
       object-fit: cover;
       border-radius: 4px;
       border: 1px solid var(--rule);
       background: var(--hover);
+      margin: 0 auto;
     }
 
     .name {
       font-size: var(--t-name);
       font-weight: 600;
-      letter-spacing: -.012em;
+      letter-spacing: -.01em;
       line-height: 1.3;
-      margin-top: 18px;
+      margin-top: 15px;
     }
 
-    .role {
-      font-size: var(--t-sm);
-      color: var(--ink-2);
-      margin-top: 3px;
-    }
+    .role { font-size: var(--t-sm); color: var(--ink-2); margin-top: 2px; }
 
     .affil {
       font-size: var(--t-sm);
       color: var(--ink-3);
       line-height: 1.55;
-      margin-top: 10px;
+      margin-top: 12px;
       padding-top: 12px;
       border-top: 1px solid var(--rule-2);
     }
 
     .side-links {
       list-style: none;
-      margin-top: 16px;
-      padding-top: 14px;
+      margin-top: 14px;
+      padding-top: 13px;
       border-top: 1px solid var(--rule-2);
     }
 
-    .side-links li { margin-bottom: 6px; }
+    .side-links li { margin-bottom: 5px; }
 
     .side-links a {
       font-size: var(--t-sm);
@@ -108,35 +107,18 @@
 
     .side-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
-    .lang-btn {
-      margin-top: 18px;
-      font: inherit;
-      font-size: var(--t-xs);
-      color: var(--ink-2);
-      background: none;
-      border: 1px solid var(--rule);
-      border-radius: 3px;
-      padding: 4px 12px;
-      cursor: pointer;
-      transition: border-color .18s, color .18s;
-    }
-
-    .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
-
     /* ---------- content ---------- */
     .block { margin-bottom: 42px; }
 
     .block h2 {
       font-size: var(--t-h2);
       font-weight: 600;
-      letter-spacing: .002em;
       padding-bottom: 9px;
       border-bottom: 1px solid var(--rule);
       margin-bottom: 16px;
     }
 
     .block p { color: var(--ink-2); }
-
     .block p + p { margin-top: 11px; }
 
     /* ---------- entries ---------- */
@@ -148,7 +130,6 @@
     }
 
     a.entry:hover { background: var(--hover); }
-
     .entry:last-child { border-bottom: 0; }
 
     .entry-top {
@@ -158,11 +139,7 @@
       gap: 14px;
     }
 
-    .entry-name {
-      font-size: var(--t-h3);
-      font-weight: 600;
-      transition: color .18s;
-    }
+    .entry-name { font-size: var(--t-h3); font-weight: 600; transition: color .18s; }
 
     a.entry:hover .entry-name { color: var(--accent); }
 
@@ -184,11 +161,33 @@
 
     /* ---------- two-column facts ---------- */
     .rows { display: grid; gap: 10px; }
-
     .row { display: grid; grid-template-columns: 132px 1fr; gap: 16px; }
-
     .row dt { font-size: var(--t-sm); color: var(--ink-3); }
     .row dd { font-size: var(--t-body); }
+
+    /* ---------- highlights ---------- */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .shot {
+      display: block;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: 3px;
+      background: var(--hover);
+    }
+
+    .shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .35s ease, opacity .2s;
+    }
+
+    .shot:hover img { transform: scale(1.04); opacity: .92; }
 
     footer {
       grid-column: 2;
@@ -199,204 +198,130 @@
       color: var(--ink-3);
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .shot img { transition: none; }
+      .shot:hover img { transform: none; }
+    }
+
     /* ---------- responsive ---------- */
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; gap: 36px; padding-top: 40px; }
       .side { position: static; }
-      .avatar { max-width: 132px; }
       footer { grid-column: 1; }
       .row { grid-template-columns: 1fr; gap: 2px; }
+      .gallery { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 520px) {
+      .gallery { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
   <div class="shell">
     <aside class="side">
-      <img class="avatar" id="avatar" src="images/avatar.jpg" alt="Charles Hong" />
+      <img class="avatar" src="images/avatar.jpg" alt="Charles Hong" />
       <h1 class="name">Charles Hong</h1>
-      <p class="role" data-i18n="role">Electrical Engineer</p>
-      <p class="affil" data-i18n="affil">Chung Yuan Christian University<br />Department of Electrical Engineering</p>
+      <p class="role">Electrical Engineer</p>
+      <p class="affil">Chung Yuan Christian University<br />Department of Electrical Engineering</p>
 
       <ul class="side-links">
         <li><a href="mailto:charles5000017@gmail.com">charles5000017@gmail.com</a></li>
         <li><a href="https://github.com/charlesHYC" target="_blank" rel="noopener">github.com/charlesHYC</a></li>
       </ul>
-
-      <button id="langBtn" class="lang-btn">中文</button>
     </aside>
 
     <main>
       <section class="block">
-        <h2 data-i18n="h_about">About</h2>
-        <p data-i18n="about_1">I am an electrical engineering student working on digital hardware design, from cell-based flows through to FPGA systems.</p>
-        <p data-i18n="about_2">My current work is an FPGA engine that stores recorded network traffic in High Bandwidth Memory and replays it onto a 100 Gbps link, either preserving the original capture timing or running as fast as the wire allows.</p>
+        <h2>About</h2>
+        <p>I am an electrical engineering student working on digital hardware design, from cell-based flows through to FPGA systems.</p>
+        <p>My current work is an FPGA engine that stores recorded network traffic in High Bandwidth Memory and replays it onto a 100 Gbps link, either preserving the original capture timing or running as fast as the wire allows.</p>
       </section>
 
       <section class="block">
-        <h2 data-i18n="h_projects">Projects</h2>
+        <h2>Projects</h2>
 
         <a class="entry" href="projects/hbm-replay.html">
           <span class="entry-top">
-            <span class="entry-name" data-i18n="p1_name">HBM-Based Traffic Replay Engine</span>
+            <span class="entry-name">HBM-Based Traffic Replay Engine</span>
             <span class="entry-year">2026</span>
           </span>
-          <span class="entry-note" data-i18n="p1_note">An FPGA system that holds recorded traffic in High Bandwidth Memory and replays it onto a 100 Gbps link.</span>
-          <span class="entry-tags" data-i18n="p1_tags">Alveo U50 · HBM2 · Corundum · Verilog · PCIe</span>
+          <span class="entry-note">An FPGA system that holds recorded traffic in High Bandwidth Memory and replays it onto a 100 Gbps link.</span>
+          <span class="entry-tags">Alveo U50 · HBM2 · Corundum · Verilog · PCIe</span>
         </a>
 
         <a class="entry" href="https://github.com/charlesHYC/EDA_tool_setup" target="_blank" rel="noopener">
           <span class="entry-top">
-            <span class="entry-name" data-i18n="p2_name">EDA Environment Setup</span>
+            <span class="entry-name">EDA Environment Setup</span>
             <span class="entry-year">2026</span>
           </span>
-          <span class="entry-note" data-i18n="p2_note">A portable shell script for Synopsys, Cadence, Siemens and Xilinx tool chains, with site-specific paths kept out of the script.</span>
-          <span class="entry-tags" data-i18n="p2_tags">Shell · Synopsys · Cadence · Xilinx</span>
+          <span class="entry-note">A portable shell script for Synopsys, Cadence, Siemens and Xilinx tool chains, with site-specific paths kept out of the script.</span>
+          <span class="entry-tags">Shell · Synopsys · Cadence · Xilinx</span>
         </a>
 
         <a class="entry" href="https://github.com/charlesHYC/skill" target="_blank" rel="noopener">
           <span class="entry-top">
-            <span class="entry-name" data-i18n="p3_name">IC Design Documentation Tools</span>
+            <span class="entry-name">IC Design Documentation Tools</span>
             <span class="entry-year">2026</span>
           </span>
-          <span class="entry-note" data-i18n="p3_note">Two authoring tools: one turns a design into an HTML document with timing diagrams, the other walks through Verilog line by line.</span>
-          <span class="entry-tags" data-i18n="p3_tags">Python · HTML · Verilog</span>
+          <span class="entry-note">Two authoring tools: one turns a design into an HTML document with timing diagrams, the other walks through Verilog line by line.</span>
+          <span class="entry-tags">Python · HTML · Verilog</span>
         </a>
       </section>
 
       <section class="block">
-        <h2 data-i18n="h_edu">Education</h2>
+        <h2>Education</h2>
         <div class="entry">
           <span class="entry-top">
-            <span class="entry-name" data-i18n="edu_name">Chung Yuan Christian University</span>
+            <span class="entry-name">Chung Yuan Christian University</span>
           </span>
-          <span class="entry-note" data-i18n="edu_note">Department of Electrical Engineering</span>
+          <span class="entry-note">Department of Electrical Engineering</span>
         </div>
       </section>
 
       <section class="block">
-        <h2 data-i18n="h_skills">Skills</h2>
+        <h2>Skills</h2>
         <dl class="rows">
           <div class="row">
-            <dt data-i18n="s_k1">Design</dt>
-            <dd data-i18n="s_v1">Cell-based IC Design, ASIC, FPGA, Application of Networking</dd>
+            <dt>Design</dt>
+            <dd>Cell-based IC Design, ASIC, FPGA, Application of Networking</dd>
           </div>
           <div class="row">
-            <dt data-i18n="s_k2">EDA Tools</dt>
-            <dd data-i18n="s_v2">Design Compiler, ICC / ICC2 / Fusion Compiler, Custom Compiler, Laker, Virtuoso, Catapult, Vivado</dd>
+            <dt>EDA Tools</dt>
+            <dd>Design Compiler, ICC / ICC2 / Fusion Compiler, Custom Compiler, Laker, Virtuoso, Catapult, Vivado</dd>
           </div>
           <div class="row">
-            <dt data-i18n="s_k3">Programming</dt>
-            <dd data-i18n="s_v3">Verilog, C, Python</dd>
+            <dt>Programming</dt>
+            <dd>Verilog, C, Python</dd>
           </div>
           <div class="row">
-            <dt data-i18n="s_k4">Languages</dt>
-            <dd data-i18n="s_v4">Chinese, English, Vietnamese</dd>
+            <dt>Languages</dt>
+            <dd>Chinese, English, Vietnamese</dd>
           </div>
         </dl>
       </section>
+
+      <section class="block">
+        <h2>Highlights</h2>
+        <div class="gallery">
+          <a class="shot" href="images/moment0.jpg"  target="_blank" rel="noopener"><img src="images/thumbs/moment0.jpg"  loading="lazy" alt="Highlight 1" /></a>
+          <a class="shot" href="images/moment1.jpg"  target="_blank" rel="noopener"><img src="images/thumbs/moment1.jpg"  loading="lazy" alt="Highlight 2" /></a>
+          <a class="shot" href="images/moment2.jpg"  target="_blank" rel="noopener"><img src="images/thumbs/moment2.jpg"  loading="lazy" alt="Highlight 3" /></a>
+          <a class="shot" href="images/moment3.jpg"  target="_blank" rel="noopener"><img src="images/thumbs/moment3.jpg"  loading="lazy" alt="Highlight 4" /></a>
+          <a class="shot" href="images/moment4.jpg"  target="_blank" rel="noopener"><img src="images/thumbs/moment4.jpg"  loading="lazy" alt="Highlight 5" /></a>
+          <a class="shot" href="images/moment5.jpg"  target="_blank" rel="noopener"><img src="images/thumbs/moment5.jpg"  loading="lazy" alt="Highlight 6" /></a>
+          <a class="shot" href="images/moment6.jpg"  target="_blank" rel="noopener"><img src="images/thumbs/moment6.jpg"  loading="lazy" alt="Highlight 7" /></a>
+          <a class="shot" href="images/moment7.jpg"  target="_blank" rel="noopener"><img src="images/thumbs/moment7.jpg"  loading="lazy" alt="Highlight 8" /></a>
+          <a class="shot" href="images/moment8.jpg"  target="_blank" rel="noopener"><img src="images/thumbs/moment8.jpg"  loading="lazy" alt="Highlight 9" /></a>
+          <a class="shot" href="images/moment9.jpg"  target="_blank" rel="noopener"><img src="images/thumbs/moment9.jpg"  loading="lazy" alt="Highlight 10" /></a>
+          <a class="shot" href="images/moment10.jpg" target="_blank" rel="noopener"><img src="images/thumbs/moment10.jpg" loading="lazy" alt="Highlight 11" /></a>
+          <a class="shot" href="images/moment11.jpg" target="_blank" rel="noopener"><img src="images/thumbs/moment11.jpg" loading="lazy" alt="Highlight 12" /></a>
+        </div>
+      </section>
     </main>
 
-    <footer><span data-i18n="foot">&copy; 2026 Charles Hong</span></footer>
+    <footer>&copy; 2026 Charles Hong</footer>
   </div>
-
-  <script>
-    const T = {
-      zh: {
-        page_title: 'Charles Hong',
-        lang_button: 'EN',
-        avatar_alt: 'Charles Hong',
-
-        role: '電機工程',
-        affil: '中原大學<br />電機工程學系',
-
-        h_about: '關於',
-        about_1: '我是電機工程學系的學生，主要做數位硬體設計，範圍從 cell-based 流程到 FPGA 系統。',
-        about_2: '目前的工作是一套 FPGA 引擎，把錄製下來的網路流量存進高頻寬記憶體，再送上 100 Gbps 的連線重播；可以還原原始擷取的時間間距，也可以用實體線速全速送出。',
-
-        h_projects: '專案',
-        p1_name: '基於高頻寬記憶體的流量重播引擎',
-        p1_note: '一套 FPGA 系統，把錄製下來的流量存進高頻寬記憶體，再送上 100 Gbps 的連線重播。',
-        p1_tags: 'Alveo U50 · HBM2 · Corundum · Verilog · PCIe',
-        p2_name: 'EDA 環境設定腳本',
-        p2_note: '可移植的 shell 腳本，涵蓋 Synopsys、Cadence、Siemens 與 Xilinx 工具鏈，站點專屬路徑不寫進腳本。',
-        p2_tags: 'Shell · Synopsys · Cadence · Xilinx',
-        p3_name: 'IC 設計文件工具',
-        p3_note: '兩個撰寫工具：一個把設計轉成帶時序圖的 HTML 文件，另一個逐行講解 Verilog。',
-        p3_tags: 'Python · HTML · Verilog',
-
-        h_edu: '學歷',
-        edu_name: '中原大學',
-        edu_note: '電機工程學系',
-
-        h_skills: '技能',
-        s_k1: '設計領域', s_v1: 'Cell-based IC Design、ASIC、FPGA、Application of Networking',
-        s_k2: 'EDA 工具',  s_v2: 'Design Compiler、ICC / ICC2 / Fusion Compiler、Custom Compiler、Laker、Virtuoso、Catapult、Vivado',
-        s_k3: '程式語言',  s_v3: 'Verilog、C、Python',
-        s_k4: '語言',      s_v4: '中文、英文、越語',
-
-        foot: '© 2026 Charles Hong'
-      },
-
-      en: {
-        page_title: 'Charles Hong',
-        lang_button: '中文',
-        avatar_alt: 'Charles Hong',
-
-        role: 'Electrical Engineer',
-        affil: 'Chung Yuan Christian University<br />Department of Electrical Engineering',
-
-        h_about: 'About',
-        about_1: 'I am an electrical engineering student working on digital hardware design, from cell-based flows through to FPGA systems.',
-        about_2: 'My current work is an FPGA engine that stores recorded network traffic in High Bandwidth Memory and replays it onto a 100 Gbps link, either preserving the original capture timing or running as fast as the wire allows.',
-
-        h_projects: 'Projects',
-        p1_name: 'HBM-Based Traffic Replay Engine',
-        p1_note: 'An FPGA system that holds recorded traffic in High Bandwidth Memory and replays it onto a 100 Gbps link.',
-        p1_tags: 'Alveo U50 · HBM2 · Corundum · Verilog · PCIe',
-        p2_name: 'EDA Environment Setup',
-        p2_note: 'A portable shell script for Synopsys, Cadence, Siemens and Xilinx tool chains, with site-specific paths kept out of the script.',
-        p2_tags: 'Shell · Synopsys · Cadence · Xilinx',
-        p3_name: 'IC Design Documentation Tools',
-        p3_note: 'Two authoring tools: one turns a design into an HTML document with timing diagrams, the other walks through Verilog line by line.',
-        p3_tags: 'Python · HTML · Verilog',
-
-        h_edu: 'Education',
-        edu_name: 'Chung Yuan Christian University',
-        edu_note: 'Department of Electrical Engineering',
-
-        h_skills: 'Skills',
-        s_k1: 'Design',      s_v1: 'Cell-based IC Design, ASIC, FPGA, Application of Networking',
-        s_k2: 'EDA Tools',   s_v2: 'Design Compiler, ICC / ICC2 / Fusion Compiler, Custom Compiler, Laker, Virtuoso, Catapult, Vivado',
-        s_k3: 'Programming', s_v3: 'Verilog, C, Python',
-        s_k4: 'Languages',   s_v4: 'Chinese, English, Vietnamese',
-
-        foot: '&copy; 2026 Charles Hong'
-      }
-    };
-
-    let lang = localStorage.getItem('language') || 'en';
-    const btn = document.getElementById('langBtn');
-    const avatar = document.getElementById('avatar');
-
-    function apply(next) {
-      lang = next;
-      const d = T[lang];
-
-      document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
-      document.title = d.page_title;
-      btn.textContent = d.lang_button;
-      avatar.alt = d.avatar_alt;
-
-      document.querySelectorAll('[data-i18n]').forEach((el) => {
-        const k = el.dataset.i18n;
-        if (d[k] !== undefined) el.innerHTML = d[k];
-      });
-
-      localStorage.setItem('language', lang);
-    }
-
-    btn.addEventListener('click', () => apply(lang === 'zh' ? 'en' : 'zh'));
-    apply(lang);
-  </script>
 </body>
 </html>
