@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>In-Network DDoS Detection on a P4 Switch | Charles Hong</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="project.css" />
+</head>
+<body>
+
+  <div class="sheet">
+
+    <div class="topbar">
+      <a href="../index.html" data-i18n="nav_back">&larr; Back to profile</a>
+      <button id="langToggle" class="lang-toggle" type="button">中文</button>
+    </div>
+
+    <header class="page-head">
+      <span class="head-tag" data-i18n="head_tag">Programmable networking</span>
+      <h1 data-i18n="head_title">In-Network DDoS Detection and Dynamic Mitigation on a P4 Programmable Switch with Count-Min Sketch</h1>
+      <p class="head-meta" data-i18n="head_meta">Presented at the Kansai University Internship and Exchange Program 2026, Research Results Presentation. Department of Electrical Engineering, Chung Yuan Christian University.</p>
+      <div class="tool-row">
+        <span class="tool-chip">P4</span>
+        <span class="tool-chip">BMv2</span>
+        <span class="tool-chip">P4Runtime</span>
+        <span class="tool-chip">gRPC</span>
+        <span class="tool-chip">Python</span>
+        <span class="tool-chip">Mininet</span>
+        <span class="tool-chip">Count-Min Sketch</span>
+      </div>
+    </header>
+
+    <div class="cols">
+
+      <main>
+        <section class="block">
+          <h2 data-i18n="s1_title">The problem</h2>
+          <p data-i18n="s1_p1">A distributed denial-of-service attack buries a victim under traffic from many sources at once. The conventional defence mirrors traffic to a separate appliance to be measured, which costs money and, worse, costs time: the decision arrives well after the packets did.</p>
+          <p data-i18n="s1_p2">A programmable switch can do the measuring itself. P4 lets the data plane keep per-source statistics and take a first-cut decision at line rate, the moment a packet passes through. This work builds the whole loop on one: detect, decide, mitigate, and release again on its own.</p>
+        </section>
+
+        <section class="block">
+          <h2 data-i18n="s2_title">How it works</h2>
+          <p data-i18n="s2_p1">The work is split between the two planes. The data plane keeps a Count-Min Sketch of every source IP's packet rate and enforces a blocklist, both per packet at line rate. When a source starts to look suspicious it raises a digest to the controller. The controller, in Python over P4Runtime, is the only part that does the expensive thinking.</p>
+
+          <figure>
+            <div class="figure-box">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 236" width="100%" role="img" aria-labelledby="p4Title">
+                <title id="p4Title">Data plane keeps the sketch and the blocklist; the control plane decides and installs the block</title>
+                <defs>
+                  <marker id="ar3" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                    <polygon points="0 0, 9 3.5, 0 7" fill="#a39a8d" />
+                  </marker>
+                </defs>
+                <g font-family="IBM Plex Sans, Arial, sans-serif" font-size="12" text-anchor="middle">
+
+                  <rect x="60" y="14" width="600" height="74" rx="4" fill="#fdfcfa" stroke="#c9c2b6"/>
+                  <text x="360" y="34" fill="#a2482a" font-weight="600">Control plane &#183; Python over P4Runtime</text>
+
+                  <rect x="80" y="44" width="168" height="32" rx="3" fill="#f0ece5" stroke="#c9c2b6"/>
+                  <text x="164" y="64" fill="#1d1a17" font-size="11">1 &#183; receive digest</text>
+
+                  <rect x="276" y="44" width="168" height="32" rx="3" fill="#e6e1d9" stroke="#c9c2b6"/>
+                  <text x="360" y="64" fill="#1d1a17" font-size="11">2 &#183; EWMA vs. own baseline</text>
+
+                  <rect x="472" y="44" width="168" height="32" rx="3" fill="#f0ece5" stroke="#c9c2b6"/>
+                  <text x="556" y="64" fill="#1d1a17" font-size="11">3 &#183; install / lift block</text>
+
+                  <line x1="220" y1="146" x2="220" y2="94" stroke="#a39a8d" stroke-width="1.4" marker-end="url(#ar3)"/>
+                  <text x="300" y="118" fill="#857d74" font-size="10">digest: this</text>
+                  <text x="300" y="130" fill="#857d74" font-size="10">source looks odd</text>
+
+                  <line x1="500" y1="94" x2="500" y2="146" stroke="#a39a8d" stroke-width="1.4" marker-end="url(#ar3)"/>
+                  <text x="424" y="118" fill="#857d74" font-size="10">drop rule,</text>
+                  <text x="424" y="130" fill="#857d74" font-size="10">lifted on TTL</text>
+
+                  <rect x="60" y="150" width="600" height="72" rx="4" fill="#fdfcfa" stroke="#c9c2b6"/>
+                  <text x="360" y="170" fill="#a2482a" font-weight="600">Data plane &#183; P4 on BMv2, every packet, line rate</text>
+
+                  <rect x="112" y="180" width="200" height="30" rx="3" fill="#e6e1d9" stroke="#c9c2b6"/>
+                  <text x="212" y="199" fill="#1d1a17" font-size="11">update Count-Min Sketch</text>
+
+                  <rect x="408" y="180" width="200" height="30" rx="3" fill="#f0ece5" stroke="#c9c2b6"/>
+                  <text x="508" y="199" fill="#1d1a17" font-size="11">blocklist: drop or forward</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption data-i18n="fig1_caption">Fig. 1. The data plane measures and enforces; the control plane decides.</figcaption>
+          </figure>
+
+          <p data-i18n="s2_p2">The sketch is three hash rows of 512 cells, hashed with crc16, crc32 and xor16. Every packet from a source adds one to its three cells; a query reads the same three and takes the smallest. Many addresses share only 512 cells, so two can land together, but a collision can only inflate a counter, never shrink it, and taking the minimum throws the inflated ones away. The size follows the Count-Min Sketch error bound: at &epsilon; = 0.01 and &delta; = 0.05 the bound asks for 272 cells per row, rounded up to the next power of two.</p>
+          <p data-i18n="s2_p3">Two sketches alternate on a five-second ping-pong: one is written while the other is read, so a window is never counted and cleared at the same moment. A source is judged against its own EWMA baseline rather than a fixed ratio, which is what fails at small scale, and only the sources the data plane has already flagged reach that check. Two anomalous windows in a row install the drop rule; it lifts itself when the TTL runs out.</p>
+        </section>
+
+        <section class="block">
+          <h2 data-i18n="s3_title">Results</h2>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-value">0.000</div>
+              <div class="metric-label" data-i18n="m1_label">False-positive rate: no normal source was ever blocked</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">0.986</div>
+              <div class="metric-label" data-i18n="m2_label">True-positive rate across 18,000 trials</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">~10 s</div>
+              <div class="metric-label" data-i18n="m3_label">From the flood starting to the attacker being blocked</div>
+            </div>
+          </div>
+
+          <p data-i18n="s3_p1">End to end in Mininet, an attacker floods the victim at around 20 packets per second while a normal user sends background traffic. The attacker is caught and blocked within two windows; from then on every one of its packets is dropped and the normal user stays at zero loss. When the flood stops, the rule expires and the link comes back on its own.</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="t_h1">Item</th>
+                  <th data-i18n="t_h2">Value</th>
+                  <th data-i18n="t_h3">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-i18n="t_r1c1">Sketch</td>
+                  <td class="num">3 &times; 512</td>
+                  <td data-i18n="t_r1c3">crc16, crc32, xor16; a query takes the minimum</td>
+                </tr>
+                <tr>
+                  <td data-i18n="t_r2c1">Sizing</td>
+                  <td class="num">&epsilon; = 0.01, &delta; = 0.05</td>
+                  <td data-i18n="t_r2c3">The bound asks for 272 cells; 512 is the next power of two</td>
+                </tr>
+                <tr>
+                  <td data-i18n="t_r3c1">Window</td>
+                  <td class="num">5 s, ping-pong</td>
+                  <td data-i18n="t_r3c3">One sketch written while the other is read</td>
+                </tr>
+                <tr>
+                  <td data-i18n="t_r4c1">Decision</td>
+                  <td class="num" data-i18n="t_r4c2">Two windows in a row</td>
+                  <td data-i18n="t_r4c3">Against the source's own EWMA baseline</td>
+                </tr>
+                <tr>
+                  <td data-i18n="t_r5c1">Evaluation</td>
+                  <td class="num">18,000 trials</td>
+                  <td data-i18n="t_r5c3">36 parameter sets &times; 500 runs</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p data-i18n="s3_p2">The remaining 1.4 per cent that get through are low-and-slow attacks that stay just under the source's own baseline. That is not a tuning failure but a structural blind spot: the same baseline that keeps the false-positive rate at zero is what a patient attacker hides beneath. Quantifying it was part of the point.</p>
+        </section>
+
+        <section class="block">
+          <h2 data-i18n="s6_title">What is borrowed and what is mine</h2>
+          <p data-i18n="s6_p1">Borrowed: the Count-Min Sketch, and Jaqen's split of "the data plane detects, the control plane decides". It sits alongside in-network measurement work such as HashPipe and Elastic Sketch, and switch-based defences such as Poseidon.</p>
+          <p data-i18n="s6_p2">Mine: the ping-pong windowing, the per-source EWMA baseline in place of a ratio threshold, digest-driven candidate discovery so the expensive check only runs on suspects, the cold-start bias fix, the quantified low-and-slow blind spot, and the BMv2 digest and Thrift plumbing that makes it run.</p>
+        </section>
+
+        <section class="block">
+          <h2 data-i18n="s5_title">Links</h2>
+          <div class="links-row">
+            <a href="../index.html" data-i18n="link_back">Back to profile</a>
+            <a href="hbm-replay.html" data-i18n="link_other1">HBM traffic replay engine</a>
+            <a href="traffic-generator-soc.html" data-i18n="link_other2">Traffic generator SoC</a>
+            <a href="mailto:charles5000017@gmail.com" data-i18n="link_contact">Contact me</a>
+          </div>
+        </section>
+      </main>
+
+      <aside class="poster-col">
+        <h2 data-i18n="s4_title">Poster</h2>
+        <a class="poster" href="../images/posters/cms-ddos-full.jpg"
+           data-caption="Kansai University Internship &amp; Exchange Program 2026 &middot; In-Network DDoS Detection and Dynamic Mitigation on a P4 Programmable Switch with Count-Min Sketch">
+          <img src="../images/posters/cms-ddos.jpg"
+               alt="Conference poster: In-Network DDoS Detection and Dynamic Mitigation on a P4 Programmable Switch" loading="lazy" />
+        </a>
+        <div class="poster-meta" data-i18n="poster_meta">Kansai University Internship and Exchange Program 2026</div>
+        <div class="poster-hint" data-i18n="poster_hint">Click to read it full size.</div>
+      </aside>
+
+    </div>
+
+    <footer><span data-i18n="footer_text">&copy; 2026 Charles Hong</span></footer>
+
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" alt="" />
+    <div class="lightbox-caption" id="lightbox-cap"></div>
+  </div>
+
+  <script>
+    const translations = {
+      zh: {
+        page_title: 'P4 可程式化交換機上的網內 DDoS 偵測 | Charles Hong',
+        lang_button: 'EN',
+        nav_back: '← 回到首頁',
+
+        head_tag: '可程式化網路',
+        head_title: '以 Count-Min Sketch 在 P4 可程式化交換機上進行網內 DDoS 偵測與動態緩解',
+        head_meta: '發表於關西大學實習交流計畫 2026 研究成果發表。中原大學電機工程學系。',
+
+        s1_title: '問題',
+        s1_p1: '分散式阻斷服務攻擊會用大量來源同時把受害端埋掉。傳統防禦的做法是把流量鏡射到另一台設備去量測，這不只花錢，更花時間——判斷送到的時候，封包早就過去了。',
+        s1_p2: '可程式化交換機可以自己量。P4 讓資料平面在封包經過的當下，以線速維護每個來源的統計並做出第一層判斷。這個作品把整個迴圈都做在交換機上：偵測、判斷、阻擋，以及自動解除。',
+
+        s2_title: '運作方式',
+        s2_p1: '工作分給兩個平面。資料平面用 Count-Min Sketch 記錄每個來源 IP 的封包速率並執行封鎖清單，兩者都是每個封包、線速處理。當某個來源開始可疑，就送一個 digest 給控制器。以 Python 透過 P4Runtime 實作的控制器，是唯一負責昂貴運算的部分。',
+        fig1_caption: '圖一、資料平面負責量測與執行，控制平面負責判斷。',
+        s2_p2: 'Sketch 是三列雜湊、每列 512 格，分別用 crc16、crc32 與 xor16。來源每送一個封包就在它的三個格子各加一；查詢時讀同樣三格取最小值。眾多位址共用 512 格，兩個位址可能落在一起，但碰撞只會讓計數變大、不會變小，取最小值就把被灌水的那些丟掉了。大小依 Count-Min Sketch 的誤差界決定：ε = 0.01、δ = 0.05 時界要求每列 272 格，向上取到 2 的冪次即 512。',
+        s2_p3: '兩份 sketch 以五秒為週期輪替：一份在寫的同時另一份被讀，避免同一個視窗一邊計數一邊被清空。判斷是拿來源跟它自己的 EWMA 基線比，而不是用固定比例門檻——後者在小規模下會失效；而且只有資料平面已經標記的來源才會進到這一步。連續兩個視窗異常才裝上 drop 規則，規則在 TTL 到期時自己解除。',
+
+        s3_title: '實測結果',
+        m1_label: '偽陽性率：沒有任何正常來源被誤擋',
+        m2_label: '18,000 次試驗的真陽性率',
+        m3_label: '從開始洪泛到攻擊者被擋下',
+        s3_p1: '在 Mininet 上端到端驗證：攻擊者以每秒約 20 個封包洪泛受害端，同時有一個正常使用者送背景流量。攻擊者在兩個視窗內被抓到並阻擋，之後它的封包 100% 被丟棄，正常使用者維持 0% 損失。洪泛停止後規則到期，連線自動恢復。',
+        t_h1: '項目',
+        t_h2: '數值',
+        t_h3: '說明',
+        t_r1c1: 'Sketch 尺寸',
+        t_r1c3: 'crc16、crc32、xor16；查詢取最小值',
+        t_r2c1: '尺寸依據',
+        t_r2c3: '誤差界要求 272 格，512 是向上取的 2 的冪次',
+        t_r3c1: '時間視窗',
+        t_r3c3: '一份在寫、另一份在讀',
+        t_r4c1: '判斷條件',
+        t_r4c2: '連續兩個視窗',
+        t_r4c3: '對照該來源自己的 EWMA 基線',
+        t_r5c1: '評估規模',
+        t_r5c3: '36 組參數 × 500 次',
+        s3_p2: '漏掉的那 1.4% 是低速潛行型攻擊，刻意壓在來源自己的基線之下。這不是調參沒調好，而是結構性的盲點：讓偽陽性維持在零的那條基線，正是有耐心的攻擊者藏身的地方。把它量化出來本身就是目的之一。',
+
+        s6_title: '哪些是借來的，哪些是自己的',
+        s6_p1: '借來的：Count-Min Sketch，以及 Jaqen 提出的「資料平面偵測、控制平面判斷」分工。它與 HashPipe、Elastic Sketch 等網內量測研究，以及 Poseidon 等交換機端防禦並列。',
+        s6_p2: '自己的：乒乓式時間視窗、以每來源 EWMA 基線取代比例門檻、由 digest 驅動的候選發現讓昂貴檢查只跑在可疑對象上、冷啟動偏差修正、把低速潛行盲點量化出來，以及讓整套跑得起來的 BMv2 digest 與 Thrift 工程。',
+
+        s4_title: '海報',
+        poster_meta: '關西大學實習交流計畫 2026',
+        poster_hint: '點擊可看完整大圖。',
+
+        s5_title: '連結',
+        link_back: '回到首頁',
+        link_other1: 'HBM 流量重播引擎',
+        link_other2: '流量產生 SoC',
+        link_contact: '聯絡我',
+        footer_text: '© 2026 Charles Hong'
+      },
+      en: {
+        page_title: 'In-Network DDoS Detection on a P4 Switch | Charles Hong',
+        lang_button: '中文',
+        nav_back: '← Back to profile',
+
+        head_tag: 'Programmable networking',
+        head_title: 'In-Network DDoS Detection and Dynamic Mitigation on a P4 Programmable Switch with Count-Min Sketch',
+        head_meta: 'Presented at the Kansai University Internship and Exchange Program 2026, Research Results Presentation. Department of Electrical Engineering, Chung Yuan Christian University.',
+
+        s1_title: 'The problem',
+        s1_p1: 'A distributed denial-of-service attack buries a victim under traffic from many sources at once. The conventional defence mirrors traffic to a separate appliance to be measured, which costs money and, worse, costs time: the decision arrives well after the packets did.',
+        s1_p2: 'A programmable switch can do the measuring itself. P4 lets the data plane keep per-source statistics and take a first-cut decision at line rate, the moment a packet passes through. This work builds the whole loop on one: detect, decide, mitigate, and release again on its own.',
+
+        s2_title: 'How it works',
+        s2_p1: "The work is split between the two planes. The data plane keeps a Count-Min Sketch of every source IP's packet rate and enforces a blocklist, both per packet at line rate. When a source starts to look suspicious it raises a digest to the controller. The controller, in Python over P4Runtime, is the only part that does the expensive thinking.",
+        fig1_caption: 'Fig. 1. The data plane measures and enforces; the control plane decides.',
+        s2_p2: 'The sketch is three hash rows of 512 cells, hashed with crc16, crc32 and xor16. Every packet from a source adds one to its three cells; a query reads the same three and takes the smallest. Many addresses share only 512 cells, so two can land together, but a collision can only inflate a counter, never shrink it, and taking the minimum throws the inflated ones away. The size follows the Count-Min Sketch error bound: at ε = 0.01 and δ = 0.05 the bound asks for 272 cells per row, rounded up to the next power of two.',
+        s2_p3: 'Two sketches alternate on a five-second ping-pong: one is written while the other is read, so a window is never counted and cleared at the same moment. A source is judged against its own EWMA baseline rather than a fixed ratio, which is what fails at small scale, and only the sources the data plane has already flagged reach that check. Two anomalous windows in a row install the drop rule; it lifts itself when the TTL runs out.',
+
+        s3_title: 'Results',
+        m1_label: 'False-positive rate: no normal source was ever blocked',
+        m2_label: 'True-positive rate across 18,000 trials',
+        m3_label: 'From the flood starting to the attacker being blocked',
+        s3_p1: 'End to end in Mininet, an attacker floods the victim at around 20 packets per second while a normal user sends background traffic. The attacker is caught and blocked within two windows; from then on every one of its packets is dropped and the normal user stays at zero loss. When the flood stops, the rule expires and the link comes back on its own.',
+        t_h1: 'Item',
+        t_h2: 'Value',
+        t_h3: 'Notes',
+        t_r1c1: 'Sketch',
+        t_r1c3: 'crc16, crc32, xor16; a query takes the minimum',
+        t_r2c1: 'Sizing',
+        t_r2c3: 'The bound asks for 272 cells; 512 is the next power of two',
+        t_r3c1: 'Window',
+        t_r3c3: 'One sketch written while the other is read',
+        t_r4c1: 'Decision',
+        t_r4c2: 'Two windows in a row',
+        t_r4c3: "Against the source's own EWMA baseline",
+        t_r5c1: 'Evaluation',
+        t_r5c3: '36 parameter sets × 500 runs',
+        s3_p2: "The remaining 1.4 per cent that get through are low-and-slow attacks that stay just under the source's own baseline. That is not a tuning failure but a structural blind spot: the same baseline that keeps the false-positive rate at zero is what a patient attacker hides beneath. Quantifying it was part of the point.",
+
+        s6_title: 'What is borrowed and what is mine',
+        s6_p1: 'Borrowed: the Count-Min Sketch, and Jaqen\'s split of "the data plane detects, the control plane decides". It sits alongside in-network measurement work such as HashPipe and Elastic Sketch, and switch-based defences such as Poseidon.',
+        s6_p2: 'Mine: the ping-pong windowing, the per-source EWMA baseline in place of a ratio threshold, digest-driven candidate discovery so the expensive check only runs on suspects, the cold-start bias fix, the quantified low-and-slow blind spot, and the BMv2 digest and Thrift plumbing that makes it run.',
+
+        s4_title: 'Poster',
+        poster_meta: 'Kansai University Internship and Exchange Program 2026',
+        poster_hint: 'Click to read it full size.',
+
+        s5_title: 'Links',
+        link_back: 'Back to profile',
+        link_other1: 'HBM traffic replay engine',
+        link_other2: 'Traffic generator SoC',
+        link_contact: 'Contact me',
+        footer_text: '© 2026 Charles Hong'
+      }
+    };
+
+    const langToggle = document.getElementById('langToggle');
+    let currentLang = localStorage.getItem('language') || 'en';
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      const dict = translations[lang];
+
+      document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
+      document.title = dict.page_title;
+      langToggle.textContent = dict.lang_button;
+
+      document.querySelectorAll('[data-i18n]').forEach((element) => {
+        const key = element.dataset.i18n;
+        if (dict[key] !== undefined) element.textContent = dict[key];
+      });
+
+      localStorage.setItem('language', lang);
+    }
+
+    langToggle.addEventListener('click', () => {
+      applyLanguage(currentLang === 'zh' ? 'en' : 'zh');
+    });
+
+    applyLanguage(currentLang);
+
+    (function () {
+      const box = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-cap');
+      if (!box) return;
+
+      function close() { box.removeAttribute('open'); img.removeAttribute('src'); }
+
+      document.querySelectorAll('[data-caption]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+          e.preventDefault();
+          img.src = a.getAttribute('href');
+          cap.innerHTML = a.getAttribute('data-caption') || '';
+          box.setAttribute('open', '');
+        });
+      });
+
+      box.addEventListener('click', close);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    })();
+  </script>
+</body>
+</html>
