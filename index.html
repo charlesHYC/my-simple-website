@@ -55,7 +55,7 @@
          eye starts instead of drifting right on a wide monitor. */
       margin-inline: max(24px, calc((100vw - 1560px) * 0.34)) auto;
       display: grid;
-      grid-template-columns: 15.5rem minmax(0, 50rem);
+      grid-template-columns: 15.5rem minmax(0, 46rem) 10.5rem;
       gap: 64px;
       align-items: start;
       padding: 56px 0 80px;
@@ -231,6 +231,74 @@
     }
 
     /* ---------- responsive ---------- */
+
+    /* ---------- posters ---------- */
+    .posters { position: sticky; top: 40px; }
+
+    .posters h2 {
+      font-size: var(--t-sm);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      font-weight: 600;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .poster { display: block; margin-bottom: 22px; }
+
+    /* A poster is portrait; reserving the ratio keeps the column from jumping
+       about while the thumbnails load. */
+    .poster img {
+      width: 100%;
+      aspect-ratio: 1 / 1.414;
+      object-fit: cover;
+      object-position: top center;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      background: var(--hover);
+      transition: border-color .18s;
+    }
+    .poster:hover img { border-color: var(--ink-3); }
+
+    .poster-year { font-size: var(--t-xs); color: var(--ink-3); margin-top: 7px; }
+    .poster-topic {
+      font-size: var(--t-xs);
+      color: var(--ink-2);
+      line-height: 1.5;
+      margin-top: 1px;
+    }
+    .poster:hover .poster-topic { color: var(--accent); }
+
+    /* ---------- full-size viewer ---------- */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 50;
+      display: none; align-items: center; justify-content: center;
+      background: rgba(20, 18, 16, .88);
+      padding: 32px;
+      cursor: zoom-out;
+    }
+    .lightbox[open] { display: flex; }
+    .lightbox img {
+      max-width: 100%; max-height: 100%;
+      object-fit: contain;
+      border-radius: 2px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.4);
+    }
+    .lightbox-caption {
+      position: absolute; left: 0; right: 0; bottom: 14px;
+      text-align: center; color: #efeae2; font-size: var(--t-xs);
+    }
+
+    /* Too narrow for three columns: the posters drop below the content. */
+    @media (max-width: 1200px) {
+      .shell { grid-template-columns: 15.5rem minmax(0, 1fr); }
+      .posters { position: static; grid-column: 2; margin-top: 8px; }
+      .poster-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
+      .poster { margin-bottom: 0; }
+    }
+
     @media (max-width: 860px) {
       .shell { grid-template-columns: 1fr; gap: 36px; padding-top: 40px; }
       .side { position: static; }
@@ -341,7 +409,44 @@
       </section>
     </main>
 
+    <aside class="posters">
+      <h2>Posters</h2>
+      <div class="poster-list">
+
+        <a class="poster" href="images/posters/ust-cycu-2026-full.jpg"
+           data-caption="UST-CYCU Joint Research Symposium 2026 &middot; HBM-Based 100 Gbps Traffic Replay Engine on FPGA">
+          <img src="images/posters/ust-cycu-2026.jpg"
+               alt="HBM-Based 100 Gbps Traffic Replay Engine on FPGA" loading="lazy" />
+          <div class="poster-year">2026 &middot; UST-CYCU Joint Research Symposium</div>
+          <div class="poster-topic">HBM-Based 100 Gbps Traffic Replay Engine on FPGA</div>
+        </a>
+
+        <a class="poster" href="images/posters/iseecs-2026-full.jpg"
+           data-caption="ISEECS 2026 &middot; A High-Efficiency 100 Gbps Traffic Generator and Flow Analysis SoC">
+          <img src="images/posters/iseecs-2026.jpg"
+               alt="A High-Efficiency 100 Gbps Traffic Generator and Flow Analysis SoC" loading="lazy" />
+          <div class="poster-year">2026 &middot; ISEECS</div>
+          <div class="poster-topic">A High-Efficiency 100 Gbps Traffic Generator and Flow Analysis SoC</div>
+        </a>
+
+        <a class="poster" href="images/posters/cms-ddos-full.jpg"
+           data-caption="Kansai University Internship &amp; Exchange Program 2026 &middot; In-Network DDoS Detection and Dynamic Mitigation on a P4 Programmable Switch with Count-Min Sketch">
+          <img src="images/posters/cms-ddos.jpg"
+               alt="In-Network DDoS Detection and Dynamic Mitigation on a P4 Programmable Switch" loading="lazy" />
+          <div class="poster-year">2026 &middot; Kansai University Internship &amp; Exchange Program</div>
+          <div class="poster-topic">In-Network DDoS Detection and Dynamic Mitigation on a P4 Programmable Switch</div>
+        </a>
+
+      </div>
+    </aside>
+
     <footer>&copy; 2026 Charles Hong</footer>
+  </div>
+
+
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" alt="" />
+    <div class="lightbox-caption" id="lightbox-cap"></div>
   </div>
 
   <script>
@@ -391,6 +496,32 @@
     // let someone stop on a picture they want to look at
     stage.addEventListener('mouseenter', () => clearInterval(timer));
     stage.addEventListener('mouseleave', restart);
+
+    /* Posters open full size in an overlay. The anchor still points at the
+       image file, so this degrades to a plain link if the script never runs. */
+    (function () {
+      var box = document.getElementById('lightbox');
+      var img = document.getElementById('lightbox-img');
+      var cap = document.getElementById('lightbox-cap');
+      if (!box) return;
+
+      function close() { box.removeAttribute('open'); img.removeAttribute('src'); }
+
+      document.querySelectorAll('.poster').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+          e.preventDefault();
+          img.src = a.getAttribute('href');
+          cap.innerHTML = a.getAttribute('data-caption') || '';
+          box.setAttribute('open', '');
+        });
+      });
+
+      box.addEventListener('click', close);
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') close();
+      });
+    })();
   </script>
 </body>
 </html>
