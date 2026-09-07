@@ -46,22 +46,19 @@
     img { max-width: 100%; display: block; }
 
     /* ---------- shell: profile column on the left, content on the right ---------- */
-    /* Three tracks, the third one empty. It mirrors the profile column, so the
-       reading column lands on the centre of the page and the portrait and
-       contact details sit out in the left margin beside it. */
+    /* Profile column on the left, content filling the rest. The content is
+       capped so the measure stays readable on a wide monitor; the slack that
+       leaves on the right is where the poster column will go. */
     .shell {
       width: min(1400px, 94%);
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 15.5rem minmax(0, 42rem) clamp(0px, 100vw - 1060px, 15.5rem);
-      justify-content: center;
+      grid-template-columns: 15.5rem minmax(0, 50rem);
       gap: 64px;
       align-items: start;
       padding: 56px 0 80px;
     }
 
-    /* The mirror grows with the window instead of switching on at a breakpoint,
-       so narrow screens keep their reading width and wide ones sit dead centre. */
 
     /* The profile column is centred on itself: a small portrait with the name
        directly beneath it, which is how a personal page introduces someone. */
