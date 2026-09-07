@@ -246,7 +246,13 @@
       border-bottom: 1px solid var(--rule);
     }
 
-    .poster { display: block; margin-bottom: 22px; }
+    .poster {
+      display: block;
+      padding-bottom: 22px;
+      margin-bottom: 22px;
+      border-bottom: 3px solid var(--rule);
+    }
+    .poster:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: 0; }
 
     /* A poster is portrait; reserving the ratio keeps the column from jumping
        about while the thumbnails load. */
@@ -296,7 +302,7 @@
       .shell { grid-template-columns: 15.5rem minmax(0, 1fr); }
       .posters { position: static; grid-column: 2; margin-top: 8px; }
       .poster-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
-      .poster { margin-bottom: 0; }
+      .poster { margin-bottom: 0; padding-bottom: 0; border-bottom: 0; }
     }
 
     @media (max-width: 860px) {
