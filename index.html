@@ -46,14 +46,25 @@
     img { max-width: 100%; display: block; }
 
     /* ---------- shell: profile column on the left, content on the right ---------- */
+    /* Three tracks, the third one empty. It mirrors the profile column, so the
+       reading column lands on the centre of the page and the portrait and
+       contact details sit out in the left margin beside it. */
     .shell {
-      width: min(1080px, 90%);
+      width: min(1400px, 94%);
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 15.5rem 1fr;
+      grid-template-columns: 15.5rem minmax(0, 42rem) 15.5rem;
+      justify-content: center;
       gap: 64px;
       align-items: start;
       padding: 56px 0 80px;
+    }
+
+    /* The mirror only pays for itself while the reading column stays wide
+       enough. Below this it would squeeze the text to buy symmetry, so the
+       layout drops back to the plain profile-plus-content pair. */
+    @media (max-width: 1360px) {
+      .shell { grid-template-columns: 15.5rem minmax(0, 1fr); }
     }
 
     /* The profile column is centred on itself: a small portrait with the name
