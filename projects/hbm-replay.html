@@ -1,236 +1,237 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HBM 100 Gbps Traffic Replay Engine | Charles-Hong</title>
+  <title>HBM 100 Gbps Traffic Replay Engine | Charles Hong</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    /* Same tokens and scale as the home page, so the two read as one site. */
     :root {
-      --bg: #f7f8fc;
-      --card: #ffffff;
-      --primary: #5b5ff5;
-      --primary-dark: #4347d9;
-      --text: #1f2937;
-      --subtext: #6b7280;
-      --border: #e5e7eb;
-      --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-      --radius: 20px;
+      --bg:      #f7f5f1;
+      --paper:   #fdfcfa;
+      --ink:     #1d1a17;
+      --ink-2:   #4d4741;
+      --ink-3:   #857d74;
+      --rule:    #e6e1d9;
+      --rule-2:  #f0ece5;
+      --accent:  #a2482a;
+      --hover:   #f6f3ed;
+
+      --t-name: 1.32rem;
+      --t-h2:   1.06rem;
+      --t-h3:   1rem;
+      --t-body: .95rem;
+      --t-sm:   .88rem;
+      --t-xs:   .81rem;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 18px; scroll-behavior: smooth; }
 
     body {
-      font-family: Arial, "Noto Sans TC", sans-serif;
-      background: linear-gradient(180deg, #f8f8ff 0%, #eef2ff 100%);
-      color: var(--text);
-      line-height: 1.7;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "PingFang TC", "Noto Sans TC", sans-serif;
+      font-size: var(--t-body);
+      line-height: 1.72;
+      -webkit-font-smoothing: antialiased;
     }
 
-    a { text-decoration: none; color: inherit; }
+    a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
 
-    .container { width: min(920px, 92%); margin: 0 auto; }
-
-    .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(12px);
-      background: rgba(255, 255, 255, 0.82);
-      border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+    /* ---------- sheet ---------- */
+    .sheet {
+      width: min(1240px, calc(100% - 64px));
+      margin: 40px auto;
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 40px 44px 56px;
     }
 
-    .nav-inner {
+    .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 14px 0;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--rule);
     }
-
-    .back-link {
-      font-weight: 600;
-      color: var(--primary);
-    }
-
-    .back-link:hover { color: var(--primary-dark); }
+    .topbar a { font-size: var(--t-sm); color: var(--ink-2); }
+    .topbar a:hover { color: var(--accent); }
 
     .lang-toggle {
-      font-family: inherit;
-      font-size: 0.88rem;
-      color: var(--primary);
-      background: #eef0ff;
-      border: none;
-      border-radius: 999px;
-      padding: 7px 16px;
+      font: inherit;
+      font-size: var(--t-xs);
+      color: var(--ink-2);
+      background: none;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 2px 10px;
       cursor: pointer;
-      transition: background 0.2s;
     }
+    .lang-toggle:hover { color: var(--accent); border-color: var(--accent); }
 
-    .lang-toggle:hover { background: #e0e4ff; }
-
-    header.page-head { padding: 52px 0 30px; }
-
+    /* ---------- header ---------- */
+    .page-head { padding: 34px 0 26px; border-bottom: 1px solid var(--rule); }
     .head-tag {
-      display: inline-block;
-      font-size: 0.74rem;
-      letter-spacing: 0.08em;
+      display: block;
+      font-size: var(--t-xs);
+      letter-spacing: .1em;
       text-transform: uppercase;
-      color: var(--primary);
-      background: #eef0ff;
-      border-radius: 999px;
-      padding: 5px 13px;
-      margin-bottom: 16px;
+      color: var(--ink-3);
+      margin-bottom: 8px;
     }
-
-    header.page-head h1 {
-      font-size: clamp(1.7rem, 4vw, 2.4rem);
-      line-height: 1.3;
-      margin-bottom: 14px;
-    }
-
-    .head-meta { color: var(--subtext); }
-
-    .tool-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 18px;
-    }
-
-    .tool-chip {
-      font-size: 0.8rem;
-      color: var(--subtext);
-      background: #f2f4f9;
-      border-radius: 999px;
-      padding: 5px 12px;
-    }
-
-    section.block {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 30px;
-      margin-bottom: 22px;
-    }
-
-    section.block h2 {
-      font-size: 1.24rem;
-      margin-bottom: 14px;
-    }
-
-    section.block p { color: var(--subtext); }
-    section.block p + p { margin-top: 12px; }
-
-    .figure {
-      background: #fbfbfe;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px 14px;
-      margin-top: 18px;
-      overflow-x: auto;
-    }
-
-    .figure svg { display: block; margin: 0 auto; min-width: 560px; }
-
-    .figure figcaption {
-      text-align: center;
-      font-size: 0.84rem;
-      color: var(--subtext);
+    h1 { font-size: 1.62rem; line-height: 1.34; font-weight: 600; letter-spacing: -.01em; }
+    .head-meta {
       margin-top: 12px;
+      max-width: 62ch;
+      color: var(--ink-2);
+      font-size: var(--t-sm);
+    }
+    .tool-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+    .tool-chip {
+      font-size: var(--t-xs);
+      color: var(--ink-2);
+      background: var(--hover);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 1px 9px;
     }
 
+    /* ---------- body: text column with the poster alongside ---------- */
+    .cols {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 15rem;
+      gap: 56px;
+      align-items: start;
+      padding-top: 34px;
+    }
+
+    .block + .block { margin-top: 34px; }
+    h2 {
+      font-size: var(--t-h2);
+      font-weight: 600;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .block p { max-width: 68ch; }
+    .block p + p { margin-top: 12px; }
+
+    figure { margin: 22px 0 0; }
+    .figure-box {
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      background: var(--paper);
+      padding: 18px;
+    }
+    figcaption { margin-top: 10px; font-size: var(--t-xs); color: var(--ink-3); }
+
+    /* ---------- results ---------- */
     .metrics {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      overflow: hidden;
       margin-bottom: 22px;
     }
+    .metric { background: var(--paper); padding: 16px 18px; }
+    .metric-value { font-size: 1.24rem; font-weight: 600; letter-spacing: -.01em; }
+    .metric-label { font-size: var(--t-xs); color: var(--ink-3); margin-top: 2px; line-height: 1.5; }
 
-    .metric {
-      background: #f7f8fc;
-      border-radius: 14px;
-      padding: 16px 18px;
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table { border-collapse: collapse; width: 100%; font-size: var(--t-sm); min-width: 460px; }
+    th, td { text-align: left; padding: 9px 14px 9px 0; border-bottom: 1px solid var(--rule-2); vertical-align: top; }
+    th {
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      border-bottom: 1px solid var(--rule);
+      white-space: nowrap;
     }
+    tbody tr:last-child td { border-bottom: 0; }
+    td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .note { font-size: var(--t-xs); color: var(--ink-3); }
 
-    .metric-value {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--primary);
-      line-height: 1.25;
-    }
-
-    .metric-label {
-      font-size: 0.84rem;
-      color: var(--subtext);
-      margin-top: 4px;
-    }
-
-    table {
+    /* ---------- poster column ---------- */
+    .poster-col { position: sticky; top: 40px; }
+    .poster-col h2 { font-size: var(--t-sm); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+    .poster img {
       width: 100%;
-      border-collapse: collapse;
-      font-size: 0.92rem;
+      aspect-ratio: 1 / 1.414;
+      object-fit: cover;
+      object-position: top center;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      background: var(--hover);
+      transition: border-color .18s;
     }
+    .poster:hover img { border-color: var(--ink-3); }
+    .poster-meta { font-size: var(--t-xs); color: var(--ink-3); margin-top: 8px; line-height: 1.5; }
+    .poster-hint { font-size: var(--t-xs); color: var(--ink-3); margin-top: 10px; }
 
-    th, td {
-      text-align: left;
-      padding: 11px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    th { color: var(--text); font-size: 0.84rem; letter-spacing: 0.02em; }
-    td { color: var(--subtext); }
-    tbody tr:last-child td { border-bottom: none; }
-
-    .table-wrap { overflow-x: auto; }
-
-    .poster-slot {
-      border: 1px dashed #c7cbf5;
-      border-radius: 14px;
-      background: #fbfbfe;
-      padding: 40px 24px;
-      text-align: center;
-      color: var(--subtext);
-      font-size: 0.92rem;
-    }
-
-    .links-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .links-row a { color: var(--primary); font-weight: 600; }
-    .links-row a:hover { color: var(--primary-dark); }
+    /* ---------- links, footer ---------- */
+    .links-row { display: flex; flex-wrap: wrap; gap: 20px; }
+    .links-row a { font-size: var(--t-sm); color: var(--ink-2); border-bottom: 1px solid var(--rule); }
+    .links-row a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
     footer {
-      text-align: center;
-      color: var(--subtext);
-      font-size: 0.88rem;
-      padding: 34px 0 44px;
+      margin-top: 40px;
+      padding-top: 18px;
+      border-top: 1px solid var(--rule-2);
+      font-size: var(--t-xs);
+      color: var(--ink-3);
     }
 
-    @media (max-width: 760px) {
-      .metrics { grid-template-columns: 1fr; }
-      section.block { padding: 22px; }
-      header.page-head { padding: 34px 0 22px; }
+    /* ---------- full-size viewer ---------- */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 50;
+      display: none; align-items: center; justify-content: center;
+      background: rgba(20, 18, 16, .88);
+      padding: 32px;
+      cursor: zoom-out;
+    }
+    .lightbox[open] { display: flex; }
+    .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .lightbox-caption {
+      position: absolute; left: 0; right: 0; bottom: 14px;
+      text-align: center; color: #efeae2; font-size: var(--t-xs);
+    }
+
+    @media (max-width: 900px) {
+      .sheet { padding: 32px 24px 40px; margin: 20px auto; width: min(1240px, calc(100% - 32px)); }
+      .cols { grid-template-columns: 1fr; gap: 34px; }
+      .poster-col { position: static; max-width: 20rem; }
+      h1 { font-size: 1.4rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
 <body>
 
-  <nav class="navbar">
-    <div class="container nav-inner">
-      <a class="back-link" href="../index.html#projects" data-i18n="nav_back">&larr; Back to projects</a>
-      <button id="langToggle" class="lang-toggle">中文</button>
-    </div>
-  </nav>
+  <div class="sheet">
 
-  <div class="container">
+    <div class="topbar">
+      <a href="../index.html" data-i18n="nav_back">&larr; Back to profile</a>
+      <button id="langToggle" class="lang-toggle" type="button">中文</button>
+    </div>
 
     <header class="page-head">
-      <span class="head-tag" data-i18n="head_tag">Main Project</span>
+      <span class="head-tag" data-i18n="head_tag">Main project</span>
       <h1 data-i18n="head_title">An HBM-Based 100 Gbps Traffic Replay Engine on FPGA</h1>
       <p class="head-meta" data-i18n="head_meta">Presented at the UST-CYCU Joint Research Symposium 2026, University of Santo Tomas, Philippines. Advised by Prof. Yu-Kuen Lai, Department of Electrical Engineering, Chung Yuan Christian University.</p>
       <div class="tool-row">
@@ -245,148 +246,167 @@
       </div>
     </header>
 
-    <section class="block">
-      <h2 data-i18n="s1_title">The problem</h2>
-      <p data-i18n="s1_p1">Replaying recorded traffic is how high-speed network equipment gets tested. Software cannot do it at 100 Gbps: packets are handled one at a time on the CPU, so throughput collapses for the short frames that make up most real traffic, and scheduling jitter distorts the very packet spacing the replay is supposed to preserve.</p>
-      <p data-i18n="s1_p2">This design moves the whole job into hardware. The trace lives in High Bandwidth Memory on the FPGA card and is replayed without the host touching the transmit path at all.</p>
-    </section>
+    <div class="cols">
 
-    <section class="block">
-      <h2 data-i18n="s2_title">How it works</h2>
-      <p data-i18n="s2_p1">The trace is split into 512-byte batches and spread across all sixteen HBM channels, with batch N landing in channel N mod 16. Eight AXI read masters pull it back, each statically owning its own pair of channels, so no arbitration is needed and no two masters ever contend.</p>
-      <p data-i18n="s2_p2">A three-stage pipeline reassembles the Ethernet frames. A hardware throttle reproduces the recorded timestamps and gates only the final stage, so prefetching never stalls while the engine waits for the right moment to transmit.</p>
+      <main>
+        <section class="block">
+          <h2 data-i18n="s1_title">The problem</h2>
+          <p data-i18n="s1_p1">Replaying recorded traffic is how high-speed network equipment gets tested. Software cannot do it at 100 Gbps: packets are handled one at a time on the CPU, so throughput collapses for the short frames that make up most real traffic, and scheduling jitter distorts the very packet spacing the replay is supposed to preserve.</p>
+          <p data-i18n="s1_p2">This design moves the whole job into hardware. The trace lives in High Bandwidth Memory on the FPGA card and is replayed without the host touching the transmit path at all.</p>
+        </section>
 
-      <figure class="figure">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 190" width="100%" role="img" aria-labelledby="dpTitle">
-          <title id="dpTitle">Datapath: host memory to PCIe to HBM to the 100G MAC</title>
-          <defs>
-            <marker id="ar" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-              <polygon points="0 0, 9 3.5, 0 7" fill="#9aa2b8" />
-            </marker>
-          </defs>
-          <g font-family="Arial, sans-serif" font-size="12" text-anchor="middle">
+        <section class="block">
+          <h2 data-i18n="s2_title">How it works</h2>
+          <p data-i18n="s2_p1">The trace is split into 512-byte batches and spread across all sixteen HBM channels, with batch N landing in channel N mod 16. Eight AXI read masters pull it back, each statically owning its own pair of channels, so no arbitration is needed and no two masters ever contend.</p>
+          <p data-i18n="s2_p2">A three-stage pipeline reassembles the Ethernet frames. A hardware throttle reproduces the recorded timestamps and gates only the final stage, so prefetching never stalls while the engine waits for the right moment to transmit.</p>
 
-            <rect x="8" y="58" width="96" height="52" rx="10" fill="#eef0ff" stroke="#c7cbf5"/>
-            <text x="56" y="79" fill="#3f43c4" font-weight="700">Host</text>
-            <text x="56" y="96" fill="#6b7280" font-size="11">memory</text>
+          <figure>
+            <div class="figure-box">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 190" width="100%" role="img" aria-labelledby="dpTitle">
+                <title id="dpTitle">Datapath: host memory to PCIe to HBM to the 100G MAC</title>
+                <defs>
+                  <marker id="ar" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                    <polygon points="0 0, 9 3.5, 0 7" fill="#a39a8d" />
+                  </marker>
+                </defs>
+                <g font-family="IBM Plex Sans, Arial, sans-serif" font-size="12" text-anchor="middle">
 
-            <line x1="106" y1="84" x2="150" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
-            <text x="128" y="74" fill="#6b7280" font-size="10">PCIe</text>
+                  <rect x="8" y="58" width="96" height="52" rx="4" fill="#f0ece5" stroke="#c9c2b6"/>
+                  <text x="56" y="79" fill="#1d1a17" font-weight="600">Host</text>
+                  <text x="56" y="96" fill="#857d74" font-size="11">memory</text>
 
-            <rect x="152" y="58" width="104" height="52" rx="10" fill="#ffffff" stroke="#c7cbf5"/>
-            <text x="204" y="79" fill="#1f2937" font-weight="700">DMA</text>
-            <text x="204" y="96" fill="#6b7280" font-size="11">ring scheduler</text>
+                  <line x1="106" y1="84" x2="150" y2="84" stroke="#a39a8d" stroke-width="1.4" marker-end="url(#ar)"/>
+                  <text x="128" y="74" fill="#857d74" font-size="10">PCIe</text>
 
-            <line x1="258" y1="84" x2="300" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
+                  <rect x="152" y="58" width="104" height="52" rx="4" fill="#fdfcfa" stroke="#c9c2b6"/>
+                  <text x="204" y="79" fill="#1d1a17" font-weight="600">DMA</text>
+                  <text x="204" y="96" fill="#857d74" font-size="11">ring scheduler</text>
 
-            <rect x="302" y="20" width="120" height="138" rx="10" fill="#f7f8fc" stroke="#c7cbf5"/>
-            <text x="362" y="40" fill="#3f43c4" font-weight="700">HBM</text>
-            <text x="362" y="56" fill="#6b7280" font-size="10">16 channels</text>
-            <g fill="#dfe3fb" stroke="#c7cbf5">
-              <rect x="316" y="66" width="92" height="11" rx="3"/>
-              <rect x="316" y="81" width="92" height="11" rx="3"/>
-              <rect x="316" y="96" width="92" height="11" rx="3"/>
-              <rect x="316" y="111" width="92" height="11" rx="3"/>
-              <rect x="316" y="126" width="92" height="11" rx="3"/>
-            </g>
-            <text x="362" y="180" fill="#9aa2b8" font-size="10">batch N goes to channel N mod 16</text>
+                  <line x1="258" y1="84" x2="300" y2="84" stroke="#a39a8d" stroke-width="1.4" marker-end="url(#ar)"/>
 
-            <line x1="424" y1="84" x2="466" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
+                  <rect x="302" y="20" width="120" height="138" rx="4" fill="#fdfcfa" stroke="#c9c2b6"/>
+                  <text x="362" y="40" fill="#a2482a" font-weight="600">HBM</text>
+                  <text x="362" y="56" fill="#857d74" font-size="10">16 channels</text>
+                  <g fill="#e6e1d9" stroke="#c9c2b6">
+                    <rect x="316" y="66" width="92" height="11" rx="2"/>
+                    <rect x="316" y="81" width="92" height="11" rx="2"/>
+                    <rect x="316" y="96" width="92" height="11" rx="2"/>
+                    <rect x="316" y="111" width="92" height="11" rx="2"/>
+                    <rect x="316" y="126" width="92" height="11" rx="2"/>
+                  </g>
+                  <text x="362" y="180" fill="#857d74" font-size="10">batch N goes to channel N mod 16</text>
 
-            <rect x="468" y="42" width="118" height="84" rx="10" fill="#ffffff" stroke="#c7cbf5"/>
-            <text x="527" y="63" fill="#1f2937" font-weight="700">8 read</text>
-            <text x="527" y="79" fill="#1f2937" font-weight="700">masters</text>
-            <text x="527" y="99" fill="#6b7280" font-size="10">3-stage pipeline</text>
-            <text x="527" y="113" fill="#6b7280" font-size="10">Fetch / Pace / TX</text>
+                  <line x1="424" y1="84" x2="466" y2="84" stroke="#a39a8d" stroke-width="1.4" marker-end="url(#ar)"/>
 
-            <line x1="588" y1="84" x2="628" y2="84" stroke="#9aa2b8" stroke-width="1.6" marker-end="url(#ar)"/>
+                  <rect x="468" y="42" width="118" height="84" rx="4" fill="#fdfcfa" stroke="#c9c2b6"/>
+                  <text x="527" y="63" fill="#1d1a17" font-weight="600">8 read</text>
+                  <text x="527" y="79" fill="#1d1a17" font-weight="600">masters</text>
+                  <text x="527" y="99" fill="#857d74" font-size="10">3-stage pipeline</text>
+                  <text x="527" y="113" fill="#857d74" font-size="10">Fetch / Pace / TX</text>
 
-            <rect x="630" y="58" width="82" height="52" rx="10" fill="#eef0ff" stroke="#c7cbf5"/>
-            <text x="671" y="79" fill="#3f43c4" font-weight="700">100G</text>
-            <text x="671" y="96" fill="#6b7280" font-size="11">MAC</text>
-          </g>
-        </svg>
-        <figcaption data-i18n="fig1_caption">Fig. 1. Datapath: host memory, PCIe, HBM and the 100G MAC.</figcaption>
-      </figure>
-    </section>
+                  <line x1="588" y1="84" x2="628" y2="84" stroke="#a39a8d" stroke-width="1.4" marker-end="url(#ar)"/>
 
-    <section class="block">
-      <h2 data-i18n="s3_title">Results</h2>
+                  <rect x="630" y="58" width="82" height="52" rx="4" fill="#f0ece5" stroke="#c9c2b6"/>
+                  <text x="671" y="79" fill="#1d1a17" font-weight="600">100G</text>
+                  <text x="671" y="96" fill="#857d74" font-size="11">MAC</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption data-i18n="fig1_caption">Fig. 1. Datapath: host memory, PCIe, HBM and the 100G MAC.</figcaption>
+          </figure>
+        </section>
 
-      <div class="metrics">
-        <div class="metric">
-          <div class="metric-value">100 Gbps</div>
-          <div class="metric-label" data-i18n="m1_label">Line rate reached on the wire</div>
-        </div>
-        <div class="metric">
-          <div class="metric-value">227.800 &micro;s</div>
-          <div class="metric-label" data-i18n="m2_label">To deliver 32,768 frames into the MAC</div>
-        </div>
-        <div class="metric">
-          <div class="metric-value" data-i18n="m3_value">Zero loss</div>
-          <div class="metric-label" data-i18n="m3_label">All frames received by the peer NIC</div>
-        </div>
-      </div>
+        <section class="block">
+          <h2 data-i18n="s3_title">Results</h2>
 
-      <p data-i18n="s3_p1">Verification used a second 100 Gbps NIC on a back-to-back link. In timestamp mode, 998 of 1,000 replayed packets matched the source records field by field; the two that did not appear are malformed entries in the source trace itself. In max-rate mode the receiver counted all 32,768 frames with nothing dropped.</p>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-value">100 Gbps</div>
+              <div class="metric-label" data-i18n="m1_label">Line rate reached on the wire</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">227.800 &micro;s</div>
+              <div class="metric-label" data-i18n="m2_label">To deliver 32,768 frames into the MAC</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value" data-i18n="m3_value">Zero loss</div>
+              <div class="metric-label" data-i18n="m3_label">All frames received by the peer NIC</div>
+            </div>
+          </div>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th data-i18n="t_h1">Stage</th>
-              <th data-i18n="t_h2">Measured</th>
-              <th data-i18n="t_h3">Limited by</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td data-i18n="t_r1c1">Host to HBM (write)</td>
-              <td>7.855 GB/s</td>
-              <td data-i18n="t_r1c3">PCIe and the DMA engine</td>
-            </tr>
-            <tr>
-              <td data-i18n="t_r2c1">HBM to MAC (read)</td>
-              <td data-i18n="t_r2c2">Full line rate</td>
-              <td data-i18n="t_r2c3">The 100G MAC</td>
-            </tr>
-            <tr>
-              <td data-i18n="t_r3c1">A single HBM channel</td>
-              <td>8.0 GB/s</td>
-              <td>32 B &times; 250 MHz</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          <p data-i18n="s3_p1">Verification used a second 100 Gbps NIC on a back-to-back link. In timestamp mode, 998 of 1,000 replayed packets matched the source records field by field; the two that did not appear are malformed entries in the source trace itself. In max-rate mode the receiver counted all 32,768 frames with nothing dropped.</p>
 
-      <p data-i18n="s3_p2">Timing closes with 0.057 ns of setup slack and 0.010 ns of hold slack, with no failing endpoints.</p>
-    </section>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="t_h1">Stage</th>
+                  <th data-i18n="t_h2">Value</th>
+                  <th data-i18n="t_h3">Set by</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-i18n="t_r1c1">Host to HBM, write</td>
+                  <td class="num">7.855 GB/s</td>
+                  <td data-i18n="t_r1c3">PCIe and the DMA engine</td>
+                </tr>
+                <tr>
+                  <td data-i18n="t_r2c1">HBM to MAC, read</td>
+                  <td class="num" data-i18n="t_r2c2">Full line rate</td>
+                  <td data-i18n="t_r2c3">The 100G MAC</td>
+                </tr>
+                <tr>
+                  <td data-i18n="t_r3c1">What HBM can do, one channel / all sixteen</td>
+                  <td class="num">8.0 / 128 GB/s</td>
+                  <td data-i18n="t_r3c3">32 B &times; 250 MHz, not a measurement</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-    <section class="block">
-      <h2 data-i18n="s4_title">Poster</h2>
-      <div class="poster-slot" data-i18n="poster_placeholder">The conference poster will be added here.</div>
-    </section>
+          <p data-i18n="s3_p3">The last row is the reason the other two look the way they do. HBM offers 128 GB/s across its sixteen channels, so the design never comes close to exhausting it: writing uses about 6 per cent of that and replaying about 10. Both ends are held by their interfaces, not by the memory.</p>
+          <p data-i18n="s3_p2">Timing closes with 0.057 ns of setup slack and 0.010 ns of hold slack, with no failing endpoints.</p>
+        </section>
 
-    <section class="block">
-      <h2 data-i18n="s5_title">Links</h2>
-      <div class="links-row">
-        <a href="../index.html#projects" data-i18n="link_back">Back to projects</a>
-        <a href="../index.html#contact" data-i18n="link_contact">Contact me</a>
-      </div>
-    </section>
+        <section class="block">
+          <h2 data-i18n="s5_title">Links</h2>
+          <div class="links-row">
+            <a href="../index.html" data-i18n="link_back">Back to profile</a>
+            <a href="mailto:charles5000017@gmail.com" data-i18n="link_contact">Contact me</a>
+            <a href="https://github.com/charlesHYC" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </section>
+      </main>
+
+      <aside class="poster-col">
+        <h2 data-i18n="s4_title">Poster</h2>
+        <a class="poster" href="../images/posters/ust-cycu-2026-full.jpg"
+           data-caption="UST-CYCU Joint Research Symposium 2026 &middot; HBM-Based 100 Gbps Traffic Replay Engine on FPGA">
+          <img src="../images/posters/ust-cycu-2026.jpg"
+               alt="Conference poster: HBM-Based 100 Gbps Traffic Replay Engine on FPGA" loading="lazy" />
+        </a>
+        <div class="poster-meta" data-i18n="poster_meta">UST-CYCU Joint Research Symposium 2026, University of Santo Tomas</div>
+        <div class="poster-hint" data-i18n="poster_hint">Click to read it full size.</div>
+      </aside>
+
+    </div>
+
+    <footer><span data-i18n="footer_text">&copy; 2026 Charles Hong</span></footer>
 
   </div>
 
-  <footer>
-    <div class="container">&copy; 2026 Charles-Hong.</div>
-  </footer>
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" alt="" />
+    <div class="lightbox-caption" id="lightbox-cap"></div>
+  </div>
 
   <script>
     const translations = {
       zh: {
-        page_title: 'HBM 100 Gbps 流量重播引擎 | Charles-Hong',
+        page_title: 'HBM 100 Gbps 流量重播引擎 | Charles Hong',
         lang_button: 'EN',
-        nav_back: '← 回到作品',
+        nav_back: '← 回到首頁',
 
         head_tag: '主要專案',
         head_title: '基於高頻寬記憶體之 FPGA 100 Gbps 網路流量重播引擎',
@@ -408,29 +428,33 @@
         m3_label: '對端網路卡完整收到所有訊框',
         s3_p1: '驗證方式是與另一張 100 Gbps 網路卡以 back-to-back 直連。在時間戳模式下，1,000 個重播封包中有 998 個與來源記錄逐欄相符，沒出現的那兩筆是來源錄製檔本身就異常的記錄。在最高速模式下，接收端完整收到全部 32,768 個訊框，一個都沒掉。',
         t_h1: '階段',
-        t_h2: '實測',
-        t_h3: '受限於',
+        t_h2: '數值',
+        t_h3: '由什麼決定',
         t_r1c1: '主機到 HBM（寫入）',
         t_r1c3: 'PCIe 與 DMA 引擎',
         t_r2c1: 'HBM 到 MAC（讀出）',
         t_r2c2: '完整線速',
         t_r2c3: '100G MAC',
-        t_r3c1: '單一 HBM 通道',
+        t_r3c1: 'HBM 本身的能力：單一通道／十六通道總和',
+        t_r3c3: '32 B × 250 MHz，非實測值',
+        s3_p3: '最後一列正是前兩列長成那樣的原因。HBM 十六個通道合計提供 128 GB/s，這個設計從來沒有逼近過：寫入用掉約 6%，重播約 10%。兩端受限的都是介面，不是記憶體。',
         s3_p2: '時序收斂於 setup 餘裕 0.057 ns、hold 餘裕 0.010 ns，沒有任何未達標的端點。',
 
         s4_title: '海報',
-        poster_placeholder: '會議海報之後會放在這裡。',
+        poster_meta: 'UST-CYCU Joint Research Symposium 2026，University of Santo Tomas',
+        poster_hint: '點擊可看完整大圖。',
 
         s5_title: '連結',
-        link_back: '回到作品',
-        link_contact: '聯絡我'
+        link_back: '回到首頁',
+        link_contact: '聯絡我',
+        footer_text: '© 2026 Charles Hong'
       },
       en: {
-        page_title: 'HBM 100 Gbps Traffic Replay Engine | Charles-Hong',
+        page_title: 'HBM 100 Gbps Traffic Replay Engine | Charles Hong',
         lang_button: '中文',
-        nav_back: '← Back to projects',
+        nav_back: '← Back to profile',
 
-        head_tag: 'Main Project',
+        head_tag: 'Main project',
         head_title: 'An HBM-Based 100 Gbps Traffic Replay Engine on FPGA',
         head_meta: 'Presented at the UST-CYCU Joint Research Symposium 2026, University of Santo Tomas, Philippines. Advised by Prof. Yu-Kuen Lai, Department of Electrical Engineering, Chung Yuan Christian University.',
 
@@ -450,27 +474,31 @@
         m3_label: 'All frames received by the peer NIC',
         s3_p1: 'Verification used a second 100 Gbps NIC on a back-to-back link. In timestamp mode, 998 of 1,000 replayed packets matched the source records field by field; the two that did not appear are malformed entries in the source trace itself. In max-rate mode the receiver counted all 32,768 frames with nothing dropped.',
         t_h1: 'Stage',
-        t_h2: 'Measured',
-        t_h3: 'Limited by',
-        t_r1c1: 'Host to HBM (write)',
+        t_h2: 'Value',
+        t_h3: 'Set by',
+        t_r1c1: 'Host to HBM, write',
         t_r1c3: 'PCIe and the DMA engine',
-        t_r2c1: 'HBM to MAC (read)',
+        t_r2c1: 'HBM to MAC, read',
         t_r2c2: 'Full line rate',
         t_r2c3: 'The 100G MAC',
-        t_r3c1: 'A single HBM channel',
+        t_r3c1: 'What HBM can do, one channel / all sixteen',
+        t_r3c3: '32 B × 250 MHz, not a measurement',
+        s3_p3: 'The last row is the reason the other two look the way they do. HBM offers 128 GB/s across its sixteen channels, so the design never comes close to exhausting it: writing uses about 6 per cent of that and replaying about 10. Both ends are held by their interfaces, not by the memory.',
         s3_p2: 'Timing closes with 0.057 ns of setup slack and 0.010 ns of hold slack, with no failing endpoints.',
 
         s4_title: 'Poster',
-        poster_placeholder: 'The conference poster will be added here.',
+        poster_meta: 'UST-CYCU Joint Research Symposium 2026, University of Santo Tomas',
+        poster_hint: 'Click to read it full size.',
 
         s5_title: 'Links',
-        link_back: 'Back to projects',
-        link_contact: 'Contact me'
+        link_back: 'Back to profile',
+        link_contact: 'Contact me',
+        footer_text: '© 2026 Charles Hong'
       }
     };
 
     const langToggle = document.getElementById('langToggle');
-    let currentLang = localStorage.getItem('language') || 'zh';
+    let currentLang = localStorage.getItem('language') || 'en';
 
     function applyLanguage(lang) {
       currentLang = lang;
@@ -482,9 +510,7 @@
 
       document.querySelectorAll('[data-i18n]').forEach((element) => {
         const key = element.dataset.i18n;
-        if (dict[key] !== undefined) {
-          element.textContent = dict[key];
-        }
+        if (dict[key] !== undefined) element.textContent = dict[key];
       });
 
       localStorage.setItem('language', lang);
@@ -495,6 +521,30 @@
     });
 
     applyLanguage(currentLang);
+
+    /* The poster opens full size over the page; the anchor still points at the
+       file, so it degrades to a plain link if this never runs. */
+    (function () {
+      const box = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-cap');
+      if (!box) return;
+
+      function close() { box.removeAttribute('open'); img.removeAttribute('src'); }
+
+      document.querySelectorAll('[data-caption]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+          e.preventDefault();
+          img.src = a.getAttribute('href');
+          cap.innerHTML = a.getAttribute('data-caption') || '';
+          box.setAttribute('open', '');
+        });
+      });
+
+      box.addEventListener('click', close);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    })();
   </script>
 </body>
 </html>
