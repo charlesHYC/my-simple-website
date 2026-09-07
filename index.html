@@ -346,6 +346,26 @@
           <span class="entry-tags">Alveo U50 · HBM2 · Corundum · Verilog · PCIe</span>
         </a>
 
+        <a class="entry" href="images/posters/iseecs-2026-full.jpg"
+           data-caption="ISEECS 2026 &middot; A High-Efficiency 100 Gbps Traffic Generator and Flow Analysis SoC for High-Speed Networks">
+          <span class="entry-top">
+            <span class="entry-name">100 Gbps Traffic Generator and Flow Analysis SoC</span>
+            <span class="entry-year">2026</span>
+          </span>
+          <span class="entry-note">A single IP core pairing a programmable traffic generator with sketch-based flow analysis on a 512-bit AXI-Stream datapath, through a TSMC 90 nm cell-based flow at a 4 ns clock.</span>
+          <span class="entry-tags">TSMC 90nm · SoC · AXI-Stream · Verilog · Synopsys</span>
+        </a>
+
+        <a class="entry" href="images/posters/cms-ddos-full.jpg"
+           data-caption="Kansai University Internship &amp; Exchange Program 2026 &middot; In-Network DDoS Detection and Dynamic Mitigation on a P4 Programmable Switch with Count-Min Sketch">
+          <span class="entry-top">
+            <span class="entry-name">In-Network DDoS Detection on a P4 Switch</span>
+            <span class="entry-year">2026</span>
+          </span>
+          <span class="entry-note">A detect, decide and mitigate loop running on the switch itself: a Count-Min Sketch in the data plane flags a source, and a P4Runtime controller checks it against an EWMA baseline before installing a drop rule that expires on its own.</span>
+          <span class="entry-tags">P4 · BMv2 · P4Runtime · Python · Mininet</span>
+        </a>
+
         <a class="entry" href="https://github.com/charlesHYC/EDA_tool_setup" target="_blank" rel="noopener">
           <span class="entry-top">
             <span class="entry-name">EDA Environment Setup</span>
@@ -513,7 +533,7 @@
 
       function close() { box.removeAttribute('open'); img.removeAttribute('src'); }
 
-      document.querySelectorAll('.poster').forEach(function (a) {
+      document.querySelectorAll('[data-caption]').forEach(function (a) {
         a.addEventListener('click', function (e) {
           if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
           e.preventDefault();
