@@ -50,8 +50,10 @@
        capped so the measure stays readable on a wide monitor; the slack that
        leaves on the right is where the poster column will go. */
     .shell {
-      width: min(1400px, 94%);
-      margin: 0 auto;
+      width: min(1560px, 96%);
+      /* Biased towards the left rather than centred, so the page sits where the
+         eye starts instead of drifting right on a wide monitor. */
+      margin-inline: max(24px, calc((100vw - 1560px) * 0.34)) auto;
       display: grid;
       grid-template-columns: 15.5rem minmax(0, 50rem);
       gap: 64px;
