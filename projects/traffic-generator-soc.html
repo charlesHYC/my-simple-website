@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>100 Gbps Traffic Generator and Flow Analysis SoC | Charles Hong</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="project.css" />
+</head>
+<body>
+
+  <div class="sheet">
+
+    <div class="topbar">
+      <a href="../index.html" data-i18n="nav_back">&larr; Back to profile</a>
+      <button id="langToggle" class="lang-toggle" type="button">中文</button>
+    </div>
+
+    <header class="page-head">
+      <span class="head-tag" data-i18n="head_tag">Cell-based design</span>
+      <h1 data-i18n="head_title">A High-Efficiency 100 Gbps Traffic Generator and Flow Analysis SoC</h1>
+      <p class="head-meta" data-i18n="head_meta">Presented at ISEECS 2026, the 9th International Symposium on Electrical Engineering and Computer Science, 5&ndash;6 March 2026, Chung Yuan Christian University. With Prof. Yu-Kuen Lai, Department of Electrical Engineering.</p>
+      <div class="tool-row">
+        <span class="tool-chip">TSMC 90 nm</span>
+        <span class="tool-chip">Cell-based flow</span>
+        <span class="tool-chip">Verilog</span>
+        <span class="tool-chip">AXI4-Stream</span>
+        <span class="tool-chip">LFSR</span>
+        <span class="tool-chip">Count-sketch</span>
+        <span class="tool-chip">Gate-level simulation</span>
+      </div>
+    </header>
+
+    <div class="cols">
+
+      <main>
+        <section class="block">
+          <h2 data-i18n="s1_title">The problem</h2>
+          <p data-i18n="s1_p1">100 Gigabit Ethernet is now an ordinary interface, so traffic monitoring and performance measurement increasingly move into the hardware itself. An SoC that carries both gets full observability without an external measurement rig attached to it.</p>
+          <p data-i18n="s1_p2">Putting traffic generation and sketch-based analysis on one chip is the hard part. Sustaining 100 Gbps needs a wide datapath and a fast clock, which drives up timing and control complexity, and the analysis counters have to stay correct while several updates contend for the same memory.</p>
+        </section>
+
+        <section class="block">
+          <h2 data-i18n="s2_title">How it works</h2>
+          <p data-i18n="s2_p1">One chip holds a programmable traffic generator and the flow feature analysis for the device under test, with every module talking over AXI4-Stream.</p>
+          <p data-i18n="s2_p2">The generator is a three-state machine driven by a linear feedback shift register. ST_IDLE uses the LFSR's pseudo-random sequence to decide the next packet, ST_SEND builds it to an Internet Mix distribution, and ST_WAIT spaces packets apart using intervals drawn from a Pareto distribution ROM. The traffic that comes out therefore carries the statistical shape of a real network rather than a uniform stream.</p>
+          <p data-i18n="s2_p3">On the analysis side a header parser lifts the five-tuple flow key out of each packet, and an AMS module estimates the second frequency moment with a Count-sketch. Parallel hash functions and compact counters keep it within a fixed memory budget, and a collision-avoidance interface keeps the counter updates correct when they contend.</p>
+
+          <figure>
+            <div class="figure-box">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" width="100%" role="img" aria-labelledby="socTitle">
+                <title id="socTitle">Traffic generator and flow feature analysis on one chip, joined by a 512-bit AXI4-Stream</title>
+                <defs>
+                  <marker id="ar2" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                    <polygon points="0 0, 9 3.5, 0 7" fill="#a39a8d" />
+                  </marker>
+                </defs>
+                <g font-family="IBM Plex Sans, Arial, sans-serif" font-size="12" text-anchor="middle">
+
+                  <rect x="8" y="26" width="214" height="150" rx="4" fill="#fdfcfa" stroke="#c9c2b6"/>
+                  <text x="115" y="46" fill="#a2482a" font-weight="600">Traffic Generator</text>
+
+                  <rect x="24" y="60" width="70" height="26" rx="3" fill="#f0ece5" stroke="#c9c2b6"/>
+                  <text x="59" y="77" fill="#1d1a17" font-size="11" font-weight="600">LFSR</text>
+                  <line x1="96" y1="73" x2="118" y2="73" stroke="#a39a8d" stroke-width="1.4" marker-end="url(#ar2)"/>
+
+                  <rect x="120" y="60" width="86" height="26" rx="3" fill="#e6e1d9" stroke="#c9c2b6"/>
+                  <text x="163" y="77" fill="#1d1a17" font-size="11" font-weight="600">3-state FSM</text>
+
+                  <rect x="24" y="98" width="58" height="24" rx="3" fill="#fdfcfa" stroke="#c9c2b6"/>
+                  <text x="53" y="114" fill="#4d4741" font-size="10">ST_IDLE</text>
+                  <rect x="86" y="98" width="58" height="24" rx="3" fill="#fdfcfa" stroke="#c9c2b6"/>
+                  <text x="115" y="114" fill="#4d4741" font-size="10">ST_SEND</text>
+                  <rect x="148" y="98" width="58" height="24" rx="3" fill="#fdfcfa" stroke="#c9c2b6"/>
+                  <text x="177" y="114" fill="#4d4741" font-size="10">ST_WAIT</text>
+
+                  <text x="115" y="146" fill="#857d74" font-size="10">IMIX packet mix</text>
+                  <text x="115" y="162" fill="#857d74" font-size="10">Pareto ROM for the gaps</text>
+
+                  <line x1="224" y1="100" x2="270" y2="100" stroke="#a39a8d" stroke-width="1.4" marker-end="url(#ar2)"/>
+                  <text x="247" y="84" fill="#857d74" font-size="9.5">512-bit</text>
+                  <text x="247" y="95" fill="#857d74" font-size="9.5">AXIS</text>
+
+                  <rect x="272" y="26" width="266" height="150" rx="4" fill="#fdfcfa" stroke="#c9c2b6"/>
+                  <text x="405" y="46" fill="#a2482a" font-weight="600">Flow Feature Analysis</text>
+
+                  <rect x="288" y="62" width="106" height="42" rx="3" fill="#f0ece5" stroke="#c9c2b6"/>
+                  <text x="341" y="80" fill="#1d1a17" font-size="11" font-weight="600">Header Parser</text>
+                  <text x="341" y="95" fill="#857d74" font-size="10">five-tuple key</text>
+
+                  <line x1="396" y1="83" x2="418" y2="83" stroke="#a39a8d" stroke-width="1.4" marker-end="url(#ar2)"/>
+
+                  <rect x="420" y="62" width="104" height="42" rx="3" fill="#e6e1d9" stroke="#c9c2b6"/>
+                  <text x="472" y="80" fill="#1d1a17" font-size="11" font-weight="600">AMS</text>
+                  <text x="472" y="95" fill="#857d74" font-size="10">Count-sketch</text>
+
+                  <g fill="#f0ece5" stroke="#c9c2b6" stroke-width="0.7">
+                    <rect x="420" y="116" width="24" height="12" rx="1"/>
+                    <rect x="446" y="116" width="24" height="12" rx="1"/>
+                    <rect x="472" y="116" width="24" height="12" rx="1"/>
+                    <rect x="498" y="116" width="26" height="12" rx="1"/>
+                  </g>
+                  <text x="405" y="150" fill="#857d74" font-size="10">parallel hashes, fixed counter memory,</text>
+                  <text x="405" y="164" fill="#857d74" font-size="10">collision-avoiding updates</text>
+
+                  <line x1="540" y1="100" x2="586" y2="100" stroke="#a39a8d" stroke-width="1.4" marker-end="url(#ar2)"/>
+
+                  <rect x="588" y="74" width="124" height="52" rx="4" fill="#f0ece5" stroke="#c9c2b6"/>
+                  <text x="650" y="95" fill="#1d1a17" font-weight="600">F2 estimate</text>
+                  <text x="650" y="112" fill="#857d74" font-size="10">updated in real time</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption data-i18n="fig1_caption">Fig. 1. The generator and the analysis engine on one chip, joined by a 512-bit AXI4-Stream.</figcaption>
+          </figure>
+        </section>
+
+        <section class="block">
+          <h2 data-i18n="s3_title">Results</h2>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-value">100 Gbps</div>
+              <div class="metric-label" data-i18n="m1_label">Sustained at the worst-case corner</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">4.0 ns</div>
+              <div class="metric-label" data-i18n="m2_label">Clock period met in post-simulation timing</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">514,034 &micro;m&sup2;</div>
+              <div class="metric-label" data-i18n="m3_label">Total cell area, TSMC 90 nm</div>
+            </div>
+          </div>
+
+          <p data-i18n="s3_p1">The integrated system was checked by gate-level simulation. The generator produces packets at stochastic intervals, and the monitor shows them crossing the 512-bit AXI4-Stream and feeding the F2 computation, with the testbench driving 85 per cent load: 108 Gbps against the bus ceiling of 128.</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="t_h1">Item</th>
+                  <th data-i18n="t_h2">Value</th>
+                  <th data-i18n="t_h3">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-i18n="t_r1c1">Process</td>
+                  <td class="num">TSMC 90 nm</td>
+                  <td data-i18n="t_r1c3">Cell-based flow</td>
+                </tr>
+                <tr>
+                  <td data-i18n="t_r2c1">Clock period</td>
+                  <td class="num">4.0 ns</td>
+                  <td data-i18n="t_r2c3">250 MHz, met at the worst case</td>
+                </tr>
+                <tr>
+                  <td data-i18n="t_r3c1">Datapath</td>
+                  <td class="num">512-bit AXI4-Stream</td>
+                  <td data-i18n="t_r3c3">128 Gbps of bus capacity</td>
+                </tr>
+                <tr>
+                  <td data-i18n="t_r4c1">Testbench load</td>
+                  <td class="num">108 Gbps</td>
+                  <td data-i18n="t_r4c3">85 per cent of the bus</td>
+                </tr>
+                <tr>
+                  <td data-i18n="t_r5c1">Total cell area</td>
+                  <td class="num">514,034.5 &micro;m&sup2;</td>
+                  <td data-i18n="t_r5c3">From the synthesis report</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p data-i18n="s3_p2">The 512-bit stream absorbs the bursts without dropping packets, which is what makes the pairing work: the generator can be pushed past the 100 Gbps target and the analysis still keeps up on the same clock.</p>
+        </section>
+
+        <section class="block">
+          <h2 data-i18n="s5_title">Links</h2>
+          <div class="links-row">
+            <a href="../index.html" data-i18n="link_back">Back to profile</a>
+            <a href="hbm-replay.html" data-i18n="link_other">HBM traffic replay engine</a>
+            <a href="mailto:charles5000017@gmail.com" data-i18n="link_contact">Contact me</a>
+          </div>
+        </section>
+      </main>
+
+      <aside class="poster-col">
+        <h2 data-i18n="s4_title">Poster</h2>
+        <a class="poster" href="../images/posters/iseecs-2026-full.jpg"
+           data-caption="ISEECS 2026 &middot; A High-Efficiency 100 Gbps Traffic Generator and Flow Analysis SoC for High-Speed Networks">
+          <img src="../images/posters/iseecs-2026.jpg"
+               alt="Conference poster: A High-Efficiency 100 Gbps Traffic Generator and Flow Analysis SoC" loading="lazy" />
+        </a>
+        <div class="poster-meta" data-i18n="poster_meta">ISEECS 2026, Chung Yuan Christian University</div>
+        <div class="poster-hint" data-i18n="poster_hint">Click to read it full size.</div>
+      </aside>
+
+    </div>
+
+    <footer><span data-i18n="footer_text">&copy; 2026 Charles Hong</span></footer>
+
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" alt="" />
+    <div class="lightbox-caption" id="lightbox-cap"></div>
+  </div>
+
+  <script>
+    const translations = {
+      zh: {
+        page_title: '100 Gbps 流量產生與流特徵分析 SoC | Charles Hong',
+        lang_button: 'EN',
+        nav_back: '← 回到首頁',
+
+        head_tag: 'Cell-based 設計',
+        head_title: '高效率 100 Gbps 流量產生與流特徵分析 SoC',
+        head_meta: '發表於 ISEECS 2026（第九屆電機工程與電腦科學國際研討會），2026 年 3 月 5–6 日，中原大學。合作指導：電機工程學系 賴裕坤教授。',
+
+        s1_title: '問題',
+        s1_p1: '100 Gigabit 乙太網路已是常見介面，流量監測與效能量測因此越來越往硬體內部搬。把兩者做進 SoC，就能在不外接量測設備的情況下取得完整的可觀測性。',
+        s1_p2: '難的是把流量產生與 sketch 分析放進同一顆晶片。要撐住 100 Gbps 需要寬資料路徑與高時脈，時序與控制的複雜度隨之上升；而且多筆更新搶同一塊記憶體時，分析用的計數器還必須保持正確。',
+
+        s2_title: '運作方式',
+        s2_p1: '同一顆晶片同時放進可程式化的流量產生器，以及待測物的流特徵分析，模組之間全部以 AXI4-Stream 溝通。',
+        s2_p2: '產生器是由線性回饋移位暫存器（LFSR）驅動的三狀態機。ST_IDLE 用 LFSR 的擬隨機序列決定下一個封包，ST_SEND 依 Internet Mix（IMIX）分布組出封包，ST_WAIT 則從 Pareto 分布 ROM 取間隔把封包拉開。因此送出的流量帶有真實網路的統計特性，而不是均勻的資料流。',
+        s2_p3: '分析端由 Header Parser 從每個封包取出五元組流鍵，AMS 模組再以 Count-sketch 估計二階頻率矩（F2）。平行雜湊與精簡計數器讓它維持固定的記憶體用量，另有防碰撞介面確保計數更新互相衝突時仍然正確。',
+        fig1_caption: '圖一、產生器與分析引擎位於同一顆晶片，以 512-bit AXI4-Stream 相連。',
+
+        s3_title: '實測結果',
+        m1_label: '最差條件下仍維持的速率',
+        m2_label: '後模擬時序達成的時脈週期',
+        m3_label: 'TSMC 90 nm 總 cell 面積',
+        s3_p1: '整合後的系統以 gate-level 模擬驗證。產生器以隨機間隔送出封包，監測器顯示封包通過 512-bit AXI4-Stream 並進入 F2 計算，測試平台設定 85% 負載：128 Gbps 匯流排上限下實際跑 108 Gbps。',
+        t_h1: '項目',
+        t_h2: '數值',
+        t_h3: '說明',
+        t_r1c1: '製程',
+        t_r1c3: 'Cell-based 流程',
+        t_r2c1: '時脈週期',
+        t_r2c3: '250 MHz，最差條件下達成',
+        t_r3c1: '資料路徑',
+        t_r3c3: '匯流排容量 128 Gbps',
+        t_r4c1: '測試平台負載',
+        t_r4c3: '匯流排的 85%',
+        t_r5c1: '總 cell 面積',
+        t_r5c3: '取自合成報告',
+        s3_p2: '512-bit 串流能吸收突發而不掉封包，這正是兩者能配在一起的關鍵：產生器可以推過 100 Gbps 的目標，分析端在同一個時脈下仍然跟得上。',
+
+        s4_title: '海報',
+        poster_meta: 'ISEECS 2026，中原大學',
+        poster_hint: '點擊可看完整大圖。',
+
+        s5_title: '連結',
+        link_back: '回到首頁',
+        link_other: 'HBM 流量重播引擎',
+        link_contact: '聯絡我',
+        footer_text: '© 2026 Charles Hong'
+      },
+      en: {
+        page_title: '100 Gbps Traffic Generator and Flow Analysis SoC | Charles Hong',
+        lang_button: '中文',
+        nav_back: '← Back to profile',
+
+        head_tag: 'Cell-based design',
+        head_title: 'A High-Efficiency 100 Gbps Traffic Generator and Flow Analysis SoC',
+        head_meta: 'Presented at ISEECS 2026, the 9th International Symposium on Electrical Engineering and Computer Science, 5–6 March 2026, Chung Yuan Christian University. With Prof. Yu-Kuen Lai, Department of Electrical Engineering.',
+
+        s1_title: 'The problem',
+        s1_p1: '100 Gigabit Ethernet is now an ordinary interface, so traffic monitoring and performance measurement increasingly move into the hardware itself. An SoC that carries both gets full observability without an external measurement rig attached to it.',
+        s1_p2: 'Putting traffic generation and sketch-based analysis on one chip is the hard part. Sustaining 100 Gbps needs a wide datapath and a fast clock, which drives up timing and control complexity, and the analysis counters have to stay correct while several updates contend for the same memory.',
+
+        s2_title: 'How it works',
+        s2_p1: 'One chip holds a programmable traffic generator and the flow feature analysis for the device under test, with every module talking over AXI4-Stream.',
+        s2_p2: "The generator is a three-state machine driven by a linear feedback shift register. ST_IDLE uses the LFSR's pseudo-random sequence to decide the next packet, ST_SEND builds it to an Internet Mix distribution, and ST_WAIT spaces packets apart using intervals drawn from a Pareto distribution ROM. The traffic that comes out therefore carries the statistical shape of a real network rather than a uniform stream.",
+        s2_p3: 'On the analysis side a header parser lifts the five-tuple flow key out of each packet, and an AMS module estimates the second frequency moment with a Count-sketch. Parallel hash functions and compact counters keep it within a fixed memory budget, and a collision-avoidance interface keeps the counter updates correct when they contend.',
+        fig1_caption: 'Fig. 1. The generator and the analysis engine on one chip, joined by a 512-bit AXI4-Stream.',
+
+        s3_title: 'Results',
+        m1_label: 'Sustained at the worst-case corner',
+        m2_label: 'Clock period met in post-simulation timing',
+        m3_label: 'Total cell area, TSMC 90 nm',
+        s3_p1: 'The integrated system was checked by gate-level simulation. The generator produces packets at stochastic intervals, and the monitor shows them crossing the 512-bit AXI4-Stream and feeding the F2 computation, with the testbench driving 85 per cent load: 108 Gbps against the bus ceiling of 128.',
+        t_h1: 'Item',
+        t_h2: 'Value',
+        t_h3: 'Notes',
+        t_r1c1: 'Process',
+        t_r1c3: 'Cell-based flow',
+        t_r2c1: 'Clock period',
+        t_r2c3: '250 MHz, met at the worst case',
+        t_r3c1: 'Datapath',
+        t_r3c3: '128 Gbps of bus capacity',
+        t_r4c1: 'Testbench load',
+        t_r4c3: '85 per cent of the bus',
+        t_r5c1: 'Total cell area',
+        t_r5c3: 'From the synthesis report',
+        s3_p2: 'The 512-bit stream absorbs the bursts without dropping packets, which is what makes the pairing work: the generator can be pushed past the 100 Gbps target and the analysis still keeps up on the same clock.',
+
+        s4_title: 'Poster',
+        poster_meta: 'ISEECS 2026, Chung Yuan Christian University',
+        poster_hint: 'Click to read it full size.',
+
+        s5_title: 'Links',
+        link_back: 'Back to profile',
+        link_other: 'HBM traffic replay engine',
+        link_contact: 'Contact me',
+        footer_text: '© 2026 Charles Hong'
+      }
+    };
+
+    const langToggle = document.getElementById('langToggle');
+    let currentLang = localStorage.getItem('language') || 'en';
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      const dict = translations[lang];
+
+      document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
+      document.title = dict.page_title;
+      langToggle.textContent = dict.lang_button;
+
+      document.querySelectorAll('[data-i18n]').forEach((element) => {
+        const key = element.dataset.i18n;
+        if (dict[key] !== undefined) element.textContent = dict[key];
+      });
+
+      localStorage.setItem('language', lang);
+    }
+
+    langToggle.addEventListener('click', () => {
+      applyLanguage(currentLang === 'zh' ? 'en' : 'zh');
+    });
+
+    applyLanguage(currentLang);
+
+    (function () {
+      const box = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-cap');
+      if (!box) return;
+
+      function close() { box.removeAttribute('open'); img.removeAttribute('src'); }
+
+      document.querySelectorAll('[data-caption]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+          e.preventDefault();
+          img.src = a.getAttribute('href');
+          cap.innerHTML = a.getAttribute('data-caption') || '';
+          box.setAttribute('open', '');
+        });
+      });
+
+      box.addEventListener('click', close);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    })();
+  </script>
+</body>
+</html>
