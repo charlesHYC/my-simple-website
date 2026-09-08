@@ -101,6 +101,15 @@
       border-top: 1px solid var(--rule-2);
     }
 
+    /* A link inside the grey affiliation block needs a visible affordance, so it
+       carries a hairline underline that picks up the accent on hover. */
+    .affil a {
+      border-bottom: 1px solid var(--rule);
+      transition: color .18s, border-color .18s;
+    }
+
+    .affil a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
     .side-links {
       list-style: none;
       margin-top: 14px;
@@ -327,7 +336,7 @@
     <aside class="side">
       <img class="avatar" src="images/avatar.jpg" alt="Charles Hong" />
       <h1 class="name">Charles Hong</h1>
-      <p class="affil">Chung Yuan Christian University<br />Department of Electrical Engineering<br />CNSRL Lab</p>
+      <p class="affil">Chung Yuan Christian University<br />Department of Electrical Engineering<br /><a href="https://ecelab.cycu.edu.tw/" target="_blank" rel="noopener">CNSRL Lab</a></p>
 
       <ul class="side-links">
         <li><a href="mailto:charles5000017@gmail.com">charles5000017@gmail.com</a></li>
