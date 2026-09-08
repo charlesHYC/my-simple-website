@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Charles Hong - electrical engineer working in cell-based IC design, FPGA and high-speed networking." />
   <title>Charles Hong</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon-32.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <!-- Shared links show a card instead of a bare URL. -->
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="Charles Hong" />
+  <meta property="og:description" content="Electrical engineering student working on digital hardware design, from cell-based flows through to FPGA systems." />
+  <meta property="og:url" content="https://charleshyc.github.io/my-simple-website/" />
+  <meta property="og:image" content="https://charleshyc.github.io/my-simple-website/images/avatar.jpg" />
+  <meta property="og:image:width" content="640" />
+  <meta property="og:image:height" content="640" />
+  <meta name="twitter:card" content="summary" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -44,6 +58,7 @@
     }
 
     a { color: inherit; text-decoration: none; }
+    ::selection { background: #ecd9d1; color: var(--ink); }
     img { max-width: 100%; display: block; }
 
     /* ---------- shell: profile column on the left, content on the right ---------- */
@@ -128,15 +143,47 @@
 
     .side-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
+    /* Section jump links. The column is sticky, so these stay reachable at any
+       scroll position. */
+    .side-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 14px;
+      padding-top: 13px;
+      border-top: 1px solid var(--rule-2);
+    }
+
+    .side-nav a {
+      font-size: var(--t-sm);
+      color: var(--ink-3);
+      transition: color .18s;
+    }
+
+    .side-nav a:hover { color: var(--accent); }
+
     /* ---------- content ---------- */
-    .block { margin-bottom: 42px; }
+    .block { margin-bottom: 42px; scroll-margin-top: 32px; }
 
     .block h2 {
+      position: relative;
       font-size: var(--t-h2);
       font-weight: 600;
       padding-bottom: 9px;
       border-bottom: 1px solid var(--rule);
       margin-bottom: 16px;
+    }
+
+    /* The rule under each heading starts in the accent and hands over to the
+       hairline, so the colour appears at rest rather than only on hover. */
+    .block h2::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 2.4rem;
+      height: 1px;
+      background: var(--accent);
     }
 
     .block p { color: var(--ink-2); }
@@ -343,16 +390,24 @@
         <li><a href="https://github.com/charlesHYC" target="_blank" rel="noopener">github.com/charlesHYC</a></li>
         <li><a href="https://youtu.be/LCVm5drnpyQ" target="_blank" rel="noopener">Lab introduction (video)</a></li>
       </ul>
+
+      <nav class="side-nav">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#education">Education</a>
+        <a href="#skills">Skills</a>
+        <a href="#highlights">Highlights</a>
+      </nav>
     </aside>
 
     <main>
-      <section class="block">
+      <section class="block" id="about">
         <h2>About</h2>
         <p>I am an electrical engineering student working on digital hardware design, from cell-based flows through to FPGA systems.</p>
         <p>My current work is an FPGA engine that stores recorded network traffic in High Bandwidth Memory and replays it onto a 100 Gbps link, either preserving the original capture timing or running as fast as the wire allows.</p>
       </section>
 
-      <section class="block">
+      <section class="block" id="projects">
         <h2>Projects</h2>
 
         <a class="entry" href="projects/hbm-replay.html">
@@ -410,7 +465,7 @@
         </a>
       </section>
 
-      <section class="block">
+      <section class="block" id="education">
         <h2>Education</h2>
         <div class="entry">
           <span class="entry-top">
@@ -435,7 +490,7 @@
         </div>
       </section>
 
-      <section class="block">
+      <section class="block" id="skills">
         <h2>Skills</h2>
         <dl class="rows">
           <div class="row">
@@ -457,7 +512,7 @@
         </dl>
       </section>
 
-      <section class="block">
+      <section class="block" id="highlights">
         <h2>Highlights</h2>
         <div class="stage" id="stage">
           <img id="slideA" alt="Highlight" />
